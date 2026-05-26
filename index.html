@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EdTech HUB — Connecting the Global EdTech Ecosystem</title>
+  <meta name="description" content="EdTech HUB is the go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <span>📍 22 Bishopsgate, London, EC2B 4BQ, UK</span>
+      <div class="topbar-right">
+        <a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a>
+        <a href="https://www.linkedin.com/company/edtechhub" target="_blank" rel="noopener" class="topbar-linkedin">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER / NAV ===== -->
+  <header class="header" id="header">
+    <nav class="nav container">
+
+      <!-- Logo -->
+      <a href="#home" class="nav-logo">
+        <div class="logo-mark">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="6" fill="#1D3557"/>
+            <path d="M8 26L18 10L28 26" stroke="#E63946" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="18" cy="10" r="3" fill="#E63946"/>
+            <rect x="11" y="22" width="14" height="2.5" rx="1.25" fill="white" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="logo-text-wrap">
+          <span class="logo-edtech">EdTech</span><span class="logo-hub">HUB</span>
+        </div>
+      </a>
+
+      <!-- Nav Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+
+        <li class="has-dropdown">
+          <a href="#news" class="nav-link">News & Events
+            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <ul class="dropdown">
+            <li><a href="#news"><span class="drop-icon">📰</span>News</a></li>
+            <li><a href="#events"><span class="drop-icon">📅</span>Events</a></li>
+            <li><a href="#news"><span class="drop-icon">📤</span>Submit News or Events</a></li>
+          </ul>
+        </li>
+
+        <li class="has-dropdown">
+          <a href="#community" class="nav-link">Community
+            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <ul class="dropdown dropdown-wide">
+            <li><a href="#edtech-together"><span class="drop-icon">🤝</span>EdTech Together</a></li>
+            <li><a href="#partnerships"><span class="drop-icon">🌐</span>Partnership Initiatives</a></li>
+            <li><a href="#community"><span class="drop-icon">🔗</span>Cross-Cohort Networking</a></li>
+            <li><a href="#community"><span class="drop-icon">💬</span>Redefining Learning Forum</a></li>
+          </ul>
+        </li>
+
+        <li><a href="#programme" class="nav-link">Programme</a></li>
+
+        <li>
+          <a href="https://gem.edtechhub.com" target="_blank" rel="noopener" class="nav-link nav-gem">
+            GEM
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 8.5L8.5 1.5M8.5 1.5H4M8.5 1.5V6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="nav-actions">
+        <a href="#newsletter" class="btn btn-ghost">Subscribe</a>
+        <a href="#contact" class="btn btn-primary">Contact Us</a>
+      </div>
+
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#home">Home</a>
+      <div class="mobile-group">
+        <span class="mobile-label">News & Events</span>
+        <a href="#news">News</a>
+        <a href="#events">Events</a>
+        <a href="#news">Submit News or Events</a>
+      </div>
+      <div class="mobile-group">
+        <span class="mobile-label">Community</span>
+        <a href="#edtech-together">EdTech Together</a>
+        <a href="#partnerships">Partnership Initiatives</a>
+        <a href="#community">Cross-Cohort Networking</a>
+        <a href="#community">Redefining Learning Forum</a>
+      </div>
+      <a href="#programme">Programme</a>
+      <a href="https://gem.edtechhub.com" target="_blank">GEM ↗</a>
+      <div class="mobile-actions">
+        <a href="#newsletter" class="btn btn-ghost">Subscribe</a>
+        <a href="#contact" class="btn btn-primary">Contact Us</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+      <div class="hero-bg">
+        <div class="hero-overlay"></div>
+        <div class="hero-grid-pattern"></div>
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-content">
+          <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            Global EdTech Ecosystem
+          </div>
+          <h1 class="hero-title">
+            Connecting Startups,<br/>
+            Investors & Educators<br/>
+            <span class="hero-accent">Shaping the Future</span>
+          </h1>
+          <p class="hero-desc">
+            EdTech HUB is the go-to platform for the latest insights,
+            opportunities, and connections in the global EdTech ecosystem —
+            for startups, educators, and industry enthusiasts.
+          </p>
+          <div class="hero-btns">
+            <a href="#edtech-together" class="btn btn-primary btn-lg">Reserve a Spot</a>
+            <a href="#news" class="btn btn-outline-white btn-lg">Latest News</a>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-avatars">
+              <div class="avatar av1">S</div>
+              <div class="avatar av2">I</div>
+              <div class="avatar av3">E</div>
+              <div class="avatar av4">+</div>
+            </div>
+            <span>Trusted by <strong>500+</strong> startups, investors & educators worldwide</span>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card-main">
+            <div class="hc-header">
+              <div class="hc-dot red"></div>
+              <div class="hc-dot yellow"></div>
+              <div class="hc-dot green"></div>
+              <span>EdTech Together — London</span>
+            </div>
+            <div class="hc-body">
+              <div class="hc-event-title">Monthly Networking Event</div>
+              <div class="hc-event-sub">Keynotes · Panels · Interactive Sessions</div>
+              <div class="hc-divider"></div>
+              <div class="hc-rows">
+                <div class="hc-row">
+                  <span class="hc-icon">🎤</span>
+                  <div>
+                    <strong>Keynote Speech</strong>
+                    <span>Accelerating EdTech Innovation</span>
+                  </div>
+                </div>
+                <div class="hc-row">
+                  <span class="hc-icon">🤝</span>
+                  <div>
+                    <strong>Panel Discussion</strong>
+                    <span>Future of Learning — 2026</span>
+                  </div>
+                </div>
+                <div class="hc-row">
+                  <span class="hc-icon">🚀</span>
+                  <div>
+                    <strong>Startup Showcase</strong>
+                    <span>Early-stage Pitching</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#edtech-together" class="hc-btn">Reserve a Spot →</a>
+            </div>
+          </div>
+          <div class="hero-card-float fc1">
+            <div class="fc-icon">🌍</div>
+            <div>
+              <strong>Global Network</strong>
+              <span>London & Online</span>
+            </div>
+          </div>
+          <div class="hero-card-float fc2">
+            <div class="fc-icon">🏆</div>
+            <div>
+              <strong>GES Awards Partner</strong>
+              <span>Top EdTech Awards</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Scroll hint -->
+      <div class="scroll-hint">
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ===== PARTNERS TICKER ===== -->
+    <section class="partners-bar">
+      <div class="container">
+        <p class="partners-label">Our Partners</p>
+        <div class="partners-track-wrap">
+          <div class="partners-track">
+            <div class="partner-item">GES Awards</div>
+            <div class="partner-item">MindCET</div>
+            <div class="partner-item">EdTech Impact</div>
+            <div class="partner-item">Global EdTech</div>
+            <div class="partner-item">Learning Spark</div>
+            <div class="partner-item">ICF.EI</div>
+            <!-- Duplicate for seamless loop -->
+            <div class="partner-item">GES Awards</div>
+            <div class="partner-item">MindCET</div>
+            <div class="partner-item">EdTech Impact</div>
+            <div class="partner-item">Global EdTech</div>
+            <div class="partner-item">Learning Spark</div>
+            <div class="partner-item">ICF.EI</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS ===== -->
+    <section class="stats-section">
+      <div class="container stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" data-target="500">0</div>
+          <div class="stat-label">EdTech Startups</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="50">0</div>
+          <div class="stat-label">Monthly Events</div>
+          <div class="stat-suffix">+</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="30">0</div>
+          <div class="stat-label">Countries Reached</div>
+          <div class="stat-suffix">+</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" data-target="6">0</div>
+          <div class="stat-label">Global Partners</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== NEWS SECTION ===== -->
+    <section class="news-section" id="news">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">News & Insights</div>
+          <h2 class="section-title">Top News Picks</h2>
+          <p class="section-sub">Stay up to date with the latest trends and developments in EdTech</p>
+        </div>
+
+        <!-- Filter bar (e27-style) -->
+        <div class="filter-bar">
+          <button class="filter-pill active">All</button>
+          <button class="filter-pill">Policy</button>
+          <button class="filter-pill">Cybersecurity</button>
+          <button class="filter-pill">AI & Learning</button>
+          <button class="filter-pill">Startups</button>
+          <button class="filter-pill">Investment</button>
+        </div>
+
+        <!-- Main news grid -->
+        <div class="news-grid">
+          <!-- Featured -->
+          <article class="news-card news-featured">
+            <div class="news-img news-img-featured">
+              <div class="news-img-bg" style="background:linear-gradient(135deg,#1D3557,#2d4a73)">
+                <span class="news-emoji">🖥️</span>
+              </div>
+              <span class="news-badge badge-policy">Policy</span>
+            </div>
+            <div class="news-body">
+              <div class="news-source">
+                <span class="source-logo">EdSurge</span>
+                <span class="news-date">May 2026</span>
+                <span class="read-time">4 min read</span>
+              </div>
+              <h3 class="news-title">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
+              <p class="news-excerpt">Growing concern among parents and educators over screen time is putting new pressure on how schools evaluate and approve EdTech tools — prompting calls for more rigorous, transparent vetting processes across districts.</p>
+              <div class="news-footer">
+                <a href="#" class="read-more-link">Read More →</a>
+                <div class="news-engage">
+                  <button class="engage-btn">♥ 142</button>
+                  <button class="engage-btn">💬 28</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Side cards -->
+          <div class="news-side-stack">
+            <article class="news-card news-side">
+              <div class="news-img news-img-side">
+                <div class="news-img-bg" style="background:linear-gradient(135deg,#E63946,#c1121f)">
+                  <span class="news-emoji">🔒</span>
+                </div>
+                <span class="news-badge badge-cyber">Cybersecurity</span>
+              </div>
+              <div class="news-body">
+                <div class="news-source">
+                  <span class="source-logo">EdSurge</span>
+                  <span class="news-date">May 2026</span>
+                  <span class="read-time">5 min read</span>
+                </div>
+                <h3 class="news-title">Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
+                <p class="news-excerpt">A recent breach targeting Canvas LMS has exposed ongoing vulnerabilities in school cybersecurity infrastructure, highlighting the urgent need for stronger digital defenses in education.</p>
+                <div class="news-footer">
+                  <a href="#" class="read-more-link">Read More →</a>
+                  <div class="news-engage">
+                    <button class="engage-btn">♥ 97</button>
+                    <button class="engage-btn">💬 19</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="news-card news-side">
+              <div class="news-img news-img-side">
+                <div class="news-img-bg" style="background:linear-gradient(135deg,#457B9D,#1D3557)">
+                  <span class="news-emoji">🤖</span>
+                </div>
+                <span class="news-badge badge-ai">AI & Learning</span>
+              </div>
+              <div class="news-body">
+                <div class="news-source">
+                  <span class="source-logo">EdTech HUB</span>
+                  <span class="news-date">May 2026</span>
+                  <span class="read-time">6 min read</span>
+                </div>
+                <h3 class="news-title">Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
+                <p class="news-excerpt">What separates early-stage EdTech startups that scale from those that stall? A framework for building execution systems that align founders, product, and go-to-market from day one.</p>
+                <div class="news-footer">
+                  <a href="#" class="read-more-link">Read More →</a>
+                  <div class="news-engage">
+                    <button class="engage-btn">♥ 203</button>
+                    <button class="engage-btn">💬 41</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Submit CTA -->
+        <div class="news-submit-banner">
+          <div class="nsb-content">
+            <span class="nsb-icon">📤</span>
+            <div>
+              <strong>Have EdTech news or events to share?</strong>
+              <p>Submit your EdTech news or events directly to EdTech HUB for publication.</p>
+            </div>
+          </div>
+          <a href="#contact" class="btn btn-primary">Submit</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EVENTS SECTION (Bett-style dark) ===== -->
+    <section class="events-section" id="events">
+      <div class="events-bg-layer"></div>
+      <div class="container">
+        <div class="section-header light-header">
+          <div class="section-tag tag-light">Upcoming Events</div>
+          <h2 class="section-title title-light">EdTech HUB Events</h2>
+          <p class="section-sub sub-light">Monthly events in London and online webinars bringing the ecosystem together</p>
+        </div>
+
+        <!-- Featured Event -->
+        <div class="event-hero-card">
+          <div class="ehc-left">
+            <div class="ehc-live-badge">
+              <span class="live-dot"></span>Registration Open
+            </div>
+            <div class="ehc-date">Monthly · London & Online</div>
+            <h2 class="ehc-title">EdTech Together — London</h2>
+            <p class="ehc-desc">
+              EdTech Together brings together startups, investors, experts, and other ecosystem players to connect, collaborate, and innovate. Engage with thought leaders through insightful keynote speeches, panel discussions, and interactive sessions.
+            </p>
+            <ul class="ehc-features">
+              <li><span>✓</span> Share trends, tools, and insights</li>
+              <li><span>✓</span> Discover opportunities for collaboration and innovation</li>
+              <li><span>✓</span> Join special editions on the latest trends and topics</li>
+              <li><span>✓</span> Build meaningful relationships & explore business opportunities</li>
+            </ul>
+            <div class="ehc-actions">
+              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-lg">Reserve a Spot</a>
+              <a href="#contact" class="btn btn-outline-white btn-lg">Contact Us</a>
+            </div>
+          </div>
+          <div class="ehc-right">
+            <div class="ehc-schedule">
+              <div class="ehc-schedule-title">Event Schedule</div>
+              <div class="ehc-slot">
+                <div class="ehc-time">6:00 PM</div>
+                <div class="ehc-slot-info">
+                  <strong>Doors Open & Networking</strong>
+                  <span>Welcome drinks & introductions</span>
+                </div>
+              </div>
+              <div class="ehc-slot">
+                <div class="ehc-time">6:30 PM</div>
+                <div class="ehc-slot-info">
+                  <strong>Keynote Speech</strong>
+                  <span>Industry leader insights</span>
+                </div>
+              </div>
+              <div class="ehc-slot">
+                <div class="ehc-time">7:00 PM</div>
+                <div class="ehc-slot-info">
+                  <strong>Panel Discussion</strong>
+                  <span>Expert perspectives & debate</span>
+                </div>
+              </div>
+              <div class="ehc-slot">
+                <div class="ehc-time">7:45 PM</div>
+                <div class="ehc-slot-info">
+                  <strong>Startup Showcase</strong>
+                  <span>Early-stage startup pitches</span>
+                </div>
+              </div>
+              <div class="ehc-slot">
+                <div class="ehc-time">8:30 PM</div>
+                <div class="ehc-slot-info">
+                  <strong>Open Networking</strong>
+                  <span>Connect with the community</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Cards Grid -->
+        <h3 class="events-grid-title">All Events</h3>
+        <div class="events-grid">
+
+          <div class="event-card">
+            <div class="ec-top" style="background:linear-gradient(135deg,#1D3557 0%,#2d4a73 100%)">
+              <span class="ec-emoji">🏙️</span>
+              <span class="ec-location">London, UK</span>
+            </div>
+            <div class="ec-body">
+              <div class="ec-date-badge">
+                <span class="ec-month">JUN</span>
+                <span class="ec-day">12</span>
+              </div>
+              <h4>EdTech Together — London March</h4>
+              <p>Monthly in-person networking for startups, investors, and educators in London.</p>
+              <div class="ec-tags">
+                <span>In-Person</span><span>Networking</span><span>Monthly</span>
+              </div>
+              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Reserve a Spot</a>
+            </div>
+          </div>
+
+          <div class="event-card">
+            <div class="ec-top" style="background:linear-gradient(135deg,#E63946 0%,#c1121f 100%)">
+              <span class="ec-emoji">💻</span>
+              <span class="ec-location">Online Webinar</span>
+            </div>
+            <div class="ec-body">
+              <div class="ec-date-badge">
+                <span class="ec-month">JUL</span>
+                <span class="ec-day">08</span>
+              </div>
+              <h4>Accelerating Execution Webinar</h4>
+              <p>The Operating System of High-Performing Early-Stage EdTech Teams.</p>
+              <div class="ec-tags">
+                <span>Webinar</span><span>Startup</span><span>Free</span>
+              </div>
+              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Register</a>
+            </div>
+          </div>
+
+          <div class="event-card">
+            <div class="ec-top" style="background:linear-gradient(135deg,#457B9D 0%,#1D3557 100%)">
+              <span class="ec-emoji">🤝</span>
+              <span class="ec-location">London, UK</span>
+            </div>
+            <div class="ec-body">
+              <div class="ec-date-badge">
+                <span class="ec-month">AUG</span>
+                <span class="ec-day">20</span>
+              </div>
+              <h4>EdTech Together — London</h4>
+              <p>Special edition exploring the latest trends and innovations in educational technology.</p>
+              <div class="ec-tags">
+                <span>In-Person</span><span>Special Edition</span>
+              </div>
+              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Reserve a Spot</a>
+            </div>
+          </div>
+
+          <div class="event-card">
+            <div class="ec-top" style="background:linear-gradient(135deg,#2a9d8f 0%,#1a6b5f 100%)">
+              <span class="ec-emoji">🌐</span>
+              <span class="ec-location">Partnership Event</span>
+            </div>
+            <div class="ec-body">
+              <div class="ec-date-badge">
+                <span class="ec-month">SEP</span>
+                <span class="ec-day">15</span>
+              </div>
+              <h4>Partnership Initiatives Summit</h4>
+              <p>Bringing stakeholder groups together to support the future of EdTech startup leaders.</p>
+              <div class="ec-tags">
+                <span>Summit</span><span>B2B</span><span>Partnership</span>
+              </div>
+              <a href="#contact" class="btn btn-primary btn-sm">Contact Us</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== COMMUNITY (EdTech Together) ===== -->
+    <section class="community-section" id="community">
+      <div class="container">
+        <div class="community-grid">
+          <!-- EdTech Together -->
+          <div class="community-feature" id="edtech-together">
+            <div class="cf-eyebrow">Community</div>
+            <h2 class="cf-title">EdTech Together</h2>
+            <p class="cf-desc">
+              EdTech Together brings together startups, investors, experts, and other ecosystem players to connect, collaborate, and innovate. Engage with thought leaders and industry experts through insightful keynote speeches, panel discussions, and interactive sessions to expand your knowledge, build meaningful relationships, and explore business development opportunities.
+            </p>
+            <p class="cf-desc">
+              It's also a perfect opportunity to support long-term success within the EdTech industry.
+            </p>
+            <h4 class="cf-sub">What's Inside</h4>
+            <ul class="cf-list">
+              <li>
+                <div class="cf-li-icon">💡</div>
+                <span>Share trends, tools, and insights</span>
+              </li>
+              <li>
+                <div class="cf-li-icon">🔍</div>
+                <span>Discover opportunities for collaboration and innovation</span>
+              </li>
+              <li>
+                <div class="cf-li-icon">⭐</div>
+                <span>Join special editions on the latest trends and topics</span>
+              </li>
+            </ul>
+            <h4 class="cf-sub">How To Join</h4>
+            <p class="cf-desc">
+              We host a monthly event in London as well as online webinars. If you're interested in committing to share your insights and learnings at this event, we'd love to hear from you.
+            </p>
+            <div class="cf-actions">
+              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-lg">Reserve a Spot</a>
+              <a href="#contact" class="btn btn-outline btn-lg">Contact Us</a>
+            </div>
+          </div>
+
+          <!-- Community cards on right -->
+          <div class="community-cards-col">
+            <div class="comm-card cc-blue">
+              <div class="comm-card-icon">🤝</div>
+              <h4>EdTech Together</h4>
+              <p>Monthly events in London & online webinars connecting the ecosystem.</p>
+              <a href="#edtech-together" class="comm-link">Learn more →</a>
+            </div>
+
+            <div class="comm-card cc-red">
+              <div class="comm-card-icon">🌐</div>
+              <h4>Partnership Initiatives</h4>
+              <p>Together, not against each other — we shape the future of EdTech through strategic partnerships.</p>
+              <a href="#partnerships" class="comm-link">Learn more →</a>
+            </div>
+
+            <div class="comm-card cc-navy">
+              <div class="comm-card-icon">🔗</div>
+              <h4>Cross-Cohort Networking</h4>
+              <p>Connect across programmes and cohorts to build lasting relationships in the EdTech ecosystem.</p>
+              <a href="#contact" class="comm-link">Learn more →</a>
+            </div>
+
+            <div class="comm-card cc-teal">
+              <div class="comm-card-icon">💬</div>
+              <h4>Redefining Learning Forum</h4>
+              <p>Thoughtful conversations across stakeholder groups supporting the future of EdTech.</p>
+              <a href="#contact" class="comm-link">Learn more →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PARTNERSHIP SECTION ===== -->
+    <section class="partnership-section" id="partnerships">
+      <div class="container">
+        <div class="partnership-inner">
+          <div class="ps-content">
+            <div class="section-tag">Partnership Initiatives</div>
+            <h2 class="section-title">Together, Not Against Each Other</h2>
+            <p class="section-sub">
+              We strongly believe in driving innovation and success through partnerships and encourage thoughtful conversations across various stakeholder groups to support the future EdTech startup leaders.
+            </p>
+            <div class="ps-features">
+              <div class="ps-feat">
+                <div class="ps-feat-icon">🚀</div>
+                <div>
+                  <strong>Startup Support</strong>
+                  <span>Mentoring and resources for early-stage EdTech founders</span>
+                </div>
+              </div>
+              <div class="ps-feat">
+                <div class="ps-feat-icon">💰</div>
+                <div>
+                  <strong>Investor Access</strong>
+                  <span>Direct connections to VCs, angels, and grant providers</span>
+                </div>
+              </div>
+              <div class="ps-feat">
+                <div class="ps-feat-icon">🏛️</div>
+                <div>
+                  <strong>Institutional Partners</strong>
+                  <span>Collaboration with schools, universities, and government bodies</span>
+                </div>
+              </div>
+            </div>
+            <a href="#contact" class="btn btn-primary btn-lg">Contact Us</a>
+          </div>
+          <div class="ps-visual">
+            <div class="ps-partners-grid">
+              <div class="ps-partner-card">
+                <div class="ppc-icon">🏆</div>
+                <span>GES Awards</span>
+              </div>
+              <div class="ps-partner-card">
+                <div class="ppc-icon">🧠</div>
+                <span>MindCET</span>
+              </div>
+              <div class="ps-partner-card">
+                <div class="ppc-icon">📊</div>
+                <span>EdTech Impact</span>
+              </div>
+              <div class="ps-partner-card">
+                <div class="ppc-icon">🌍</div>
+                <span>Global EdTech</span>
+              </div>
+              <div class="ps-partner-card">
+                <div class="ppc-icon">⚡</div>
+                <span>Learning Spark</span>
+              </div>
+              <div class="ps-partner-card">
+                <div class="ppc-icon">🎓</div>
+                <span>ICF.EI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROGRAMME ===== -->
+    <section class="programme-section" id="programme">
+      <div class="programme-bg"></div>
+      <div class="container">
+        <div class="section-header light-header">
+          <div class="section-tag tag-light">Programme</div>
+          <h2 class="section-title title-light">EdTech HUB Programme</h2>
+          <p class="section-sub sub-light">Structured support for EdTech startups at every stage of their journey</p>
+        </div>
+        <div class="programme-grid">
+          <div class="prog-card">
+            <div class="prog-num">01</div>
+            <div class="prog-icon">🔍</div>
+            <h4>Discovery</h4>
+            <p>Connect with the EdTech ecosystem, attend events, and identify your market opportunity.</p>
+          </div>
+          <div class="prog-card">
+            <div class="prog-num">02</div>
+            <div class="prog-icon">🛠️</div>
+            <h4>Development</h4>
+            <p>Access mentorship, workshops, and resources to build and refine your EdTech product.</p>
+          </div>
+          <div class="prog-card">
+            <div class="prog-num">03</div>
+            <div class="prog-icon">🚀</div>
+            <h4>Growth</h4>
+            <p>Scale your startup with investor introductions, partnership opportunities, and community backing.</p>
+          </div>
+          <div class="prog-card">
+            <div class="prog-num">04</div>
+            <div class="prog-icon">🌍</div>
+            <h4>Global</h4>
+            <p>Expand internationally with EdTech HUB's global network of partners, institutions, and investors.</p>
+          </div>
+        </div>
+        <div class="programme-cta">
+          <a href="#contact" class="btn btn-primary btn-lg">Apply to the Programme</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GEM ===== -->
+    <section class="gem-section">
+      <div class="container">
+        <div class="gem-inner">
+          <div class="gem-badge">GEM</div>
+          <h2>Global EdTech Resource Map</h2>
+          <p>Discover the world's EdTech ecosystem at a glance. GEM is EdTech HUB's live resource map connecting startups, investors, accelerators, and educators across the globe.</p>
+          <a href="https://gem.edtechhub.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+            Explore GEM
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H6M12 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== NEWSLETTER ===== -->
+    <section class="newsletter-section" id="newsletter">
+      <div class="container">
+        <div class="newsletter-box">
+          <div class="nl-left">
+            <div class="nl-icon">📬</div>
+            <div>
+              <h3>Don't Miss Out</h3>
+              <p>Stay up to date with the latest trends, events, and activities in EdTech. Join our community newsletter.</p>
+            </div>
+          </div>
+          <form class="nl-form" id="nlForm">
+            <div class="nl-fields">
+              <input type="email" name="email" placeholder="Email address" required />
+              <input type="text" name="name" placeholder="Full name" required />
+              <select name="role">
+                <option value="" disabled selected>Your role</option>
+                <option>Startup</option>
+                <option>Startup Coach</option>
+                <option>Expert</option>
+                <option>Investor</option>
+                <option>Service Provider</option>
+                <option>Accelerator</option>
+                <option>Educator</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT CTA ===== -->
+    <section class="contact-section" id="contact">
+      <div class="contact-bg"></div>
+      <div class="container">
+        <div class="contact-inner">
+          <div class="contact-left">
+            <div class="section-tag tag-light">Get Involved</div>
+            <h2 class="title-light">Interested in joining our community or internal events?</h2>
+            <p class="sub-light">Whether you're a startup founder, investor, educator, or industry expert — EdTech HUB has a place for you.</p>
+            <div class="contact-options">
+              <div class="contact-opt">
+                <span class="copt-icon">📧</span>
+                <div>
+                  <strong>Email Us</strong>
+                  <a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a>
+                </div>
+              </div>
+              <div class="contact-opt">
+                <span class="copt-icon">📍</span>
+                <div>
+                  <strong>Visit Us</strong>
+                  <span>22 Bishopsgate, London, EC2B 4BQ, UK</span>
+                </div>
+              </div>
+              <div class="contact-opt">
+                <span class="copt-icon">🔗</span>
+                <div>
+                  <strong>Connect</strong>
+                  <a href="https://www.linkedin.com/company/edtechhub" target="_blank">LinkedIn</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <form class="contact-form" id="contactForm">
+            <h4>Send Us a Message</h4>
+            <div class="cf-field">
+              <label>Full Name</label>
+              <input type="text" placeholder="Your name" required />
+            </div>
+            <div class="cf-field">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.com" required />
+            </div>
+            <div class="cf-field">
+              <label>Role</label>
+              <select>
+                <option value="" disabled selected>Select your role</option>
+                <option>Startup Founder</option>
+                <option>Investor</option>
+                <option>Educator</option>
+                <option>Expert / Advisor</option>
+                <option>Partner Organisation</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="cf-field">
+              <label>Message</label>
+              <textarea rows="4" placeholder="Tell us how we can help..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <!-- Brand -->
+        <div class="footer-brand">
+          <a href="#home" class="nav-logo footer-logo">
+            <div class="logo-mark">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="6" fill="#1D3557"/>
+                <path d="M8 26L18 10L28 26" stroke="#E63946" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="18" cy="10" r="3" fill="#E63946"/>
+                <rect x="11" y="22" width="14" height="2.5" rx="1.25" fill="white" opacity="0.6"/>
+              </svg>
+            </div>
+            <div class="logo-text-wrap">
+              <span class="logo-edtech">EdTech</span><span class="logo-hub">HUB</span>
+            </div>
+          </a>
+          <p class="footer-desc">The go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem.</p>
+          <a href="https://www.linkedin.com/company/edtechhub" target="_blank" class="footer-linkedin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            Follow on LinkedIn
+          </a>
+        </div>
+
+        <!-- Nav columns -->
+        <div class="footer-nav-grid">
+          <div class="footer-col">
+            <h5>Navigation</h5>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#news">News</a></li>
+              <li><a href="#events">Events</a></li>
+              <li><a href="#programme">Programme</a></li>
+              <li><a href="https://gem.edtechhub.com" target="_blank">GEM ↗</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Community</h5>
+            <ul>
+              <li><a href="#edtech-together">EdTech Together</a></li>
+              <li><a href="#partnerships">Partnership Initiatives</a></li>
+              <li><a href="#community">Cross-Cohort Networking</a></li>
+              <li><a href="#community">Redefining Learning Forum</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Contact</h5>
+            <ul>
+              <li><a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a></li>
+              <li><span>22 Bishopsgate</span></li>
+              <li><span>London, EC2B 4BQ, UK</span></li>
+              <li><a href="#contact">Send a Message</a></li>
+              <li><a href="#news">Submit News / Events</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>@2025 DOHE GLOBAL. ALL RIGHTS RESERVED.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Submissions</a>
+        </div>
+        <button class="back-to-top" id="backToTop">↑ TOP</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
