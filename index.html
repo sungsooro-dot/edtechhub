@@ -156,8 +156,8 @@
     .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
     .news-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, border-color .2s; }
     .news-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-    .news-card-img { width: 100%; height: 120px; overflow: hidden; position: relative; flex-shrink: 0; }
-    .news-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+    .news-card-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; position: relative; flex-shrink: 0; }
+    .news-card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transition: transform .3s; }
     .news-card:hover .news-card-img img { transform: scale(1.04); }
     .news-body { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
     .news-source { display: flex; gap: 6px; align-items: center; }
@@ -406,7 +406,7 @@
       .li-nav-btn  { width: 32px; height: 32px; font-size: 13px; }
 
       /* news — images capped so they don't dominate */
-      .news-card-img { height: 80px; }
+      .news-card-img { aspect-ratio: 16/9; }
       .news-grid  { grid-template-columns: 1fr 1fr; gap: 10px; }
       .news-body  { padding: 10px; gap: 6px; }
       .news-card h3 { font-size: 12px; }
@@ -477,7 +477,7 @@
     }
 
     @media (max-width: 480px) {
-      .news-card-img   { height: 65px; }
+      .news-card-img   { aspect-ratio: 2/1; }
       .news-grid       { grid-template-columns: 1fr 1fr; gap: 8px; }
       .programme-grid  { grid-template-columns: 1fr; }
       .ft-cols         { grid-template-columns: 1fr; }
@@ -863,7 +863,7 @@
         <article class="news-card">
           <div class="news-card-img">
             <span class="news-badge badge-policy">Policy</span>
-            <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=640&q=80&fit=crop" alt="Screen time and EdTech vetting" loading="lazy"/>
+            <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=85&fit=crop&crop=entropy" alt="Screen time and EdTech vetting" loading="lazy"/>
           </div>
           <div class="news-body">
             <div class="news-source">
@@ -877,7 +877,7 @@
         <article class="news-card">
           <div class="news-card-img">
             <span class="news-badge badge-cyber">Cybersecurity</span>
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=640&q=80&fit=crop" alt="Cybersecurity in schools" loading="lazy"/>
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=85&fit=crop&crop=entropy" alt="Cybersecurity in schools" loading="lazy"/>
           </div>
           <div class="news-body">
             <div class="news-source">
@@ -891,7 +891,7 @@
         <article class="news-card">
           <div class="news-card-img">
             <span class="news-badge badge-ai">AI &amp; Learning</span>
-            <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=640&q=80&fit=crop" alt="AI and learning" loading="lazy"/>
+            <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=85&fit=crop&crop=entropy" alt="AI and learning" loading="lazy"/>
           </div>
           <div class="news-body">
             <div class="news-source">
@@ -905,7 +905,7 @@
         <article class="news-card">
           <div class="news-card-img">
             <span class="news-badge" style="background:#FEF3C7;color:#D97706;">Investment</span>
-            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=640&q=80&fit=crop" alt="EdTech investment" loading="lazy"/>
+            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=85&fit=crop&crop=entropy" alt="EdTech investment" loading="lazy"/>
           </div>
           <div class="news-body">
             <div class="news-source">
