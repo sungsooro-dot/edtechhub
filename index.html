@@ -156,8 +156,8 @@
     .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
     .news-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, border-color .2s; }
     .news-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-    .news-card-img { width: 100%; aspect-ratio: 3/1; overflow: hidden; position: relative; flex-shrink: 0; }
-    .news-card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transition: transform .3s; }
+    .news-card-img { width: 100%; height: 100px; overflow: hidden; position: relative; flex-shrink: 0; }
+    .news-card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; transition: transform .3s; }
     .news-card:hover .news-card-img img { transform: scale(1.04); }
     .news-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
     .news-source { display: flex; gap: 6px; align-items: center; }
@@ -405,8 +405,8 @@
       .li-controls { margin-top: 14px; gap: 10px; }
       .li-nav-btn  { width: 32px; height: 32px; font-size: 13px; }
 
-      /* news — images capped so they don't dominate */
-      .news-card-img { aspect-ratio: 3/1; }
+      /* news — fixed height keeps all 4 cards identical */
+      .news-card-img { height: 90px; }
       .news-grid  { grid-template-columns: 1fr 1fr; gap: 10px; }
       .news-body  { padding: 10px; gap: 6px; }
       .news-card h3 { font-size: 12px; }
@@ -477,7 +477,7 @@
     }
 
     @media (max-width: 480px) {
-      .news-card-img   { aspect-ratio: 2/1; }
+      .news-card-img   { height: 80px; }
       .news-grid       { grid-template-columns: 1fr 1fr; gap: 8px; }
       .programme-grid  { grid-template-columns: 1fr; }
       .ft-cols         { grid-template-columns: 1fr; }
