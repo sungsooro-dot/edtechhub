@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Events — EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  { font-family: 'Inter', system-ui, sans-serif; background: #FFFFFF; color: #111827; line-height: 1.6; }
+    a     { text-decoration: none; color: inherit; }
+
+    :root {
+      --bg-elevated : #F1F5F9;
+      --border      : #E5E7EB;
+      --border-h    : #CBD5E1;
+      --accent      : #16A34A;
+      --accent-h    : #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --text-1      : #111827;
+      --text-2      : #6B7280;
+      --text-3      : #9CA3AF;
+      --max         : 1200px;
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    .header { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: #111827; }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; list-style: none; gap: 2px; flex: 1; }
+    .nav-item  { position: relative; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 4px; font-size: 15px; font-weight: 500; color: #4B5563; transition: color .15s; white-space: nowrap; }
+    .nav-a:hover { color: var(--text-1); }
+    .nav-a.on    { color: var(--accent); border-bottom: 2px solid var(--accent); }
+    .nav-a.gem   { color: var(--accent); }
+    .nav-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10);
+      min-width: 200px; padding: 6px 0;
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .18s, transform .18s, visibility .18s; z-index: 200;
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
+    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .nav-cta { display: flex; gap: 8px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .btn-ghost   { background: transparent; color: var(--text-2); }
+    .btn-ghost:hover { color: var(--text-1); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+    .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); transition: background .12s; }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .nav-hamburger { display: flex; } .nav { height: 60px; } }
+
+    /* ── PAGE HERO ── */
+    .page-hero { background: linear-gradient(135deg, #F0FDF4, #DCFCE7); padding: 48px 0 40px; border-bottom: 1px solid #D1FAE5; }
+    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .page-hero h1 { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; color: #111827; }
+    .page-hero-sub { color: var(--text-2); margin-top: 8px; font-size: 15px; }
+    .hero-meta { display: flex; align-items: center; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+    .hero-stat { font-size: 13px; color: var(--text-2); }
+    .hero-stat strong { color: var(--accent); font-weight: 700; }
+    .eb-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600;
+      background: var(--accent); color: #fff; transition: background .15s;
+    }
+    .eb-btn:hover { background: var(--accent-h); }
+
+    /* ── SEARCH BAR ── */
+    .search-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 14px 0; }
+    .search-inner { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .search-box {
+      flex: 1; min-width: 220px; display: flex; align-items: center; gap: 8px;
+      background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 14px;
+    }
+    .search-box input {
+      flex: 1; border: none; background: transparent; font-size: 14px; color: var(--text-1);
+      font-family: 'Inter', sans-serif; outline: none;
+    }
+    .search-box input::placeholder { color: var(--text-3); }
+    .search-icon { color: var(--text-3); font-size: 16px; flex-shrink: 0; }
+    .view-toggle { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .view-btn {
+      padding: 8px 14px; background: #fff; border: none; cursor: pointer;
+      font-size: 13px; color: var(--text-2); font-weight: 500; transition: background .12s, color .12s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .view-btn.on { background: var(--accent); color: #fff; }
+    .view-btn:not(:last-child) { border-right: 1px solid var(--border); }
+    .clear-btn {
+      padding: 8px 14px; background: transparent; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 13px; color: var(--text-2); font-weight: 500; cursor: pointer;
+      display: none; transition: background .12s;
+    }
+    .clear-btn:hover { background: var(--bg-elevated); }
+    .clear-btn.show { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* ── MAP SECTION ── */
+    .map-section { border-bottom: 1px solid var(--border); position: relative; }
+    #event-map { width: 100%; height: 460px; background: #e8f4fd; }
+    @media (max-width: 640px) { #event-map { height: 320px; } }
+
+    /* ── MAP SIDE PANEL (Naver-style) ── */
+    .map-panel {
+      position: absolute; top: 12px; right: 12px; bottom: 12px;
+      width: 300px; background: #fff;
+      border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.18);
+      display: none; flex-direction: column; z-index: 500;
+      overflow: hidden;
+    }
+    .map-panel.open { display: flex; }
+    .map-panel-head {
+      padding: 14px 16px 10px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      flex-shrink: 0;
+    }
+    .map-panel-country { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .map-panel-title   { font-size: 15px; font-weight: 700; color: #111827; margin-top: 2px; }
+    .map-panel-close {
+      background: none; border: none; cursor: pointer; color: var(--text-3);
+      font-size: 18px; line-height: 1; padding: 2px; flex-shrink: 0;
+    }
+    .map-panel-close:hover { color: var(--text-1); }
+    .map-panel-list { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .map-panel-ev {
+      border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+      background: #fff; transition: background .12s;
+    }
+    .map-panel-ev:hover { background: #F0FDF4; }
+    .map-panel-ev-title { font-size: 13px; font-weight: 600; color: #111827; line-height: 1.4; margin-bottom: 5px; }
+    .map-panel-ev-meta  { font-size: 11px; color: var(--text-2); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .map-panel-ev-price { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; background: var(--accent-muted); color: var(--accent); }
+    .map-panel-ev-price.free { background: #EFF6FF; color: #3B82F6; }
+    .map-panel-btn {
+      display: block; margin-top: 7px; padding: 6px 12px; background: var(--accent);
+      color: #fff; border-radius: 5px; font-size: 11px; font-weight: 600; text-align: center;
+      transition: background .12s;
+    }
+    .map-panel-btn:hover { background: var(--accent-h); }
+    .map-panel-more { text-align: center; font-size: 11px; color: var(--text-3); padding: 6px; }
+    @media (max-width: 640px) {
+      .map-panel { top: auto; right: 0; bottom: 0; left: 0; width: 100%; height: 55%; border-radius: 12px 12px 0 0; }
+    }
+
+    /* ── SECTION ── */
+    .section { padding: 40px 0 60px; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+    .section-header h2 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; }
+    .filter-tag { font-size: 12px; padding: 4px 10px; background: var(--accent-muted); color: var(--accent); border-radius: 4px; font-weight: 600; }
+
+    /* ── EVENT LIST ── */
+    .ev-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .ev-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; padding: 18px 24px;
+      border: 1px solid var(--border); border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      transition: background .15s, box-shadow .15s;
+      color: inherit;
+    }
+    .ev-item:hover { background: #F0FDF4; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+
+    .ev-left { display: flex; gap: 16px; align-items: center; flex: 1; min-width: 0; }
+
+    .ev-date {
+      text-align: center; min-width: 52px; flex-shrink: 0;
+      background: #F0FDF4; border-radius: 6px; padding: 6px 10px;
+      border: 1px solid #D1FAE5;
+    }
+    .ev-date .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .ev-date .dy { display: block; font-size: 22px; font-weight: 700; color: #111827; line-height: 1.1; }
+
+    .ev-info { flex: 1; min-width: 0; }
+    .ev-info h4 { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-info-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .ev-country { font-size: 12px; color: var(--text-2); }
+    .ev-price {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+      background: var(--accent-muted); color: var(--accent);
+    }
+    .ev-price.free { background: #EFF6FF; color: #3B82F6; }
+
+    .ev-arrow { color: var(--text-3); font-size: 18px; transition: color .15s, transform .15s; flex-shrink: 0; margin-left: 12px; }
+    .ev-item:hover .ev-arrow { color: var(--accent); transform: translateX(3px); }
+
+    /* ── PAGINATION ── */
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 32px; }
+    .pg-btn {
+      min-width: 36px; height: 36px; border-radius: 6px; padding: 0 10px;
+      font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border);
+      background: #fff; color: var(--text-2); transition: all .14s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pg-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .pg-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pg-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .pg-info { font-size: 13px; color: var(--text-2); margin: 0 8px; }
+
+    /* ── STATUS ── */
+    .status-msg { padding: 60px; text-align: center; color: var(--text-3); font-size: 14px; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111827; color: #9CA3AF; padding: 48px 0 24px; }
+    .ft-top  { display: flex; gap: 48px; justify-content: space-between; margin-bottom: 32px; }
+    .ft-brand p { font-size: 13px; margin: 10px 0; }
+    .ft-brand a { font-size: 13px; color: #9CA3AF; }
+    .ft-brand a:hover { color: #fff; }
+    .ft-cols { display: flex; gap: 48px; }
+    .ft-col h5 { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #fff; margin-bottom: 12px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ft-col li a { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col li a:hover { color: #fff; }
+    .ft-col li span { font-size: 13px; }
+    .ft-btm { border-top: 1px solid #1F2937; padding-top: 20px; font-size: 12px; color: #4B5563; }
+    .logo-text-ft { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 800; color: #fff; }
+    .logo-text-ft span { color: var(--accent); }
+    @media (max-width: 640px) { .ft-top { flex-direction: column; gap: 28px; } .ft-cols { flex-direction: column; gap: 24px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="/" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="36" height="36" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a on">News &amp; Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html"   class="nav-drop-item">News</a>
+          <div class="nav-drop-divider"></div>
+          <a href="events.html" class="nav-drop-item">Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="/#community" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown">
+          <a href="/#community"                  class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-partnership.html"  class="nav-drop-item">Partnership Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-forum.html"        class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-cta">
+      <a href="/#newsletter"              class="btn btn-ghost">Subscribe</a>
+      <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="/"                           class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="news.html"                  class="nav-mobile-a" onclick="closeMenu()">News</a>
+  <a href="events.html"                class="nav-mobile-a accent" onclick="closeMenu()">Events</a>
+  <a href="submit.html"                class="nav-mobile-a" onclick="closeMenu()">Submit News / Event</a>
+  <a href="/#community"                 class="nav-mobile-a" onclick="closeMenu()">EdTech Together</a>
+  <a href="community-partnership.html" class="nav-mobile-a" onclick="closeMenu()">Partnership Events</a>
+  <a href="community-forum.html"       class="nav-mobile-a" onclick="closeMenu()">Redefining Learning Forum</a>
+  <a href="programme.html"             class="nav-mobile-a" onclick="closeMenu()">Programme</a>
+  <a href="https://gem.edtechhub.com/"  class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
+  <div class="nav-mobile-divider"></div>
+  <div class="nav-mobile-cta">
+    <a href="/#newsletter"              class="btn btn-ghost"   onclick="closeMenu()">Subscribe</a>
+    <a href="mailto:info@edtechhub.com" class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="wrap">
+    <div class="sec-lbl">EdTech Events</div>
+    <h1>Upcoming Events</h1>
+    <p class="page-hero-sub">Conferences, webinars, and networking events across the global EdTech ecosystem.</p>
+    <div class="hero-meta">
+      <span class="hero-stat" id="total-stat">Loading…</span>
+      <a href="https://www.eventbrite.co.uk/o/dohe-81050166313" class="eb-btn" target="_blank" rel="noopener">
+        EdTech Together on Eventbrite ↗
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-bar">
+  <div class="wrap search-inner">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search by country, city, or event name…" autocomplete="off"/>
+    </div>
+    <button class="clear-btn" id="clear-btn" onclick="clearSearch()">✕ Clear</button>
+    <div class="view-toggle">
+      <button class="view-btn on" id="btn-map"  onclick="setView('map')">🗺 Map</button>
+      <button class="view-btn"   id="btn-list" onclick="setView('list')">☰ List</button>
+      <button class="view-btn"   id="btn-both" onclick="setView('both')">⊞ Both</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="map-section" id="map-section">
+  <div id="event-map"></div>
+  <!-- Side panel (Naver-style) -->
+  <div class="map-panel" id="map-panel">
+    <div class="map-panel-head">
+      <div>
+        <div class="map-panel-country" id="panel-country"></div>
+        <div class="map-panel-title"   id="panel-count"></div>
+      </div>
+      <button class="map-panel-close" onclick="closePanel()" title="Close">✕</button>
+    </div>
+    <div class="map-panel-list" id="panel-list"></div>
+  </div>
+</div>
+
+<!-- EVENT LIST -->
+<main>
+  <section class="section" id="list-section">
+    <div class="wrap">
+      <div class="section-header">
+        <h2 id="list-title">All Events</h2>
+        <span class="filter-tag" id="filter-tag" style="display:none"></span>
+      </div>
+      <div class="ev-list" id="ev-list">
+        <div class="status-msg">Loading events…</div>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a href="/" class="logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span class="logo-text-ft">EdTech<span>HUB</span></span>
+        </a>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" rel="noopener">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="/#community">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Events</a></li>
+            <li><a href="community-forum.html">Redefining Learning Forum</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2B 4BQ, UK</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" async id="leaflet-js"></script>
+<script>
+/* ── Country → lat/lng ── */
+const COUNTRY_COORDS = {
+  'Afghanistan': [33.93, 67.71], 'Albania': [41.15, 20.17], 'Algeria': [28.03, 1.66],
+  'Argentina': [-38.42, -63.62], 'Armenia': [40.07, 45.04], 'Australia': [-25.27, 133.78],
+  'Austria': [47.52, 14.55], 'Azerbaijan': [40.14, 47.58], 'Bahrain': [26.0, 50.55],
+  'Bangladesh': [23.68, 90.36], 'Belarus': [53.71, 27.95], 'Belgium': [50.50, 4.47],
+  'Bolivia': [-16.29, -63.59], 'Brazil': [-14.24, -51.93], 'Bulgaria': [42.73, 25.49],
+  'Cambodia': [12.57, 104.99], 'Canada': [56.13, -106.35], 'Chile': [-35.68, -71.54],
+  'China': [35.86, 104.20], 'Colombia': [4.57, -74.30], 'Costa Rica': [9.75, -83.75],
+  'Croatia': [45.10, 15.20], 'Cyprus': [35.13, 33.43], 'Czech Republic': [49.82, 15.47],
+  'Denmark': [56.26, 9.50], 'Ecuador': [-1.83, -78.18], 'Egypt': [26.82, 30.80],
+  'Estonia': [58.60, 25.01], 'Ethiopia': [9.14, 40.49], 'Finland': [61.92, 25.75],
+  'France': [46.23, 2.21], 'Georgia': [42.32, 43.36], 'Germany': [51.17, 10.45],
+  'Ghana': [7.95, -1.02], 'Greece': [39.07, 21.82], 'Hong Kong': [22.32, 114.17],
+  'Hungary': [47.16, 19.50], 'Iceland': [64.96, -19.02], 'India': [20.59, 78.96],
+  'Indonesia': [-0.79, 113.92], 'Iran': [32.43, 53.69], 'Iraq': [33.22, 43.68],
+  'Ireland': [53.41, -8.24], 'Israel': [31.05, 34.85], 'Italy': [41.87, 12.57],
+  'Japan': [36.20, 138.25], 'Jordan': [30.59, 36.24], 'Kazakhstan': [48.02, 66.92],
+  'Kenya': [-0.02, 37.91], 'Kuwait': [29.31, 47.48], 'Latvia': [56.88, 24.60],
+  'Lebanon': [33.85, 35.86], 'Lithuania': [55.17, 23.88], 'Luxembourg': [49.82, 6.13],
+  'Malaysia': [4.21, 109.46], 'Malta': [35.94, 14.38], 'Mexico': [23.63, -102.55],
+  'Morocco': [31.79, -7.09], 'Netherlands': [52.13, 5.29], 'New Zealand': [-40.90, 174.89],
+  'Nigeria': [9.08, 8.68], 'Norway': [60.47, 8.47], 'Oman': [21.51, 55.92],
+  'Pakistan': [30.38, 69.35], 'Palestine': [31.95, 35.23], 'Panama': [8.54, -80.78],
+  'Peru': [-9.19, -75.02], 'Philippines': [12.88, 121.77], 'Poland': [51.92, 19.15],
+  'Portugal': [39.40, -8.22], 'Qatar': [25.35, 51.18], 'Romania': [45.94, 24.97],
+  'Russia': [61.52, 105.32], 'Rwanda': [-1.94, 29.87], 'Saudi Arabia': [23.89, 45.08],
+  'Senegal': [14.50, -14.45], 'Serbia': [44.02, 21.01], 'Singapore': [1.35, 103.82],
+  'Slovakia': [48.67, 19.70], 'Slovenia': [46.15, 14.99], 'South Africa': [-30.56, 22.94],
+  'South Korea': [35.91, 127.77], 'Spain': [40.46, -3.75], 'Sri Lanka': [7.87, 80.77],
+  'Sweden': [60.13, 18.64], 'Switzerland': [46.82, 8.23], 'Taiwan': [23.70, 120.96],
+  'Tanzania': [-6.37, 34.89], 'Thailand': [15.87, 100.99], 'Tunisia': [33.89, 9.54],
+  'Turkey': [38.96, 35.24], 'UAE': [23.42, 53.85], 'Uganda': [1.37, 32.29],
+  'Ukraine': [48.38, 31.17], 'United Arab Emirates': [23.42, 53.85],
+  'United Kingdom': [55.38, -3.44], 'UK': [55.38, -3.44], 'England': [52.36, -1.17],
+  'United States': [37.09, -95.71], 'USA': [37.09, -95.71],
+  'Uruguay': [-32.52, -55.77], 'Uzbekistan': [41.38, 64.59],
+  'Venezuela': [6.42, -66.59], 'Vietnam': [14.06, 108.28],
+  'Zambia': [-13.13, 27.85], 'Zimbabwe': [-19.02, 29.15],
+  'Online': [20, 0], 'Virtual': [20, 0], 'Remote': [20, 0],
+};
+
+function getCoords(country) {
+  if (!country) return null;
+  const n = country.trim();
+  if (COUNTRY_COORDS[n]) return COUNTRY_COORDS[n];
+  for (const [key, val] of Object.entries(COUNTRY_COORDS)) {
+    if (n.toLowerCase().includes(key.toLowerCase()) ||
+        key.toLowerCase().includes(n.toLowerCase())) return val;
+  }
+  return null;
+}
+
+/* ── State ── */
+const PAGE_SIZE = 15;
+let currentPage = 1;
+let allEvents   = [];   // 전체 이벤트 (1회 로드)
+let filtered    = [];   // 검색/필터 후 결과
+let activeFilter = '';
+let currentView = 'both';
+let map = null;
+let markers = [];
+
+const evList      = document.getElementById('ev-list');
+const pagination  = document.getElementById('pagination');
+const totalStat   = document.getElementById('total-stat');
+const searchInput = document.getElementById('search-input');
+const clearBtn    = document.getElementById('clear-btn');
+const filterTag   = document.getElementById('filter-tag');
+const listTitle   = document.getElementById('list-title');
+const mapSection  = document.getElementById('map-section');
+const listSection = document.getElementById('list-section');
+
+/* ── View toggle ── */
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-map').classList.toggle('on',  v === 'map'  || v === 'both');
+  document.getElementById('btn-list').classList.toggle('on', v === 'list' || v === 'both');
+  document.getElementById('btn-both').classList.toggle('on', v === 'both');
+  mapSection.style.display  = (v === 'map'  || v === 'both') ? '' : 'none';
+  listSection.style.display = (v === 'list' || v === 'both') ? '' : 'none';
+  if ((v === 'map' || v === 'both') && map) setTimeout(() => map.invalidateSize(), 50);
+}
+
+/* ── Init Map ── */
+function initMap() {
+  map = L.map('event-map', { zoomControl: true, scrollWheelZoom: false })
+           .setView([30, 10], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18,
+  }).addTo(map);
+}
+
+/* ── Map side panel ── */
+const mapPanel     = document.getElementById('map-panel');
+const panelCountry = document.getElementById('panel-country');
+const panelCount   = document.getElementById('panel-count');
+const panelList    = document.getElementById('panel-list');
+
+function openPanel(country, evs) {
+  const isOnline = /online|virtual|remote/i.test(country);
+  panelCountry.textContent = isOnline ? 'Online / Virtual' : `📍 ${country}`;
+  panelCount.textContent   = `${evs.length} event${evs.length > 1 ? 's' : ''}`;
+
+  panelList.innerHTML = evs.map(e => {
+    const start = e.event_start_dt ? new Date(e.event_start_dt) : null;
+    const dateStr = start
+      ? start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+      : '';
+    const priceText = (e.price || '').trim();
+    const isFree = /free|0|unspecified/i.test(priceText) || !priceText;
+    const priceLabel = isFree ? 'Free' : priceText;
+    const priceClass = isFree ? 'map-panel-ev-price free' : 'map-panel-ev-price';
+    const location = [e.city, e.country].filter(Boolean).join(', ');
+    return `<div class="map-panel-ev">
+      <div class="map-panel-ev-title">${escHtml(e.title || '')}</div>
+      <div class="map-panel-ev-meta">
+        ${dateStr ? `<span>${dateStr}</span>` : ''}
+        <span class="${priceClass}">${escHtml(priceLabel)}</span>
+      </div>
+      ${e.url ? `<a href="${escAttr(e.url)}" class="map-panel-btn" target="_blank" rel="noopener">Register →</a>` : ''}
+    </div>`;
+  }).join('');
+
+  mapPanel.classList.add('open');
+}
+
+function closePanel() {
+  mapPanel.classList.remove('open');
+}
+
+/* ── Plot map pins ── */
+function plotMapPins(events) {
+  if (!map) return;
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+
+  const byCountry = {};
+  events.forEach(e => {
+    const c = (e.country || '').trim() || 'Unknown';
+    if (!byCountry[c]) byCountry[c] = [];
+    byCountry[c].push(e);
+  });
+
+  Object.entries(byCountry).forEach(([country, evs]) => {
+    const coords = getCoords(country);
+    if (!coords) return;
+
+    const isOnline = /online|virtual|remote/i.test(country);
+    const bg    = isOnline ? '#6B7280' : '#16A34A';
+    const count = evs.length;
+    const size  = Math.min(28 + count * 2, 52);
+    const fs    = size >= 44 ? 14 : size >= 36 ? 13 : 12;
+
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width:${size}px;height:${size}px;
+        background:${bg};border:2.5px solid #fff;border-radius:50%;
+        display:flex;align-items:center;justify-content:center;
+        font-size:${fs}px;font-weight:800;color:#fff;
+        box-shadow:0 2px 8px rgba(0,0,0,.28);
+        cursor:pointer;font-family:'Inter',sans-serif;
+        transition:transform .15s;
+      " onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">${count}</div>`,
+      iconSize : [size, size],
+      iconAnchor: [size / 2, size / 2],
+    });
+
+    const marker = L.marker(coords, { icon });
+    marker.on('click', () => openPanel(country, evs));
+    marker.addTo(map);
+    markers.push(marker);
+  });
+
+  // 지도 클릭 시 패널 닫기
+  map.on('click', closePanel);
+}
+
+/* ── Filter by country (from map pin click) ── */
+function filterByCountry(country) {
+  searchInput.value = country;
+  applyFilter(country);
+  listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── Apply filter & re-render ── */
+function applyFilter(q) {
+  activeFilter = q;
+  clearBtn.classList.toggle('show', q.length > 0);
+
+  if (q) {
+    filterTag.textContent = q;
+    filterTag.style.display = '';
+    listTitle.textContent = `Events in "${q}"`;
+    filtered = allEvents.filter(e =>
+      (e.country || '').toLowerCase().includes(q.toLowerCase()) ||
+      (e.title   || '').toLowerCase().includes(q.toLowerCase()));
+    plotMapPins(filtered);
+  } else {
+    filterTag.style.display = 'none';
+    listTitle.textContent = 'All Events';
+    filtered = allEvents;
+    plotMapPins(allEvents);
+  }
+
+  currentPage = 1;
+  renderList();
+}
+
+/* ── Clear search ── */
+function clearSearch() {
+  searchInput.value = '';
+  applyFilter('');
+}
+
+/* ── Search input handler ── */
+searchInput.addEventListener('input', () => applyFilter(searchInput.value.trim()));
+
+/* ── Render current page from local data ── */
+function renderList() {
+  const total = filtered.length;
+  const pages = Math.ceil(total / PAGE_SIZE);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  if (!pageItems.length) {
+    evList.innerHTML = '<div class="status-msg">No events found.</div>';
+    pagination.innerHTML = '';
+    return;
+  }
+
+  evList.innerHTML = pageItems.map(e => renderEventItem(e)).join('');
+  renderPagination(currentPage, pages);
+}
+
+function renderEventItem(e) {
+  const start = e.event_start_dt ? new Date(e.event_start_dt) : null;
+  const mo  = start ? start.toLocaleString('en-US', { month: 'short' }).toUpperCase() : '';
+  const dy  = start ? start.getDate() : '';
+  const dateLabel = start
+    ? start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+  const priceText  = (e.price || '').trim();
+  const isFree     = /free|0|unspecified/i.test(priceText) || !priceText;
+  const priceLabel = isFree ? 'Free / TBC' : priceText;
+  const priceClass = isFree ? 'ev-price free' : 'ev-price';
+
+  return `
+    <a href="${escAttr(e.url || '#')}" class="ev-item" target="_blank" rel="noopener">
+      <div class="ev-left">
+        ${start ? `<div class="ev-date"><span class="mo">${escHtml(mo)}</span><span class="dy">${dy}</span></div>` : ''}
+        <div class="ev-info">
+          <h4>${escHtml(e.title || '')}</h4>
+          <div class="ev-info-meta">
+            ${(e.city || e.country) ? `<span class="ev-country">📍 ${escHtml([e.city, e.country].filter(Boolean).join(', '))}</span>` : ''}
+            <span class="${priceClass}">${escHtml(priceLabel)}</span>
+            ${dateLabel ? `<span class="ev-country">${dateLabel}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <span class="ev-arrow">→</span>
+    </a>`;
+}
+
+/* ── Load all events once, then render locally ── */
+async function loadAllEvents() {
+  evList.innerHTML = '<div class="status-msg">Loading…</div>';
+  try {
+    const res  = await fetch('/api/db/events?page=1&limit=500');
+    const data = await res.json();
+    allEvents = data.events || [];
+    filtered  = allEvents;
+
+    totalStat.innerHTML = allEvents.length
+      ? `<strong>${allEvents.length.toLocaleString()}</strong> upcoming events`
+      : '';
+
+    renderList();
+    plotMapPins(allEvents);
+  } catch (err) {
+    console.error(err);
+    evList.innerHTML = '<div class="status-msg">Could not load events. Please try again.</div>';
+  }
+}
+
+function renderPagination(page, pages) {
+  if (pages <= 1) { pagination.innerHTML = ''; return; }
+  const items = [];
+  items.push(`<button class="pg-btn" onclick="goPage(${page-1})" ${page<=1?'disabled':''}>←</button>`);
+  const shown = new Set([1, pages]);
+  for (let p = Math.max(1, page-2); p <= Math.min(pages, page+2); p++) shown.add(p);
+  let prev = 0;
+  [...shown].sort((a,b)=>a-b).forEach(p => {
+    if (prev && p-prev > 1) items.push('<span class="pg-info">…</span>');
+    items.push(`<button class="pg-btn ${p===page?'on':''}" onclick="goPage(${p})">${p}</button>`);
+    prev = p;
+  });
+  items.push(`<button class="pg-btn" onclick="goPage(${page+1})" ${page>=pages?'disabled':''}>→</button>`);
+  pagination.innerHTML = items.join('');
+}
+
+function goPage(p) {
+  if (p < 1) return;
+  currentPage = p;
+  renderList();
+  listSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function escHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escAttr(str) { return escHtml(str); }
+
+/* ── Hamburger nav ── */
+const hamburger  = document.getElementById('nav-hamburger');
+const mobileMenu = document.getElementById('nav-mobile');
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', isOpen);
+});
+function closeMenu() {
+  mobileMenu.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', false);
+}
+window.addEventListener('scroll', () => {
+  if (mobileMenu.classList.contains('open')) closeMenu();
+}, { passive: true });
+
+/* ── Init ── */
+setView('both');
+loadAllEvents(); // 이벤트 로딩은 Leaflet 독립적으로 즉시 실행
+
+// Leaflet async 로드 후 지도 초기화
+function waitForLeaflet() {
+  if (typeof L !== 'undefined') {
+    initMap();
+    if (allEvents.length) plotMapPins(allEvents);
+  } else {
+    setTimeout(waitForLeaflet, 100);
+  }
+}
+document.getElementById('leaflet-js').addEventListener('load', waitForLeaflet);
+document.getElementById('leaflet-js').addEventListener('error', () => {
+  mapSection.style.display = 'none';
+  console.warn('Leaflet CDN failed to load');
+});
+</script>
+</body>
+</html>

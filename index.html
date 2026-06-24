@@ -1,912 +1,1200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EdTech HUB — Connecting the Global EdTech Ecosystem</title>
-  <meta name="description" content="EdTech HUB is the go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="EdTech HUB is the go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+
+    :root {
+      --accent:       #16A34A;
+      --accent-h:     #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --text-1:       #111827;
+      --text-2:       #6B7280;
+      --text-3:       #9CA3AF;
+      --border:       #E5E7EB;
+      --border-h:     #CBD5E1;
+      --bg-surface:   #F8FAFC;
+      --bg-elevated:  #F1F5F9;
+      --max:          1200px;
+    }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 7px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, border-color .15s; font-family: 'Inter', sans-serif; white-space: nowrap; }
+    .btn-primary   { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .btn-secondary { background: transparent; border: 1.5px solid var(--border-h); color: var(--text-1); padding: 10px 20px; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--text-2); padding: 8px 14px; font-size: 13px; border: none; }
+    .btn-ghost:hover { color: var(--text-1); }
+    .btn-sm  { padding: 7px 16px; font-size: 13px; }
+    .btn-lg  { padding: 14px 28px; font-size: 15px; }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,.4); color: #fff; padding: 10px 20px; }
+    .btn-outline:hover { border-color: #fff; }
+
+    /* ── NAV ── */
+    .header { background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; flex-shrink: 0; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-1); }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2px; list-style: none; flex: 1; }
+    .nav-item { position: relative; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
+    .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
+    .nav-a.on  { color: var(--accent); }
+    .nav-a.gem { color: var(--accent); }
+    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
+    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-div { height: 1px; background: var(--border); margin: 4px 0; }
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag  { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nav-cta { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; margin-left: auto; cursor: pointer; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; }
+    .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); transition: background .12s; }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-div { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .nav-mobile-cta .btn { justify-content: center; }
+
+    /* ── SECTION COMMON ── */
+    .sec-hd  { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; }
+    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .sec-ttl { font-family: 'Sora', sans-serif; font-size: clamp(22px, 2.5vw, 28px); font-weight: 700; color: #111827; }
+    .more-link { font-size: 14px; font-weight: 600; color: #6B7280; transition: color .15s; white-space: nowrap; }
+    .more-link:hover { color: #111827; }
+
+    /* ── HERO ── */
+    .hero { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #F0FDF4 100%); border-bottom: 1px solid var(--border); padding: 80px 0 72px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 100% at 70% 50%, rgba(22,163,74,.06) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: center; position: relative; z-index: 1; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+    .hero-tag::before { content: ''; width: 16px; height: 2px; background: var(--accent); }
+    .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; color: #111827; margin-bottom: 14px; }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub  { font-size: 16px; color: #4B5563; max-width: 440px; margin-bottom: 28px; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 32px; padding-top: 28px; border-top: 1px solid #D1FAE5; flex-wrap: wrap; }
+    .hs-val { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 700; color: #111827; }
+    .hs-val sup { font-size: 13px; color: var(--accent); }
+    .hs-lbl { font-size: 12px; color: #6B7280; margin-top: 2px; }
+    /* Hero event card */
+    .ev-card-hero { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+    .ech-top { background: #F0FDF4; border-bottom: 1px solid #D1FAE5; padding: 18px 20px; }
+    .ech-live { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-muted); color: var(--accent); font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; }
+    .ech-dot  { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+    .ech-title { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 3px; }
+    .ech-sub   { font-size: 11.5px; color: #6B7280; }
+    .ech-body  { padding: 8px 0; }
+    .ech-row   { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #F3F4F6; text-decoration: none; transition: background .12s; }
+    .ech-row:last-child { border-bottom: none; }
+    .ech-row:hover { background: #F9FAFB; }
+    .ech-row:hover .ech-city-name { color: var(--accent); }
+    .ech-row:hover .ech-arrow { color: var(--accent); transform: translateX(3px); }
+    .ech-flag { min-width: 44px; height: 32px; border-radius: 6px; background: var(--accent-muted); color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ech-info  { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .ech-city-name { font-size: 13px; font-weight: 700; color: #111827; transition: color .12s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ech-city-sub  { font-size: 11px; color: #4B5563; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ech-city-date { font-size: 10.5px; color: #9CA3AF; margin-top: 2px; }
+    .ech-arrow { font-size: 14px; color: #D1D5DB; transition: color .12s, transform .12s; }
+    .ech-cta   { display: block; background: var(--accent); color: #fff; text-align: center; padding: 13px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .ech-cta:hover { background: var(--accent-h); }
+
+    /* ── PARTNERS ── */
+    .partners-bar { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 20px 0; }
+    .partners-inner { display: flex; align-items: center; gap: 32px; }
+    .partners-lbl { font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
+    .partners-track-wrap { overflow: hidden; flex: 1; position: relative; }
+    .partners-track-wrap::before, .partners-track-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 48px; z-index: 1; }
+    .partners-track-wrap::before { left: 0;  background: linear-gradient(90deg,  var(--bg-surface), transparent); }
+    .partners-track-wrap::after  { right: 0; background: linear-gradient(-90deg, var(--bg-surface), transparent); }
+    .partners-track { display: flex; gap: 48px; animation: scroll 22s linear infinite; width: max-content; }
+    .partner-item { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-3); white-space: nowrap; }
+    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── STATS ── */
+    .stats-section { background: #fff; border-bottom: 1px solid var(--border); padding: 40px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .stat-card { text-align: center; padding: 24px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-surface); }
+    .stat-num  { font-family: 'Sora', sans-serif; font-size: 40px; font-weight: 700; color: #111827; line-height: 1; }
+    .stat-suffix { display: inline; font-size: 24px; color: var(--accent); font-weight: 700; }
+    .stat-label { font-size: 13px; color: var(--text-2); margin-top: 6px; font-weight: 500; }
+
+    /* ── NEWS (Actual: featured + 2 side) ── */
+    .news-section { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 64px 0; }
+    .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filter-pill { padding: 5px 14px; border-radius: 9999px; font-size: 12.5px; font-weight: 500; background: #fff; border: 1px solid var(--border); color: var(--text-2); cursor: pointer; transition: all .14s; }
+    .filter-pill:hover { border-color: var(--border-h); color: var(--text-1); }
+    .filter-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .news-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; margin-bottom: 24px; }
+    .news-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s, border-color .2s; }
+    .news-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .news-featured { flex-direction: row; }
+    .news-img-featured { width: 260px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 52px; position: relative; }
+    .news-img-side { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 36px; position: relative; }
+    .news-side-stack { display: flex; flex-direction: column; gap: 20px; }
+    .news-body { padding: 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+    .news-source { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .source-logo { font-size: 11px; font-weight: 700; background: var(--bg-elevated); color: var(--text-2); padding: 2px 8px; border-radius: 4px; }
+    .news-date, .read-time { font-size: 11px; color: var(--text-3); }
+    .news-card h3 { font-family: 'Sora', sans-serif; font-size: 14.5px; font-weight: 700; color: #111827; line-height: 1.4; }
+    .news-featured h3 { font-size: 17px; }
+    .news-excerpt { font-size: 13.5px; color: #4B5563; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .news-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); margin-top: auto; }
+    .read-more-link { font-size: 13px; font-weight: 600; color: var(--accent); }
+    .read-more-link:hover { color: var(--accent-h); }
+    .news-engage { display: flex; gap: 6px; }
+    .engage-btn { padding: 3px 9px; border: 1px solid var(--border); border-radius: 9999px; background: none; font-size: 11.5px; color: var(--text-3); cursor: pointer; }
+    .engage-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .news-badge { position: absolute; top: 10px; left: 10px; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .badge-policy { background: #DBEAFE; color: #1D4ED8; }
+    .badge-cyber  { background: #FEE2E2; color: #DC2626; }
+    .badge-ai     { background: #DCFCE7; color: #15803D; }
+    .news-submit-banner { display: flex; align-items: center; justify-content: space-between; background: #111827; border-radius: 10px; padding: 22px 28px; gap: 20px; }
+    .nsb-content { display: flex; align-items: center; gap: 14px; }
+    .nsb-content strong { display: block; font-family: 'Sora', sans-serif; font-size: 15px; color: #fff; margin-bottom: 3px; }
+    .nsb-content p { font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ── LINKEDIN VOICES (Preview: 6-card carousel) ── */
+    .li-section { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 64px 0; }
+    .li-carousel { position: relative; }
+    .li-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 40px) / 3); gap: 20px; overflow-x: scroll; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; }
+    .li-track::-webkit-scrollbar { display: none; }
+    .li-card { scroll-snap-align: start; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; gap: 14px; transition: box-shadow .2s, border-color .2s; }
+    .li-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); border-color: #A7F3D0; }
+    .li-card-hd { display: flex; align-items: center; gap: 10px; }
+    .li-av { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .li-av-green { background: #DCFCE7; color: #15803D; }
+    .li-av-dark  { background: #1F2937; color: #fff; }
+    .li-av-slate { background: #E2E8F0; color: #374151; }
+    .li-av-blue  { background: #DBEAFE; color: #1D4ED8; }
+    .li-av-amber { background: #FEF3C7; color: #D97706; }
+    .li-av-rose  { background: #FFE4E6; color: #E11D48; }
+    .li-person { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+    .li-name { font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 700; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .li-role { font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .li-logo { flex-shrink: 0; opacity: .65; }
+    .li-card:hover .li-logo { opacity: 1; }
+    .li-badge { display: inline-block; align-self: flex-start; padding: 3px 9px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .li-post { font-size: 13.5px; color: #374151; line-height: 1.7; flex: 1; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .li-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); }
+    .li-eng { display: flex; gap: 6px; }
+    .li-eng-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: 9999px; background: none; font-size: 12px; color: var(--text-3); cursor: pointer; transition: all .15s; }
+    .li-eng-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-muted); }
+    .li-view { font-size: 13px; font-weight: 600; color: var(--accent); }
+    .li-view:hover { color: var(--accent-h); }
+    .li-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
+    .li-nav-btn { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; color: var(--text-2); transition: all .15s; flex-shrink: 0; line-height: 1; }
+    .li-nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); background: var(--accent-muted); }
+    .li-nav-btn:disabled { opacity: .28; cursor: not-allowed; }
+    .li-dots { display: flex; gap: 6px; align-items: center; }
+    .li-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-h); border: none; padding: 0; cursor: pointer; transition: all .22s; }
+    .li-dot.on { width: 22px; border-radius: 4px; background: var(--accent); }
+    .li-cta { display: flex; align-items: center; justify-content: space-between; background: #111827; border-radius: 10px; padding: 20px 28px; gap: 20px; margin-top: 20px; }
+    .li-cta-txt strong { display: block; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .li-cta-txt p { font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ── EVENTS (Preview compact list) ── */
+    .events-section { background: #fff; border-top: 1px solid var(--border); padding: 64px 0; }
+    .et-sched-top { background: #F0FDF4; border-bottom: 1px solid #D1FAE5; padding: 16px 20px; }
+    .et-sched-live  { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-muted); color: var(--accent); font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; margin-bottom: 8px; }
+    .et-sched-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+    .et-sched-sub   { font-size: 11px; color: #6B7280; }
+    .et-schedule    { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05); max-width: 620px; }
+    .et-rows        { padding: 4px 0; }
+    .et-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #F3F4F6; text-decoration: none; transition: background .12s; }
+    .et-row:last-child { border-bottom: none; }
+    .et-row:hover { background: #FAFAFA; }
+    .et-row:hover .et-row-name  { color: var(--accent); }
+    .et-row:hover .et-row-arrow { color: var(--accent); transform: translateX(3px); }
+    .et-flag { min-width: 44px; height: 32px; border-radius: 6px; background: var(--accent-muted); color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .et-row-info  { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .et-row-name  { font-size: 13px; font-weight: 700; color: #111827; transition: color .12s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .et-row-loc   { font-size: 11px; color: #4B5563; margin-top: 1px; }
+    .et-row-date  { font-size: 10.5px; color: #9CA3AF; margin-top: 2px; }
+    .et-row-arrow { font-size: 14px; color: #D1D5DB; transition: color .12s, transform .12s; }
+    .et-view-all  { display: block; text-align: center; background: var(--accent); color: #fff; padding: 13px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .et-view-all:hover { background: var(--accent-h); }
+
+    /* ── COMMUNITY (Actual structure) ── */
+    .community-section { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 64px 0; }
+    .community-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .cf-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .cf-title { font-family: 'Sora', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 700; color: #111827; line-height: 1.2; margin-bottom: 16px; }
+    .cf-desc  { font-size: 14px; color: #4B5563; line-height: 1.75; margin-bottom: 16px; }
+    .cf-sub   { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 10px; }
+    .cf-list  { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .cf-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #374151; }
+    .cf-li-icon { font-size: 18px; flex-shrink: 0; }
+    .cf-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .community-cards-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .comm-card { border-radius: 10px; padding: 22px; border: 1px solid var(--border); text-decoration: none; display: flex; flex-direction: column; gap: 8px; transition: box-shadow .2s, border-color .2s, transform .2s; }
+    .comm-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .comm-card-icon { font-size: 28px; margin-bottom: 4px; }
+    .comm-card h4 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #111827; }
+    .comm-card p  { font-size: 13px; color: #4B5563; line-height: 1.6; flex: 1; }
+    .comm-link { font-size: 13px; font-weight: 600; color: var(--accent); }
+    .comm-link:hover { color: var(--accent-h); }
+    .cc-blue  { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); border-color: #BFDBFE; }
+    .cc-red   { background: linear-gradient(135deg,#FFF5F5,#FEE2E2); border-color: #FECACA; }
+    .cc-navy  { background: linear-gradient(135deg,#F8FAFC,#F1F5F9); border-color: #CBD5E1; }
+    .cc-teal  { background: linear-gradient(135deg,#F0FDFA,#CCFBF1); border-color: #99F6E4; }
+
+    /* ── PARTNERSHIP ── */
+    .partnership-section { background: #fff; border-top: 1px solid var(--border); padding: 64px 0; }
+    .partnership-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .ps-features { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+    .ps-feat { display: flex; gap: 14px; align-items: flex-start; }
+    .ps-feat-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .ps-feat strong { display: block; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 2px; }
+    .ps-feat span { font-size: 13px; color: #4B5563; }
+    .ps-partners-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .ps-partner-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 12px; text-align: center; transition: border-color .15s, box-shadow .15s; }
+    .ps-partner-card:hover { border-color: #A7F3D0; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .ppc-icon { font-size: 22px; margin-bottom: 6px; }
+    .ps-partner-card span { font-size: 12px; font-weight: 600; color: var(--text-2); }
+
+    /* ── PROGRAMME ── */
+    .programme-section { background: #111827; padding: 64px 0; }
+    .prog-hd { text-align: center; margin-bottom: 40px; }
+    .prog-hd .sec-lbl { color: #6EE7B7; }
+    .prog-hd .sec-ttl { color: #fff; margin-top: 4px; }
+    .prog-hd p { font-size: 15px; color: #9CA3AF; margin-top: 8px; }
+    .programme-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 40px; }
+    .prog-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 24px; }
+    .prog-num  { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #6B7280; margin-bottom: 12px; }
+    .prog-icon { font-size: 28px; margin-bottom: 12px; }
+    .prog-card h4 { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .prog-card p  { font-size: 13px; color: #9CA3AF; line-height: 1.65; }
+    .programme-cta { text-align: center; }
+
+    /* ── NEWSLETTER ── */
+    .nl-section { background: #F0FDF4; border-top: 1px solid #D1FAE5; padding: 64px 0; }
+    .nl-inner { max-width: 700px; margin: 0 auto; }
+    .nl-inner h2 { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 10px; }
+    .nl-inner p  { font-size: 15px; color: #4B5563; margin-bottom: 28px; line-height: 1.65; }
+    .nl-form-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nl-inp  { flex: 1; min-width: 160px; padding: 10px 14px; border-radius: 7px; border: 1px solid #D1D5DB; background: #fff; font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: border-color .15s; color: #111827; }
+    .nl-inp:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
+    .nl-inp::placeholder { color: #9CA3AF; }
+
+    /* ── CONTACT (Actual form) ── */
+    .contact-section { background: #111827; padding: 64px 0; }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .contact-left h2 { font-family: 'Sora', sans-serif; font-size: clamp(22px, 3vw, 30px); font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 12px; }
+    .contact-left p  { font-size: 14px; color: #9CA3AF; line-height: 1.75; margin-bottom: 28px; }
+    .contact-options { display: flex; flex-direction: column; gap: 16px; }
+    .contact-opt { display: flex; align-items: flex-start; gap: 14px; }
+    .copt-icon { font-size: 22px; }
+    .contact-opt strong { display: block; font-size: 13px; font-weight: 600; color: #9CA3AF; margin-bottom: 3px; }
+    .contact-opt a, .contact-opt span { font-size: 14px; color: #E5E7EB; }
+    .contact-opt a:hover { color: #6EE7B7; }
+    .contact-form { background: #fff; border-radius: 12px; padding: 32px; }
+    .contact-form h4 { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 22px; }
+    .cf-field { margin-bottom: 16px; }
+    .cf-field label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .cf-field input, .cf-field select, .cf-field textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; font-family: 'Inter', sans-serif; color: #111827; outline: none; transition: border-color .15s; background: #fff; }
+    .cf-field input:focus, .cf-field select:focus, .cf-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+    .cf-field textarea { resize: vertical; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111827; border-top: 1px solid #1F2937; padding: 48px 0 28px; }
+    .ft-top { display: grid; grid-template-columns: 220px 1fr; gap: 48px; margin-bottom: 32px; }
+    .ft-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .ft-brand p { font-size: 13px; color: #9CA3AF; margin-bottom: 14px; line-height: 1.65; max-width: 180px; }
+    .ft-brand a { font-size: 12.5px; color: #9CA3AF; transition: color .15s; }
+    .ft-brand a:hover { color: #F9FAFB; }
+    .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .ft-col h5 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col ul { display: flex; flex-direction: column; gap: 9px; }
+    .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col a:hover { color: #F9FAFB; }
+    .ft-btm { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1F2937; padding-top: 22px; font-size: 12px; color: #6B7280; flex-wrap: wrap; gap: 10px; }
+    .ft-legal { display: flex; gap: 20px; }
+    .ft-legal a { color: #6B7280; }
+    .ft-legal a:hover { color: #F9FAFB; }
+    .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; }
+    .back-top:hover { color: #F9FAFB; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1080px) {
+      .hero-inner       { grid-template-columns: 1fr; }
+      .ev-card-hero     { display: none; }
+      .news-grid        { grid-template-columns: 1fr; }
+      .community-grid   { grid-template-columns: 1fr; }
+      .partnership-inner{ grid-template-columns: 1fr; }
+      .contact-inner    { grid-template-columns: 1fr; }
+      .ft-top           { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 900px) {
+      .li-track { grid-auto-columns: calc((100% - 20px) / 2); }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .community-cards-col { grid-template-columns: 1fr; }
+      .programme-grid { grid-template-columns: 1fr 1fr; }
+      .ft-cols { grid-template-columns: 1fr 1fr; }
+      .ft-btm { flex-direction: column; align-items: flex-start; }
+      .news-featured { flex-direction: column; }
+      .news-img-featured { width: 100%; height: 160px; }
+      .news-submit-banner { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .li-track { grid-auto-columns: calc(100% - 20px); }
+      .programme-grid { grid-template-columns: 1fr; }
+      .ft-cols { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; }
+      .nl-form-wrap { flex-direction: column; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ===== TOPBAR ===== -->
-  <div class="topbar">
-    <div class="topbar-inner container">
-      <span>📍 22 Bishopsgate, London, EC2B 4BQ, UK</span>
-      <div class="topbar-right">
-        <a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a>
-        <a href="https://www.linkedin.com/company/edtechhub" target="_blank" rel="noopener" class="topbar-linkedin">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          LinkedIn
-        </a>
+<!-- ── NAV ── -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="#home" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="34" height="34" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="#home" class="nav-a on">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a">News &amp; Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html" class="nav-drop-item">News</a>
+          <div class="nav-drop-div"></div>
+          <a href="news.html#events" class="nav-drop-item">Events</a>
+          <div class="nav-drop-div"></div>
+          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#community" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown" style="min-width:210px;">
+          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
+          <div class="nav-drop-div"></div>
+          <a href="networking.html" class="nav-drop-item">Cross-Cohort Networking</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-forum.html" class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-cta">
+      <a href="#newsletter" class="btn-ghost btn">Subscribe</a>
+      <a href="#contact" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<nav class="nav-mobile" id="mobileNav">
+  <a href="#home" class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="about.html" class="nav-mobile-a" onclick="closeMenu()">About</a>
+  <a href="news.html" class="nav-mobile-a" onclick="closeMenu()">News</a>
+  <a href="news.html#events" class="nav-mobile-a" onclick="closeMenu()">Events</a>
+  <a href="news.html#events" class="nav-mobile-a" onclick="closeMenu()">EdTech Together</a>
+  <a href="community-partnership.html" class="nav-mobile-a" onclick="closeMenu()">Partnership Initiatives</a>
+  <a href="networking.html" class="nav-mobile-a" onclick="closeMenu()">Cross-Cohort Networking</a>
+  <a href="community-forum.html" class="nav-mobile-a" onclick="closeMenu()">Redefining Learning Forum</a>
+  <a href="programme.html" class="nav-mobile-a" onclick="closeMenu()">Programme</a>
+  <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
+  <div class="nav-mobile-div"></div>
+  <div class="nav-mobile-cta">
+    <a href="#newsletter" class="btn btn-secondary" onclick="closeMenu()">Subscribe</a>
+    <a href="#contact" class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ① HERO -->
+  <section class="hero" id="home">
+    <div class="wrap hero-inner">
+      <div>
+        <div class="hero-tag">Global EdTech Ecosystem</div>
+        <h1>Connecting Startups,<br/>Investors &amp; Educators<br/><span>Shaping the Future</span></h1>
+        <p class="hero-sub">EdTech HUB is the go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem — for startups, educators, and industry enthusiasts.</p>
+        <div class="hero-btns">
+          <a href="#edtech-together" class="btn btn-primary btn-lg">Reserve a Spot</a>
+          <a href="#news" class="btn btn-secondary btn-lg">Latest News</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hs-val">500<sup>+</sup></div><div class="hs-lbl">EdTech Startups</div></div>
+          <div><div class="hs-val">50<sup>+</sup></div><div class="hs-lbl">Monthly Events</div></div>
+          <div><div class="hs-val">30<sup>+</sup></div><div class="hs-lbl">Countries</div></div>
+          <div><div class="hs-val">6</div><div class="hs-lbl">Global Partners</div></div>
+        </div>
+      </div>
+      <!-- Event card (desktop) -->
+      <div class="ev-card-hero">
+        <div class="ech-top">
+          <div class="ech-live"><div class="ech-dot"></div>Registration Open</div>
+          <div class="ech-title">EdTech Together</div>
+          <div class="ech-sub">Monthly · Global Events</div>
+        </div>
+        <div class="ech-body">
+          <a class="ech-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="ech-flag">Online</div>
+            <div class="ech-info">
+              <span class="ech-city-name">EdTech Together — Online</span>
+              <span class="ech-city-sub">Your Value Proposition Is Not What You Think</span>
+              <span class="ech-city-date">Wednesday, June 25 · 7:00 PM – 8:30 PM GMT+1</span>
+            </div>
+            <span class="ech-arrow">→</span>
+          </a>
+          <a class="ech-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="ech-flag">UK</div>
+            <div class="ech-info">
+              <span class="ech-city-name">EdTech Together — London</span>
+              <span class="ech-city-sub">London, United Kingdom</span>
+              <span class="ech-city-date">Thursday, July 10 · 6:00 PM – 9:00 PM GMT+1</span>
+            </div>
+            <span class="ech-arrow">→</span>
+          </a>
+          <a class="ech-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="ech-flag">SG</div>
+            <div class="ech-info">
+              <span class="ech-city-name">EdTech Together — Singapore</span>
+              <span class="ech-city-sub">Singapore</span>
+              <span class="ech-city-date">Thursday, July 17 · 6:00 PM – 8:00 PM SGT</span>
+            </div>
+            <span class="ech-arrow">→</span>
+          </a>
+          <a class="ech-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="ech-flag">KR</div>
+            <div class="ech-info">
+              <span class="ech-city-name">EdTech Together — Seoul</span>
+              <span class="ech-city-sub">Seoul, South Korea</span>
+              <span class="ech-city-date">Thursday, July 17 · 5:00 PM – 7:00 PM KST</span>
+            </div>
+            <span class="ech-arrow">→</span>
+          </a>
+        </div>
+        <a href="news.html#events" class="ech-cta">View All Events →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② PARTNERS -->
+  <div class="partners-bar">
+    <div class="wrap partners-inner">
+      <span class="partners-lbl">Our Partners</span>
+      <div class="partners-track-wrap">
+        <div class="partners-track">
+          <span class="partner-item">GES Awards</span>
+          <span class="partner-item">MindCET</span>
+          <span class="partner-item">EdTech Impact</span>
+          <span class="partner-item">Global EdTech</span>
+          <span class="partner-item">Learning Spark</span>
+          <span class="partner-item">ICF.EI</span>
+          <span class="partner-item">GES Awards</span>
+          <span class="partner-item">MindCET</span>
+          <span class="partner-item">EdTech Impact</span>
+          <span class="partner-item">Global EdTech</span>
+          <span class="partner-item">Learning Spark</span>
+          <span class="partner-item">ICF.EI</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== HEADER / NAV ===== -->
-  <header class="header" id="header">
-    <nav class="nav container">
-
-      <!-- Logo -->
-      <a href="#home" class="nav-logo">
-        <div class="logo-mark">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <rect width="36" height="36" rx="6" fill="#1D3557"/>
-            <path d="M8 26L18 10L28 26" stroke="#E63946" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="18" cy="10" r="3" fill="#E63946"/>
-            <rect x="11" y="22" width="14" height="2.5" rx="1.25" fill="white" opacity="0.6"/>
-          </svg>
-        </div>
-        <div class="logo-text-wrap">
-          <span class="logo-edtech">EdTech</span><span class="logo-hub">HUB</span>
-        </div>
-      </a>
-
-      <!-- Nav Links -->
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home" class="nav-link active">Home</a></li>
-
-        <li class="has-dropdown">
-          <a href="#news" class="nav-link">News & Events
-            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <ul class="dropdown">
-            <li><a href="#news"><span class="drop-icon">📰</span>News</a></li>
-            <li><a href="#events"><span class="drop-icon">📅</span>Events</a></li>
-            <li><a href="#news"><span class="drop-icon">📤</span>Submit News or Events</a></li>
-          </ul>
-        </li>
-
-        <li class="has-dropdown">
-          <a href="#community" class="nav-link">Community
-            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <ul class="dropdown dropdown-wide">
-            <li><a href="#edtech-together"><span class="drop-icon">🤝</span>EdTech Together</a></li>
-            <li><a href="#partnerships"><span class="drop-icon">🌐</span>Partnership Initiatives</a></li>
-            <li><a href="#community"><span class="drop-icon">🔗</span>Cross-Cohort Networking</a></li>
-            <li><a href="#community"><span class="drop-icon">💬</span>Redefining Learning Forum</a></li>
-          </ul>
-        </li>
-
-        <li><a href="#programme" class="nav-link">Programme</a></li>
-
-        <li>
-          <a href="https://gem.edtechhub.com" target="_blank" rel="noopener" class="nav-link nav-gem">
-            GEM
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 8.5L8.5 1.5M8.5 1.5H4M8.5 1.5V6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </li>
-      </ul>
-
-      <!-- CTA -->
-      <div class="nav-actions">
-        <a href="#newsletter" class="btn btn-ghost">Subscribe</a>
-        <a href="#contact" class="btn btn-primary">Contact Us</a>
+  <!-- ③ STATS -->
+  <section class="stats-section">
+    <div class="wrap stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">500<span class="stat-suffix">+</span></div>
+        <div class="stat-label">EdTech Startups</div>
       </div>
-
-      <!-- Hamburger -->
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-
-    <!-- Mobile Drawer -->
-    <div class="mobile-nav" id="mobileNav">
-      <a href="#home">Home</a>
-      <div class="mobile-group">
-        <span class="mobile-label">News & Events</span>
-        <a href="#news">News</a>
-        <a href="#events">Events</a>
-        <a href="#news">Submit News or Events</a>
+      <div class="stat-card">
+        <div class="stat-num">50<span class="stat-suffix">+</span></div>
+        <div class="stat-label">Monthly Events</div>
       </div>
-      <div class="mobile-group">
-        <span class="mobile-label">Community</span>
-        <a href="#edtech-together">EdTech Together</a>
-        <a href="#partnerships">Partnership Initiatives</a>
-        <a href="#community">Cross-Cohort Networking</a>
-        <a href="#community">Redefining Learning Forum</a>
+      <div class="stat-card">
+        <div class="stat-num">30<span class="stat-suffix">+</span></div>
+        <div class="stat-label">Countries Reached</div>
       </div>
-      <a href="#programme">Programme</a>
-      <a href="https://gem.edtechhub.com" target="_blank">GEM ↗</a>
-      <div class="mobile-actions">
-        <a href="#newsletter" class="btn btn-ghost">Subscribe</a>
-        <a href="#contact" class="btn btn-primary">Contact Us</a>
+      <div class="stat-card">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Global Partners</div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="home">
-      <div class="hero-bg">
-        <div class="hero-overlay"></div>
-        <div class="hero-grid-pattern"></div>
-      </div>
-      <div class="container hero-inner">
-        <div class="hero-content">
-          <div class="hero-eyebrow">
-            <span class="eyebrow-dot"></span>
-            Global EdTech Ecosystem
-          </div>
-          <h1 class="hero-title">
-            Connecting Startups,<br/>
-            Investors & Educators<br/>
-            <span class="hero-accent">Shaping the Future</span>
-          </h1>
-          <p class="hero-desc">
-            EdTech HUB is the go-to platform for the latest insights,
-            opportunities, and connections in the global EdTech ecosystem —
-            for startups, educators, and industry enthusiasts.
-          </p>
-          <div class="hero-btns">
-            <a href="#edtech-together" class="btn btn-primary btn-lg">Reserve a Spot</a>
-            <a href="#news" class="btn btn-outline-white btn-lg">Latest News</a>
-          </div>
-          <div class="hero-trust">
-            <div class="trust-avatars">
-              <div class="avatar av1">S</div>
-              <div class="avatar av2">I</div>
-              <div class="avatar av3">E</div>
-              <div class="avatar av4">+</div>
-            </div>
-            <span>Trusted by <strong>500+</strong> startups, investors & educators worldwide</span>
-          </div>
+  <!-- ④ NEWS (Actual: featured + 2 side) -->
+  <section class="news-section" id="news">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div>
+          <div class="sec-lbl">News &amp; Insights</div>
+          <h2 class="sec-ttl">Top News Picks</h2>
         </div>
-        <div class="hero-visual">
-          <div class="hero-card-main">
-            <div class="hc-header">
-              <div class="hc-dot red"></div>
-              <div class="hc-dot yellow"></div>
-              <div class="hc-dot green"></div>
-              <span>EdTech Together — London</span>
+        <a href="news.html" class="more-link">View all news →</a>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">Policy</button>
+        <button class="filter-pill">Cybersecurity</button>
+        <button class="filter-pill">AI &amp; Learning</button>
+        <button class="filter-pill">Startups</button>
+        <button class="filter-pill">Investment</button>
+      </div>
+      <div class="news-grid">
+        <!-- Featured -->
+        <article class="news-card news-featured">
+          <div class="news-img-featured" style="background:linear-gradient(135deg,#1D3557,#2d4a73);">
+            <span>🖥️</span>
+            <span class="news-badge badge-policy">Policy</span>
+          </div>
+          <div class="news-body">
+            <div class="news-source">
+              <span class="source-logo">EdSurge</span>
+              <span class="news-date">May 2026</span>
+              <span class="read-time">4 min read</span>
             </div>
-            <div class="hc-body">
-              <div class="hc-event-title">Monthly Networking Event</div>
-              <div class="hc-event-sub">Keynotes · Panels · Interactive Sessions</div>
-              <div class="hc-divider"></div>
-              <div class="hc-rows">
-                <div class="hc-row">
-                  <span class="hc-icon">🎤</span>
-                  <div>
-                    <strong>Keynote Speech</strong>
-                    <span>Accelerating EdTech Innovation</span>
-                  </div>
-                </div>
-                <div class="hc-row">
-                  <span class="hc-icon">🤝</span>
-                  <div>
-                    <strong>Panel Discussion</strong>
-                    <span>Future of Learning — 2026</span>
-                  </div>
-                </div>
-                <div class="hc-row">
-                  <span class="hc-icon">🚀</span>
-                  <div>
-                    <strong>Startup Showcase</strong>
-                    <span>Early-stage Pitching</span>
-                  </div>
-                </div>
+            <h3>Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
+            <p class="news-excerpt">Growing concern among parents and educators over screen time is putting new pressure on how schools evaluate and approve EdTech tools — prompting calls for more rigorous, transparent vetting processes across districts.</p>
+            <div class="news-footer">
+              <a href="news.html" class="read-more-link">Read More →</a>
+              <div class="news-engage">
+                <button class="engage-btn">♥ 142</button>
+                <button class="engage-btn">💬 28</button>
               </div>
-              <a href="#edtech-together" class="hc-btn">Reserve a Spot →</a>
             </div>
           </div>
-          <div class="hero-card-float fc1">
-            <div class="fc-icon">🌍</div>
-            <div>
-              <strong>Global Network</strong>
-              <span>London & Online</span>
-            </div>
-          </div>
-          <div class="hero-card-float fc2">
-            <div class="fc-icon">🏆</div>
-            <div>
-              <strong>GES Awards Partner</strong>
-              <span>Top EdTech Awards</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Scroll hint -->
-      <div class="scroll-hint">
-        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
-        <span>Scroll</span>
-      </div>
-    </section>
-
-    <!-- ===== PARTNERS TICKER ===== -->
-    <section class="partners-bar">
-      <div class="container">
-        <p class="partners-label">Our Partners</p>
-        <div class="partners-track-wrap">
-          <div class="partners-track">
-            <div class="partner-item">GES Awards</div>
-            <div class="partner-item">MindCET</div>
-            <div class="partner-item">EdTech Impact</div>
-            <div class="partner-item">Global EdTech</div>
-            <div class="partner-item">Learning Spark</div>
-            <div class="partner-item">ICF.EI</div>
-            <!-- Duplicate for seamless loop -->
-            <div class="partner-item">GES Awards</div>
-            <div class="partner-item">MindCET</div>
-            <div class="partner-item">EdTech Impact</div>
-            <div class="partner-item">Global EdTech</div>
-            <div class="partner-item">Learning Spark</div>
-            <div class="partner-item">ICF.EI</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== STATS ===== -->
-    <section class="stats-section">
-      <div class="container stats-grid">
-        <div class="stat-card">
-          <div class="stat-num" data-target="500">0</div>
-          <div class="stat-label">EdTech Startups</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" data-target="50">0</div>
-          <div class="stat-label">Monthly Events</div>
-          <div class="stat-suffix">+</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" data-target="30">0</div>
-          <div class="stat-label">Countries Reached</div>
-          <div class="stat-suffix">+</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" data-target="6">0</div>
-          <div class="stat-label">Global Partners</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== NEWS SECTION ===== -->
-    <section class="news-section" id="news">
-      <div class="container">
-        <div class="section-header">
-          <div class="section-tag">News & Insights</div>
-          <h2 class="section-title">Top News Picks</h2>
-          <p class="section-sub">Stay up to date with the latest trends and developments in EdTech</p>
-        </div>
-
-        <!-- Filter bar (e27-style) -->
-        <div class="filter-bar">
-          <button class="filter-pill active">All</button>
-          <button class="filter-pill">Policy</button>
-          <button class="filter-pill">Cybersecurity</button>
-          <button class="filter-pill">AI & Learning</button>
-          <button class="filter-pill">Startups</button>
-          <button class="filter-pill">Investment</button>
-        </div>
-
-        <!-- Main news grid -->
-        <div class="news-grid">
-          <!-- Featured -->
-          <article class="news-card news-featured">
-            <div class="news-img news-img-featured">
-              <div class="news-img-bg" style="background:linear-gradient(135deg,#1D3557,#2d4a73)">
-                <span class="news-emoji">🖥️</span>
-              </div>
-              <span class="news-badge badge-policy">Policy</span>
+        </article>
+        <!-- Side stack -->
+        <div class="news-side-stack">
+          <article class="news-card">
+            <div class="news-img-side" style="background:linear-gradient(135deg,#E63946,#c1121f);">
+              🔒
+              <span class="news-badge badge-cyber">Cybersecurity</span>
             </div>
             <div class="news-body">
               <div class="news-source">
                 <span class="source-logo">EdSurge</span>
                 <span class="news-date">May 2026</span>
-                <span class="read-time">4 min read</span>
               </div>
-              <h3 class="news-title">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
-              <p class="news-excerpt">Growing concern among parents and educators over screen time is putting new pressure on how schools evaluate and approve EdTech tools — prompting calls for more rigorous, transparent vetting processes across districts.</p>
+              <h3>Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
+              <p class="news-excerpt">A recent breach targeting Canvas LMS has exposed ongoing vulnerabilities in school cybersecurity infrastructure, highlighting the urgent need for stronger digital defenses.</p>
               <div class="news-footer">
-                <a href="#" class="read-more-link">Read More →</a>
+                <a href="news.html" class="read-more-link">Read More →</a>
                 <div class="news-engage">
-                  <button class="engage-btn">♥ 142</button>
-                  <button class="engage-btn">💬 28</button>
+                  <button class="engage-btn">♥ 97</button>
+                  <button class="engage-btn">💬 19</button>
                 </div>
               </div>
             </div>
           </article>
-
-          <!-- Side cards -->
-          <div class="news-side-stack">
-            <article class="news-card news-side">
-              <div class="news-img news-img-side">
-                <div class="news-img-bg" style="background:linear-gradient(135deg,#E63946,#c1121f)">
-                  <span class="news-emoji">🔒</span>
-                </div>
-                <span class="news-badge badge-cyber">Cybersecurity</span>
-              </div>
-              <div class="news-body">
-                <div class="news-source">
-                  <span class="source-logo">EdSurge</span>
-                  <span class="news-date">May 2026</span>
-                  <span class="read-time">5 min read</span>
-                </div>
-                <h3 class="news-title">Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
-                <p class="news-excerpt">A recent breach targeting Canvas LMS has exposed ongoing vulnerabilities in school cybersecurity infrastructure, highlighting the urgent need for stronger digital defenses in education.</p>
-                <div class="news-footer">
-                  <a href="#" class="read-more-link">Read More →</a>
-                  <div class="news-engage">
-                    <button class="engage-btn">♥ 97</button>
-                    <button class="engage-btn">💬 19</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article class="news-card news-side">
-              <div class="news-img news-img-side">
-                <div class="news-img-bg" style="background:linear-gradient(135deg,#457B9D,#1D3557)">
-                  <span class="news-emoji">🤖</span>
-                </div>
-                <span class="news-badge badge-ai">AI & Learning</span>
-              </div>
-              <div class="news-body">
-                <div class="news-source">
-                  <span class="source-logo">EdTech HUB</span>
-                  <span class="news-date">May 2026</span>
-                  <span class="read-time">6 min read</span>
-                </div>
-                <h3 class="news-title">Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
-                <p class="news-excerpt">What separates early-stage EdTech startups that scale from those that stall? A framework for building execution systems that align founders, product, and go-to-market from day one.</p>
-                <div class="news-footer">
-                  <a href="#" class="read-more-link">Read More →</a>
-                  <div class="news-engage">
-                    <button class="engage-btn">♥ 203</button>
-                    <button class="engage-btn">💬 41</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-
-        <!-- Submit CTA -->
-        <div class="news-submit-banner">
-          <div class="nsb-content">
-            <span class="nsb-icon">📤</span>
-            <div>
-              <strong>Have EdTech news or events to share?</strong>
-              <p>Submit your EdTech news or events directly to EdTech HUB for publication.</p>
+          <article class="news-card">
+            <div class="news-img-side" style="background:linear-gradient(135deg,#457B9D,#1D3557);">
+              🤖
+              <span class="news-badge badge-ai">AI &amp; Learning</span>
             </div>
-          </div>
-          <a href="#contact" class="btn btn-primary">Submit</a>
+            <div class="news-body">
+              <div class="news-source">
+                <span class="source-logo">EdTech HUB</span>
+                <span class="news-date">May 2026</span>
+              </div>
+              <h3>Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
+              <p class="news-excerpt">What separates early-stage EdTech startups that scale from those that stall? A framework for building execution systems that align founders, product, and go-to-market from day one.</p>
+              <div class="news-footer">
+                <a href="news.html" class="read-more-link">Read More →</a>
+                <div class="news-engage">
+                  <button class="engage-btn">♥ 203</button>
+                  <button class="engage-btn">💬 41</button>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
-    </section>
-
-    <!-- ===== EVENTS SECTION (Bett-style dark) ===== -->
-    <section class="events-section" id="events">
-      <div class="events-bg-layer"></div>
-      <div class="container">
-        <div class="section-header light-header">
-          <div class="section-tag tag-light">Upcoming Events</div>
-          <h2 class="section-title title-light">EdTech HUB Events</h2>
-          <p class="section-sub sub-light">Monthly events in London and online webinars bringing the ecosystem together</p>
-        </div>
-
-        <!-- Featured Event -->
-        <div class="event-hero-card">
-          <div class="ehc-left">
-            <div class="ehc-live-badge">
-              <span class="live-dot"></span>Registration Open
-            </div>
-            <div class="ehc-date">Monthly · London & Online</div>
-            <h2 class="ehc-title">EdTech Together — London</h2>
-            <p class="ehc-desc">
-              EdTech Together brings together startups, investors, experts, and other ecosystem players to connect, collaborate, and innovate. Engage with thought leaders through insightful keynote speeches, panel discussions, and interactive sessions.
-            </p>
-            <ul class="ehc-features">
-              <li><span>✓</span> Share trends, tools, and insights</li>
-              <li><span>✓</span> Discover opportunities for collaboration and innovation</li>
-              <li><span>✓</span> Join special editions on the latest trends and topics</li>
-              <li><span>✓</span> Build meaningful relationships & explore business opportunities</li>
-            </ul>
-            <div class="ehc-actions">
-              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-lg">Reserve a Spot</a>
-              <a href="#contact" class="btn btn-outline-white btn-lg">Contact Us</a>
-            </div>
-          </div>
-          <div class="ehc-right">
-            <div class="ehc-schedule">
-              <div class="ehc-schedule-title">Event Schedule</div>
-              <div class="ehc-slot">
-                <div class="ehc-time">6:00 PM</div>
-                <div class="ehc-slot-info">
-                  <strong>Doors Open & Networking</strong>
-                  <span>Welcome drinks & introductions</span>
-                </div>
-              </div>
-              <div class="ehc-slot">
-                <div class="ehc-time">6:30 PM</div>
-                <div class="ehc-slot-info">
-                  <strong>Keynote Speech</strong>
-                  <span>Industry leader insights</span>
-                </div>
-              </div>
-              <div class="ehc-slot">
-                <div class="ehc-time">7:00 PM</div>
-                <div class="ehc-slot-info">
-                  <strong>Panel Discussion</strong>
-                  <span>Expert perspectives & debate</span>
-                </div>
-              </div>
-              <div class="ehc-slot">
-                <div class="ehc-time">7:45 PM</div>
-                <div class="ehc-slot-info">
-                  <strong>Startup Showcase</strong>
-                  <span>Early-stage startup pitches</span>
-                </div>
-              </div>
-              <div class="ehc-slot">
-                <div class="ehc-time">8:30 PM</div>
-                <div class="ehc-slot-info">
-                  <strong>Open Networking</strong>
-                  <span>Connect with the community</span>
-                </div>
-              </div>
-            </div>
+      <div class="news-submit-banner">
+        <div class="nsb-content">
+          <span style="font-size:24px;">📤</span>
+          <div>
+            <strong>Have EdTech news or events to share?</strong>
+            <p>Submit your EdTech news or events directly to EdTech HUB for publication.</p>
           </div>
         </div>
-
-        <!-- Event Cards Grid -->
-        <h3 class="events-grid-title">All Events</h3>
-        <div class="events-grid">
-
-          <div class="event-card">
-            <div class="ec-top" style="background:linear-gradient(135deg,#1D3557 0%,#2d4a73 100%)">
-              <span class="ec-emoji">🏙️</span>
-              <span class="ec-location">London, UK</span>
-            </div>
-            <div class="ec-body">
-              <div class="ec-date-badge">
-                <span class="ec-month">JUN</span>
-                <span class="ec-day">12</span>
-              </div>
-              <h4>EdTech Together — London March</h4>
-              <p>Monthly in-person networking for startups, investors, and educators in London.</p>
-              <div class="ec-tags">
-                <span>In-Person</span><span>Networking</span><span>Monthly</span>
-              </div>
-              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Reserve a Spot</a>
-            </div>
-          </div>
-
-          <div class="event-card">
-            <div class="ec-top" style="background:linear-gradient(135deg,#E63946 0%,#c1121f 100%)">
-              <span class="ec-emoji">💻</span>
-              <span class="ec-location">Online Webinar</span>
-            </div>
-            <div class="ec-body">
-              <div class="ec-date-badge">
-                <span class="ec-month">JUL</span>
-                <span class="ec-day">08</span>
-              </div>
-              <h4>Accelerating Execution Webinar</h4>
-              <p>The Operating System of High-Performing Early-Stage EdTech Teams.</p>
-              <div class="ec-tags">
-                <span>Webinar</span><span>Startup</span><span>Free</span>
-              </div>
-              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Register</a>
-            </div>
-          </div>
-
-          <div class="event-card">
-            <div class="ec-top" style="background:linear-gradient(135deg,#457B9D 0%,#1D3557 100%)">
-              <span class="ec-emoji">🤝</span>
-              <span class="ec-location">London, UK</span>
-            </div>
-            <div class="ec-body">
-              <div class="ec-date-badge">
-                <span class="ec-month">AUG</span>
-                <span class="ec-day">20</span>
-              </div>
-              <h4>EdTech Together — London</h4>
-              <p>Special edition exploring the latest trends and innovations in educational technology.</p>
-              <div class="ec-tags">
-                <span>In-Person</span><span>Special Edition</span>
-              </div>
-              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-sm">Reserve a Spot</a>
-            </div>
-          </div>
-
-          <div class="event-card">
-            <div class="ec-top" style="background:linear-gradient(135deg,#2a9d8f 0%,#1a6b5f 100%)">
-              <span class="ec-emoji">🌐</span>
-              <span class="ec-location">Partnership Event</span>
-            </div>
-            <div class="ec-body">
-              <div class="ec-date-badge">
-                <span class="ec-month">SEP</span>
-                <span class="ec-day">15</span>
-              </div>
-              <h4>Partnership Initiatives Summit</h4>
-              <p>Bringing stakeholder groups together to support the future of EdTech startup leaders.</p>
-              <div class="ec-tags">
-                <span>Summit</span><span>B2B</span><span>Partnership</span>
-              </div>
-              <a href="#contact" class="btn btn-primary btn-sm">Contact Us</a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== COMMUNITY (EdTech Together) ===== -->
-    <section class="community-section" id="community">
-      <div class="container">
-        <div class="community-grid">
-          <!-- EdTech Together -->
-          <div class="community-feature" id="edtech-together">
-            <div class="cf-eyebrow">Community</div>
-            <h2 class="cf-title">EdTech Together</h2>
-            <p class="cf-desc">
-              EdTech Together brings together startups, investors, experts, and other ecosystem players to connect, collaborate, and innovate. Engage with thought leaders and industry experts through insightful keynote speeches, panel discussions, and interactive sessions to expand your knowledge, build meaningful relationships, and explore business development opportunities.
-            </p>
-            <p class="cf-desc">
-              It's also a perfect opportunity to support long-term success within the EdTech industry.
-            </p>
-            <h4 class="cf-sub">What's Inside</h4>
-            <ul class="cf-list">
-              <li>
-                <div class="cf-li-icon">💡</div>
-                <span>Share trends, tools, and insights</span>
-              </li>
-              <li>
-                <div class="cf-li-icon">🔍</div>
-                <span>Discover opportunities for collaboration and innovation</span>
-              </li>
-              <li>
-                <div class="cf-li-icon">⭐</div>
-                <span>Join special editions on the latest trends and topics</span>
-              </li>
-            </ul>
-            <h4 class="cf-sub">How To Join</h4>
-            <p class="cf-desc">
-              We host a monthly event in London as well as online webinars. If you're interested in committing to share your insights and learnings at this event, we'd love to hear from you.
-            </p>
-            <div class="cf-actions">
-              <a href="https://www.eventbrite.com" target="_blank" class="btn btn-primary btn-lg">Reserve a Spot</a>
-              <a href="#contact" class="btn btn-outline btn-lg">Contact Us</a>
-            </div>
-          </div>
-
-          <!-- Community cards on right -->
-          <div class="community-cards-col">
-            <div class="comm-card cc-blue">
-              <div class="comm-card-icon">🤝</div>
-              <h4>EdTech Together</h4>
-              <p>Monthly events in London & online webinars connecting the ecosystem.</p>
-              <a href="#edtech-together" class="comm-link">Learn more →</a>
-            </div>
-
-            <div class="comm-card cc-red">
-              <div class="comm-card-icon">🌐</div>
-              <h4>Partnership Initiatives</h4>
-              <p>Together, not against each other — we shape the future of EdTech through strategic partnerships.</p>
-              <a href="#partnerships" class="comm-link">Learn more →</a>
-            </div>
-
-            <div class="comm-card cc-navy">
-              <div class="comm-card-icon">🔗</div>
-              <h4>Cross-Cohort Networking</h4>
-              <p>Connect across programmes and cohorts to build lasting relationships in the EdTech ecosystem.</p>
-              <a href="#contact" class="comm-link">Learn more →</a>
-            </div>
-
-            <div class="comm-card cc-teal">
-              <div class="comm-card-icon">💬</div>
-              <h4>Redefining Learning Forum</h4>
-              <p>Thoughtful conversations across stakeholder groups supporting the future of EdTech.</p>
-              <a href="#contact" class="comm-link">Learn more →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== PARTNERSHIP SECTION ===== -->
-    <section class="partnership-section" id="partnerships">
-      <div class="container">
-        <div class="partnership-inner">
-          <div class="ps-content">
-            <div class="section-tag">Partnership Initiatives</div>
-            <h2 class="section-title">Together, Not Against Each Other</h2>
-            <p class="section-sub">
-              We strongly believe in driving innovation and success through partnerships and encourage thoughtful conversations across various stakeholder groups to support the future EdTech startup leaders.
-            </p>
-            <div class="ps-features">
-              <div class="ps-feat">
-                <div class="ps-feat-icon">🚀</div>
-                <div>
-                  <strong>Startup Support</strong>
-                  <span>Mentoring and resources for early-stage EdTech founders</span>
-                </div>
-              </div>
-              <div class="ps-feat">
-                <div class="ps-feat-icon">💰</div>
-                <div>
-                  <strong>Investor Access</strong>
-                  <span>Direct connections to VCs, angels, and grant providers</span>
-                </div>
-              </div>
-              <div class="ps-feat">
-                <div class="ps-feat-icon">🏛️</div>
-                <div>
-                  <strong>Institutional Partners</strong>
-                  <span>Collaboration with schools, universities, and government bodies</span>
-                </div>
-              </div>
-            </div>
-            <a href="#contact" class="btn btn-primary btn-lg">Contact Us</a>
-          </div>
-          <div class="ps-visual">
-            <div class="ps-partners-grid">
-              <div class="ps-partner-card">
-                <div class="ppc-icon">🏆</div>
-                <span>GES Awards</span>
-              </div>
-              <div class="ps-partner-card">
-                <div class="ppc-icon">🧠</div>
-                <span>MindCET</span>
-              </div>
-              <div class="ps-partner-card">
-                <div class="ppc-icon">📊</div>
-                <span>EdTech Impact</span>
-              </div>
-              <div class="ps-partner-card">
-                <div class="ppc-icon">🌍</div>
-                <span>Global EdTech</span>
-              </div>
-              <div class="ps-partner-card">
-                <div class="ppc-icon">⚡</div>
-                <span>Learning Spark</span>
-              </div>
-              <div class="ps-partner-card">
-                <div class="ppc-icon">🎓</div>
-                <span>ICF.EI</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== PROGRAMME ===== -->
-    <section class="programme-section" id="programme">
-      <div class="programme-bg"></div>
-      <div class="container">
-        <div class="section-header light-header">
-          <div class="section-tag tag-light">Programme</div>
-          <h2 class="section-title title-light">EdTech HUB Programme</h2>
-          <p class="section-sub sub-light">Structured support for EdTech startups at every stage of their journey</p>
-        </div>
-        <div class="programme-grid">
-          <div class="prog-card">
-            <div class="prog-num">01</div>
-            <div class="prog-icon">🔍</div>
-            <h4>Discovery</h4>
-            <p>Connect with the EdTech ecosystem, attend events, and identify your market opportunity.</p>
-          </div>
-          <div class="prog-card">
-            <div class="prog-num">02</div>
-            <div class="prog-icon">🛠️</div>
-            <h4>Development</h4>
-            <p>Access mentorship, workshops, and resources to build and refine your EdTech product.</p>
-          </div>
-          <div class="prog-card">
-            <div class="prog-num">03</div>
-            <div class="prog-icon">🚀</div>
-            <h4>Growth</h4>
-            <p>Scale your startup with investor introductions, partnership opportunities, and community backing.</p>
-          </div>
-          <div class="prog-card">
-            <div class="prog-num">04</div>
-            <div class="prog-icon">🌍</div>
-            <h4>Global</h4>
-            <p>Expand internationally with EdTech HUB's global network of partners, institutions, and investors.</p>
-          </div>
-        </div>
-        <div class="programme-cta">
-          <a href="#contact" class="btn btn-primary btn-lg">Apply to the Programme</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== GEM ===== -->
-    <section class="gem-section">
-      <div class="container">
-        <div class="gem-inner">
-          <div class="gem-badge">GEM</div>
-          <h2>Global EdTech Resource Map</h2>
-          <p>Discover the world's EdTech ecosystem at a glance. GEM is EdTech HUB's live resource map connecting startups, investors, accelerators, and educators across the globe.</p>
-          <a href="https://gem.edtechhub.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
-            Explore GEM
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H6M12 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== NEWSLETTER ===== -->
-    <section class="newsletter-section" id="newsletter">
-      <div class="container">
-        <div class="newsletter-box">
-          <div class="nl-left">
-            <div class="nl-icon">📬</div>
-            <div>
-              <h3>Don't Miss Out</h3>
-              <p>Stay up to date with the latest trends, events, and activities in EdTech. Join our community newsletter.</p>
-            </div>
-          </div>
-          <form class="nl-form" id="nlForm">
-            <div class="nl-fields">
-              <input type="email" name="email" placeholder="Email address" required />
-              <input type="text" name="name" placeholder="Full name" required />
-              <select name="role">
-                <option value="" disabled selected>Your role</option>
-                <option>Startup</option>
-                <option>Startup Coach</option>
-                <option>Expert</option>
-                <option>Investor</option>
-                <option>Service Provider</option>
-                <option>Accelerator</option>
-                <option>Educator</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Subscribe</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== CONTACT CTA ===== -->
-    <section class="contact-section" id="contact">
-      <div class="contact-bg"></div>
-      <div class="container">
-        <div class="contact-inner">
-          <div class="contact-left">
-            <div class="section-tag tag-light">Get Involved</div>
-            <h2 class="title-light">Interested in joining our community or internal events?</h2>
-            <p class="sub-light">Whether you're a startup founder, investor, educator, or industry expert — EdTech HUB has a place for you.</p>
-            <div class="contact-options">
-              <div class="contact-opt">
-                <span class="copt-icon">📧</span>
-                <div>
-                  <strong>Email Us</strong>
-                  <a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a>
-                </div>
-              </div>
-              <div class="contact-opt">
-                <span class="copt-icon">📍</span>
-                <div>
-                  <strong>Visit Us</strong>
-                  <span>22 Bishopsgate, London, EC2B 4BQ, UK</span>
-                </div>
-              </div>
-              <div class="contact-opt">
-                <span class="copt-icon">🔗</span>
-                <div>
-                  <strong>Connect</strong>
-                  <a href="https://www.linkedin.com/company/edtechhub" target="_blank">LinkedIn</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <form class="contact-form" id="contactForm">
-            <h4>Send Us a Message</h4>
-            <div class="cf-field">
-              <label>Full Name</label>
-              <input type="text" placeholder="Your name" required />
-            </div>
-            <div class="cf-field">
-              <label>Email</label>
-              <input type="email" placeholder="your@email.com" required />
-            </div>
-            <div class="cf-field">
-              <label>Role</label>
-              <select>
-                <option value="" disabled selected>Select your role</option>
-                <option>Startup Founder</option>
-                <option>Investor</option>
-                <option>Educator</option>
-                <option>Expert / Advisor</option>
-                <option>Partner Organisation</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="cf-field">
-              <label>Message</label>
-              <textarea rows="4" placeholder="Tell us how we can help..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <!-- Brand -->
-        <div class="footer-brand">
-          <a href="#home" class="nav-logo footer-logo">
-            <div class="logo-mark">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                <rect width="36" height="36" rx="6" fill="#1D3557"/>
-                <path d="M8 26L18 10L28 26" stroke="#E63946" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="18" cy="10" r="3" fill="#E63946"/>
-                <rect x="11" y="22" width="14" height="2.5" rx="1.25" fill="white" opacity="0.6"/>
-              </svg>
-            </div>
-            <div class="logo-text-wrap">
-              <span class="logo-edtech">EdTech</span><span class="logo-hub">HUB</span>
-            </div>
-          </a>
-          <p class="footer-desc">The go-to platform for the latest insights, opportunities, and connections in the global EdTech ecosystem.</p>
-          <a href="https://www.linkedin.com/company/edtechhub" target="_blank" class="footer-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            Follow on LinkedIn
-          </a>
-        </div>
-
-        <!-- Nav columns -->
-        <div class="footer-nav-grid">
-          <div class="footer-col">
-            <h5>Navigation</h5>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#news">News</a></li>
-              <li><a href="#events">Events</a></li>
-              <li><a href="#programme">Programme</a></li>
-              <li><a href="https://gem.edtechhub.com" target="_blank">GEM ↗</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h5>Community</h5>
-            <ul>
-              <li><a href="#edtech-together">EdTech Together</a></li>
-              <li><a href="#partnerships">Partnership Initiatives</a></li>
-              <li><a href="#community">Cross-Cohort Networking</a></li>
-              <li><a href="#community">Redefining Learning Forum</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h5>Contact</h5>
-            <ul>
-              <li><a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a></li>
-              <li><span>22 Bishopsgate</span></li>
-              <li><span>London, EC2B 4BQ, UK</span></li>
-              <li><a href="#contact">Send a Message</a></li>
-              <li><a href="#news">Submit News / Events</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>@2025 DOHE GLOBAL. ALL RIGHTS RESERVED.</p>
-        <div class="footer-legal">
-          <a href="#">Privacy</a>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Submissions</a>
-        </div>
-        <button class="back-to-top" id="backToTop">↑ TOP</button>
+        <a href="submit.html" class="btn btn-primary">Submit</a>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <script src="main.js"></script>
+  <!-- ⑤ LINKEDIN VOICES (Preview: 6 cards, carousel) -->
+  <section class="li-section" id="voices">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div>
+          <div class="sec-lbl">Community Voices</div>
+          <h2 class="sec-ttl">Voices from the Ecosystem</h2>
+        </div>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="more-link">Follow on LinkedIn →</a>
+      </div>
+      <div class="li-carousel">
+        <div class="li-track" id="liTrack">
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-dark">JO</div>
+              <div class="li-person">
+                <span class="li-name">James Okafor</span>
+                <span class="li-role">Partner · EdVentures Capital</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-policy">Investment</span>
+            <p class="li-post">The EdTech market is consolidating fast. In the last 90 days: 3 major acquisitions, 2 significant pivots. The startups surviving? Those with strong unit economics AND genuine learning outcomes data. Vanity metrics don't close Series A rounds anymore.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 489</button><button class="li-eng-btn">💬 63</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-green">SC</div>
+              <div class="li-person">
+                <span class="li-name">Sarah Chen</span>
+                <span class="li-role">Head of Learning Design · FutureEd Labs</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-ai">AI &amp; Learning</span>
+            <p class="li-post">AI-powered adaptive learning isn't replacing teachers — it's giving them superpowers. After 6 months piloting across 40 London schools, teacher confidence in personalised learning jumped 73%. The data is clear: tech + trust = transformation.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 312</button><button class="li-eng-btn">💬 47</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-slate">PN</div>
+              <div class="li-person">
+                <span class="li-name">Dr. Priya Nair</span>
+                <span class="li-role">Director · Learning Innovation Institute</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-cyber">Policy &amp; Evidence</span>
+            <p class="li-post">Hot take: the biggest barrier to EdTech adoption isn't the technology. It's trust. Schools need robust evidence, not polished demos. That's why we're launching a new impact measurement framework with 12 partner institutions this autumn.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 267</button><button class="li-eng-btn">💬 38</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-blue">MW</div>
+              <div class="li-person">
+                <span class="li-name">Marcus Webb</span>
+                <span class="li-role">Founder &amp; CEO · LearnBridge · Singapore</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-ai">EdTech Startup</span>
+            <p class="li-post">Just closed our Seed round. What made the difference? Not the product deck — it was our learning outcomes data. 3 years of proof that what we build actually works. Investors in EdTech are more sophisticated than people think. Show them the evidence.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 341</button><button class="li-eng-btn">💬 52</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-amber">AT</div>
+              <div class="li-person">
+                <span class="li-name">Aiko Tanaka</span>
+                <span class="li-role">Head of L&amp;D · GlobalTech Korea · Seoul</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-policy">Corporate Learning</span>
+            <p class="li-post">We piloted 4 different EdTech platforms this year for upskilling our 2,000-person team. The winner wasn't the flashiest — it was the one that fit into existing workflows. Adoption is 80% about change management, 20% about the technology. Never forget that.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 198</button><button class="li-eng-btn">💬 29</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+          <article class="li-card">
+            <div class="li-card-hd">
+              <div class="li-av li-av-rose">EH</div>
+              <div class="li-person">
+                <span class="li-name">Dr. Emma Hartley</span>
+                <span class="li-role">Senior Policy Adviser · Dept. for Education</span>
+              </div>
+              <svg class="li-logo" width="18" height="18" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <span class="li-badge badge-cyber">Government</span>
+            <p class="li-post">The UK's new EdTech strategy is promising — but implementation is everything. We've seen too many well-funded initiatives fail at the school level because teachers weren't involved in the design. Co-design with educators isn't optional. It's the whole point.</p>
+            <div class="li-foot">
+              <div class="li-eng"><button class="li-eng-btn">👍 421</button><button class="li-eng-btn">💬 71</button></div>
+              <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="li-view">View post →</a>
+            </div>
+          </article>
+
+        </div><!-- /li-track -->
+        <div class="li-controls">
+          <button class="li-nav-btn" id="liPrev" aria-label="Previous" disabled>&#8592;</button>
+          <div class="li-dots" id="liDots">
+            <button class="li-dot on" data-i="0"></button>
+            <button class="li-dot" data-i="1"></button>
+            <button class="li-dot" data-i="2"></button>
+            <button class="li-dot" data-i="3"></button>
+          </div>
+          <button class="li-nav-btn" id="liNext" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+      <div class="li-cta">
+        <div class="li-cta-txt">
+          <strong>Follow EdTech HUB on LinkedIn</strong>
+          <p>Join 4,000+ ecosystem members — weekly insights, event updates, and community highlights.</p>
+        </div>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="btn btn-primary">Follow Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ EVENTS (Preview compact list) -->
+  <section class="events-section" id="events">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div>
+          <div class="sec-lbl">Monthly · Global</div>
+          <h2 class="sec-ttl">Upcoming Events</h2>
+        </div>
+        <a href="news.html#events" class="more-link">View all events →</a>
+      </div>
+      <div class="et-schedule">
+        <div class="et-sched-top">
+          <div class="et-sched-live"><div class="ech-dot"></div>Registration Open</div>
+          <div class="et-sched-title">EdTech Together</div>
+          <div class="et-sched-sub">Monthly · Global Events</div>
+        </div>
+        <div class="et-rows">
+          <a class="et-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="et-flag">Online</div>
+            <div class="et-row-info">
+              <span class="et-row-name">EdTech Together — Online</span>
+              <span class="et-row-loc">Your Value Proposition Is Not What You Think</span>
+              <span class="et-row-date">Wednesday, June 25 · 7:00 PM – 8:30 PM GMT+1</span>
+            </div>
+            <span class="et-row-arrow">→</span>
+          </a>
+          <a class="et-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="et-flag">UK</div>
+            <div class="et-row-info">
+              <span class="et-row-name">EdTech Together — London</span>
+              <span class="et-row-loc">London, United Kingdom</span>
+              <span class="et-row-date">Thursday, July 10 · 6:00 PM – 9:00 PM GMT+1</span>
+            </div>
+            <span class="et-row-arrow">→</span>
+          </a>
+          <a class="et-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="et-flag">SG</div>
+            <div class="et-row-info">
+              <span class="et-row-name">EdTech Together — Singapore</span>
+              <span class="et-row-loc">Singapore</span>
+              <span class="et-row-date">Thursday, July 17 · 6:00 PM – 8:00 PM SGT</span>
+            </div>
+            <span class="et-row-arrow">→</span>
+          </a>
+          <a class="et-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="et-flag">KR</div>
+            <div class="et-row-info">
+              <span class="et-row-name">EdTech Together — Seoul</span>
+              <span class="et-row-loc">Seoul, South Korea</span>
+              <span class="et-row-date">Thursday, July 17 · 5:00 PM – 7:00 PM KST</span>
+            </div>
+            <span class="et-row-arrow">→</span>
+          </a>
+          <a class="et-row" href="https://www.eventbrite.com" target="_blank" rel="noopener">
+            <div class="et-flag">AU</div>
+            <div class="et-row-info">
+              <span class="et-row-name">EdTech Together — Sydney</span>
+              <span class="et-row-loc">Sydney, Australia</span>
+              <span class="et-row-date">Friday, July 18 · 6:00 PM – 8:00 PM AEST</span>
+            </div>
+            <span class="et-row-arrow">→</span>
+          </a>
+        </div>
+        <a href="news.html#events" class="et-view-all">View All Events →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ COMMUNITY (Actual structure, cards link to pages) -->
+  <section class="community-section" id="community">
+    <div class="wrap">
+      <div class="community-grid">
+        <div id="edtech-together">
+          <div class="cf-eyebrow">Community</div>
+          <h2 class="cf-title">EdTech Together</h2>
+          <p class="cf-desc">EdTech Together brings together startups, investors, experts, and other ecosystem players to connect, collaborate, and innovate. Engage with thought leaders through insightful keynote speeches, panel discussions, and interactive sessions to expand your knowledge, build meaningful relationships, and explore business development opportunities.</p>
+          <p class="cf-desc">It's also a perfect opportunity to support long-term success within the EdTech industry.</p>
+          <h4 class="cf-sub">What's Inside</h4>
+          <ul class="cf-list">
+            <li><div class="cf-li-icon">💡</div><span>Share trends, tools, and insights</span></li>
+            <li><div class="cf-li-icon">🔍</div><span>Discover opportunities for collaboration and innovation</span></li>
+            <li><div class="cf-li-icon">⭐</div><span>Join special editions on the latest trends and topics</span></li>
+          </ul>
+          <h4 class="cf-sub">How To Join</h4>
+          <p class="cf-desc">We host a monthly event in London as well as online webinars. If you're interested in sharing your insights and learnings at this event, we'd love to hear from you.</p>
+          <div class="cf-actions">
+            <a href="https://www.eventbrite.com" target="_blank" rel="noopener" class="btn btn-primary btn-lg">Reserve a Spot</a>
+            <a href="#contact" class="btn btn-secondary btn-lg">Contact Us</a>
+          </div>
+        </div>
+        <div class="community-cards-col">
+          <a href="news.html#events" class="comm-card cc-blue">
+            <div class="comm-card-icon">🤝</div>
+            <h4>EdTech Together</h4>
+            <p>Monthly events in London &amp; online webinars connecting the ecosystem.</p>
+            <span class="comm-link">Learn more →</span>
+          </a>
+          <a href="community-partnership.html" class="comm-card cc-red">
+            <div class="comm-card-icon">🌐</div>
+            <h4>Partnership Initiatives</h4>
+            <p>Together, not against each other — we shape the future of EdTech through strategic partnerships.</p>
+            <span class="comm-link">Learn more →</span>
+          </a>
+          <a href="networking.html" class="comm-card cc-navy">
+            <div class="comm-card-icon">🔗</div>
+            <h4>Cross-Cohort Networking</h4>
+            <p>Connect across programmes and cohorts to build lasting relationships in the EdTech ecosystem.</p>
+            <span class="comm-link">Learn more →</span>
+          </a>
+          <a href="community-forum.html" class="comm-card cc-teal">
+            <div class="comm-card-icon">💬</div>
+            <h4>Redefining Learning Forum</h4>
+            <p>Thoughtful conversations across stakeholder groups supporting the future of EdTech.</p>
+            <span class="comm-link">Learn more →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ PARTNERSHIP -->
+  <section class="partnership-section" id="partnerships">
+    <div class="wrap">
+      <div class="partnership-inner">
+        <div>
+          <div class="sec-lbl">Partnership Initiatives</div>
+          <h2 class="sec-ttl" style="margin-bottom:12px;">Together, Not Against Each Other</h2>
+          <p style="font-size:14px;color:#4B5563;line-height:1.75;margin-bottom:4px;">We strongly believe in driving innovation and success through partnerships and encourage thoughtful conversations across various stakeholder groups to support the future EdTech startup leaders.</p>
+          <div class="ps-features">
+            <div class="ps-feat">
+              <div class="ps-feat-icon">🚀</div>
+              <div><strong>Startup Support</strong><span>Mentoring and resources for early-stage EdTech founders</span></div>
+            </div>
+            <div class="ps-feat">
+              <div class="ps-feat-icon">💰</div>
+              <div><strong>Investor Access</strong><span>Direct connections to VCs, angels, and grant providers</span></div>
+            </div>
+            <div class="ps-feat">
+              <div class="ps-feat-icon">🏛️</div>
+              <div><strong>Institutional Partners</strong><span>Collaboration with schools, universities, and government bodies</span></div>
+            </div>
+          </div>
+          <a href="community-partnership.html" class="btn btn-primary">Learn More</a>
+        </div>
+        <div class="ps-partners-grid">
+          <div class="ps-partner-card"><div class="ppc-icon">🏆</div><span>GES Awards</span></div>
+          <div class="ps-partner-card"><div class="ppc-icon">🧠</div><span>MindCET</span></div>
+          <div class="ps-partner-card"><div class="ppc-icon">📊</div><span>EdTech Impact</span></div>
+          <div class="ps-partner-card"><div class="ppc-icon">🌍</div><span>Global EdTech</span></div>
+          <div class="ps-partner-card"><div class="ppc-icon">⚡</div><span>Learning Spark</span></div>
+          <div class="ps-partner-card"><div class="ppc-icon">🎓</div><span>ICF.EI</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ PROGRAMME -->
+  <section class="programme-section" id="programme">
+    <div class="wrap">
+      <div class="prog-hd">
+        <div class="sec-lbl">Programme</div>
+        <h2 class="sec-ttl">EdTech HUB Programme</h2>
+        <p>Structured support for EdTech startups at every stage of their journey</p>
+      </div>
+      <div class="programme-grid">
+        <div class="prog-card"><div class="prog-num">01</div><div class="prog-icon">🔍</div><h4>Discovery</h4><p>Connect with the EdTech ecosystem, attend events, and identify your market opportunity.</p></div>
+        <div class="prog-card"><div class="prog-num">02</div><div class="prog-icon">🛠️</div><h4>Development</h4><p>Access mentorship, workshops, and resources to build and refine your EdTech product.</p></div>
+        <div class="prog-card"><div class="prog-num">03</div><div class="prog-icon">🚀</div><h4>Growth</h4><p>Scale your startup with investor introductions, partnership opportunities, and community backing.</p></div>
+        <div class="prog-card"><div class="prog-num">04</div><div class="prog-icon">🌍</div><h4>Global</h4><p>Expand internationally with EdTech HUB's global network of partners, institutions, and investors.</p></div>
+      </div>
+      <div class="programme-cta">
+        <a href="programme.html" class="btn btn-primary btn-lg">Apply to the Programme</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑩ NEWSLETTER -->
+  <section class="nl-section" id="newsletter">
+    <div class="wrap nl-inner">
+      <div class="sec-lbl">Stay Connected</div>
+      <h2>Don't Miss Out</h2>
+      <p>Stay up to date with the latest trends, events, and activities in EdTech. Join our community newsletter.</p>
+      <form class="nl-form-wrap" onsubmit="return false">
+        <input class="nl-inp" type="email" placeholder="Email address" required/>
+        <input class="nl-inp" type="text"  placeholder="Full name" required/>
+        <select class="nl-inp" style="min-width:160px;">
+          <option value="" disabled selected>Your role</option>
+          <option>Startup</option>
+          <option>Startup Coach</option>
+          <option>Expert</option>
+          <option>Investor</option>
+          <option>Service Provider</option>
+          <option>Accelerator</option>
+          <option>Educator</option>
+          <option>Other</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ⑪ CONTACT (Actual form) -->
+  <section class="contact-section" id="contact">
+    <div class="wrap">
+      <div class="contact-inner">
+        <div class="contact-left">
+          <div class="sec-lbl" style="color:#6EE7B7;">Get Involved</div>
+          <h2>Interested in joining our community or internal events?</h2>
+          <p>Whether you're a startup founder, investor, educator, or industry expert — EdTech HUB has a place for you.</p>
+          <div class="contact-options">
+            <div class="contact-opt">
+              <span class="copt-icon">📧</span>
+              <div><strong>Email Us</strong><a href="mailto:info@edtechhub.com">INFO@EDTECHHUB.COM</a></div>
+            </div>
+            <div class="contact-opt">
+              <span class="copt-icon">📍</span>
+              <div><strong>Visit Us</strong><span>22 Bishopsgate, London, EC2B 4BQ, UK</span></div>
+            </div>
+            <div class="contact-opt">
+              <span class="copt-icon">🔗</span>
+              <div><strong>Connect</strong><a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">LinkedIn</a></div>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <h4>Send Us a Message</h4>
+          <div class="cf-field"><label>Full Name</label><input type="text" placeholder="Your name" required/></div>
+          <div class="cf-field"><label>Email</label><input type="email" placeholder="your@email.com" required/></div>
+          <div class="cf-field"><label>Role</label>
+            <select>
+              <option value="" disabled selected>Select your role</option>
+              <option>Startup Founder</option><option>Investor</option><option>Educator</option>
+              <option>Expert / Advisor</option><option>Partner Organisation</option><option>Other</option>
+            </select>
+          </div>
+          <div class="cf-field"><label>Message</label><textarea rows="4" placeholder="Tell us how we can help..."></textarea></div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="ft-brand-logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;">EdTech<span style="color:#16A34A;">HUB</span></span>
+        </div>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="news.html#events">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Initiatives</a></li>
+            <li><a href="networking.html">Cross-Cohort Networking</a></li>
+            <li><a href="community-forum.html">Learning Forum</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2B 4BQ, UK</span></li>
+            <li><a href="#contact">Send a Message</a></li>
+            <li><a href="submit.html">Submit News / Events</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+      <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms &amp; Conditions</a><a href="#">Submissions</a></div>
+      <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Filter pills
+  document.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Mobile nav
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  function closeMenu() {
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // LinkedIn carousel
+  (function() {
+    const track   = document.getElementById('liTrack');
+    const prevBtn = document.getElementById('liPrev');
+    const nextBtn = document.getElementById('liNext');
+    const dotBtns = document.querySelectorAll('#liDots .li-dot');
+    const TOTAL   = track.children.length;
+    let   current = 0;
+    function visibleCount() {
+      const w = track.parentElement.offsetWidth;
+      if (w <= 480) return 1;
+      if (w <= 900) return 2;
+      return 3;
+    }
+    function maxIndex() { return TOTAL - visibleCount(); }
+    function scrollTo(idx) {
+      current = Math.max(0, Math.min(idx, maxIndex()));
+      const card = track.children[0];
+      const cardW = card.offsetWidth;
+      const gap   = parseInt(getComputedStyle(track).columnGap) || 20;
+      track.scrollTo({ left: current * (cardW + gap), behavior: 'smooth' });
+      updateUI();
+    }
+    function updateUI() {
+      prevBtn.disabled = (current === 0);
+      nextBtn.disabled = (current >= maxIndex());
+      dotBtns.forEach((d, i) => d.classList.toggle('on', i === current));
+    }
+    prevBtn.addEventListener('click', () => scrollTo(current - 1));
+    nextBtn.addEventListener('click', () => scrollTo(current + 1));
+    dotBtns.forEach(d => d.addEventListener('click', () => scrollTo(+d.dataset.i)));
+    let scrollTimer;
+    track.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const card = track.children[0];
+        const cardW = card.offsetWidth;
+        const gap   = parseInt(getComputedStyle(track).columnGap) || 20;
+        current = Math.round(track.scrollLeft / (cardW + gap));
+        updateUI();
+      }, 80);
+    });
+    window.addEventListener('resize', () => scrollTo(Math.min(current, maxIndex())));
+    updateUI();
+  })();
+</script>
 </body>
 </html>

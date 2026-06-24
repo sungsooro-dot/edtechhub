@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Programme — EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; }
+    a     { text-decoration: none; color: inherit; }
+
+    :root {
+      --accent      : #16A34A;
+      --accent-h    : #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --border      : #E5E7EB;
+      --bg-surface  : #F8FAFC;
+      --bg-elevated : #F1F5F9;
+      --text-1      : #111827;
+      --text-2      : #6B7280;
+      --text-3      : #9CA3AF;
+      --max         : 1200px;
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    .header { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: #111827; }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; list-style: none; gap: 2px; flex: 1; }
+    .nav-item  { position: relative; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 4px; font-size: 15px; font-weight: 500; color: #4B5563; transition: color .15s; white-space: nowrap; }
+    .nav-a:hover { color: var(--text-1); }
+    .nav-a.on    { color: var(--accent); border-bottom: 2px solid var(--accent); }
+    .nav-a.gem   { color: var(--accent); }
+    .nav-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10);
+      min-width: 200px; padding: 6px 0;
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .18s, transform .18s, visibility .18s; z-index: 200;
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
+    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .nav-cta { display: flex; gap: 8px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .btn-ghost   { background: transparent; color: var(--text-2); }
+    .btn-ghost:hover { color: var(--text-1); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+    .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); transition: background .12s; }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .nav-hamburger { display: flex; } .nav { height: 60px; } }
+
+    /* ── HERO ── */
+    .prog-hero {
+      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 60%, #BBF7D0 100%);
+      padding: 72px 0 60px; border-bottom: 1px solid #A7F3D0;
+    }
+    .prog-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: #15803D; background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.25);
+      padding: 5px 14px; border-radius: 9999px; margin-bottom: 20px;
+    }
+    .prog-status::before { content: '●'; font-size: 8px; }
+    .prog-hero h1 {
+      font-family: 'Sora', sans-serif; font-size: clamp(30px, 5vw, 52px);
+      font-weight: 800; color: #111827; line-height: 1.12; margin-bottom: 14px;
+    }
+    .prog-hero h1 em { color: var(--accent); font-style: normal; }
+    .prog-hero-sub { font-size: 16px; color: var(--text-2); margin-bottom: 36px; }
+    .prog-stats-row { display: flex; gap: 40px; flex-wrap: wrap; }
+    .prog-stat-val { font-family: 'Sora', sans-serif; font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .prog-stat-lbl { font-size: 12px; color: var(--text-2); margin-top: 3px; letter-spacing: .3px; }
+
+    /* ── TAB BAR ── */
+    .tab-bar { position: sticky; top: 60px; z-index: 90; background: #fff; border-bottom: 1px solid var(--border); }
+    .tab-nav { display: flex; overflow-x: auto; padding: 0 24px; max-width: var(--max); margin: 0 auto; scrollbar-width: none; }
+    .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 14px 20px; font-size: 14px; font-weight: 500; color: var(--text-2);
+      border: none; background: transparent; cursor: pointer; white-space: nowrap;
+      border-bottom: 2px solid transparent; transition: color .15s, border-color .15s;
+    }
+    .tab-btn:hover { color: var(--text-1); }
+    .tab-btn.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+    /* ── TAB CONTENT ── */
+    .tab-pane { display: none; padding: 56px 0 72px; }
+    .tab-pane.on { display: block; }
+
+    /* ── SHARED ── */
+    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .sec-ttl { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; color: #111827; margin-bottom: 8px; }
+    .sec-desc { font-size: 15px; color: var(--text-2); max-width: 640px; line-height: 1.75; margin-bottom: 40px; }
+
+    /* ── OVERVIEW ── */
+    .ov-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 52px; }
+    @media (max-width: 640px) { .ov-kpi { grid-template-columns: 1fr; } }
+    .ov-kpi-card {
+      border: 1px solid var(--border); border-radius: 8px; padding: 28px 24px; text-align: center;
+      background: var(--bg-surface);
+    }
+    .ov-kpi-val { font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .ov-kpi-lbl { font-size: 13px; color: var(--text-2); margin-top: 6px; }
+
+    .ov-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+    @media (max-width: 768px) { .ov-cols { grid-template-columns: 1fr; gap: 32px; } }
+    .ov-cols p { font-size: 15px; color: var(--text-2); line-height: 1.8; margin-bottom: 18px; }
+    .ov-cols p:last-child { margin-bottom: 0; }
+    .ov-cols p strong { color: var(--text-1); }
+
+    /* ── ELIGIBILITY ── */
+    .elig-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 640px) { .elig-grid { grid-template-columns: 1fr; } }
+    .elig-card {
+      display: flex; gap: 16px; align-items: flex-start;
+      border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .elig-card:hover { border-color: #A7F3D0; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .elig-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent-muted); border-radius: 8px; font-size: 22px;
+    }
+    .elig-card h4 { font-size: 14px; font-weight: 600; color: var(--text-1); margin-bottom: 5px; }
+    .elig-card p  { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+    /* ── STEPS ── */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .steps { grid-template-columns: 1fr; } }
+    .step { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, box-shadow .2s; }
+    .step:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .step-top { padding: 20px 22px; display: flex; gap: 14px; align-items: center; }
+    .step-top.c1 { background: linear-gradient(135deg,#F0FDF4,#DCFCE7); }
+    .step-top.c2 { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); }
+    .step-top.c3 { background: linear-gradient(135deg,#FFFBEB,#FEF3C7); }
+    .step-num {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 800; color: #fff;
+    }
+    .step-num.n1 { background: var(--accent); }
+    .step-num.n2 { background: #3B82F6; }
+    .step-num.n3 { background: #D97706; }
+    .step-top h3 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; }
+    .step-period { font-size: 11px; color: var(--text-3); letter-spacing: .5px; margin-top: 2px; }
+    .step-body { padding: 18px 22px; flex: 1; display: flex; flex-direction: column; }
+    .step-body p { font-size: 14px; color: var(--text-2); line-height: 1.65; margin-bottom: 10px; }
+    .step-detail {
+      margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--text-2);
+    }
+    .step-detail strong { color: var(--text-1); }
+
+    /* ── TIMELINE ── */
+    .tl-wrap { max-width: 600px; }
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border);
+    }
+    .tl-item { position: relative; padding-bottom: 36px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute; left: -23px; top: 5px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--accent);
+    }
+    .tl-dot.past { background: #D1D5DB; box-shadow: 0 0 0 2px #D1D5DB; }
+    .tl-dot.future { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+    .tl-date { font-size: 11px; font-weight: 700; letter-spacing: .5px; color: var(--text-3); text-transform: uppercase; margin-bottom: 4px; }
+    .tl-date.current { color: var(--accent); }
+    .tl-title { font-size: 16px; font-weight: 600; color: var(--text-1); margin-bottom: 5px; }
+    .tl-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+    /* ── PARTNERS & PRESS ── */
+    .partner-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 52px; }
+    @media (max-width: 640px) { .partner-grid { grid-template-columns: repeat(2,1fr); } }
+    .partner-card {
+      border: 1px solid var(--border); border-radius: 8px; padding: 28px 16px;
+      text-align: center; font-size: 13px; font-weight: 600; color: var(--text-2);
+      background: var(--bg-surface);
+    }
+    .press-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 40px; }
+    @media (max-width: 640px) { .press-grid { grid-template-columns: 1fr; } }
+    .press-card {
+      border: 1px solid var(--border); border-radius: 8px; padding: 18px 22px;
+      transition: border-color .2s;
+    }
+    .press-card:hover { border-color: #A7F3D0; }
+    .press-src { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+    .press-title { font-size: 14px; font-weight: 600; color: var(--text-1); line-height: 1.4; }
+    .press-card:hover .press-title { color: var(--accent); }
+
+    .past-card {
+      background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
+      border: 1px solid #A7F3D0; border-radius: 8px; padding: 28px 32px;
+      display: flex; gap: 24px; align-items: center;
+    }
+    .past-card-icon { font-size: 44px; flex-shrink: 0; }
+    .past-card h4 { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: #111827; margin-bottom: 5px; }
+    .past-card p  { font-size: 13px; color: var(--text-2); margin-bottom: 10px; }
+    .past-card a  { font-size: 13px; font-weight: 600; color: var(--accent); }
+    .past-card a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111827; color: #9CA3AF; padding: 48px 0 24px; }
+    .ft-top { display: flex; gap: 48px; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; }
+    .ft-brand p { font-size: 13px; margin: 10px 0; }
+    .ft-brand a { font-size: 13px; color: #9CA3AF; }
+    .ft-brand a:hover { color: #fff; }
+    .ft-cols { display: flex; gap: 48px; }
+    .ft-col h5 { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #fff; margin-bottom: 12px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ft-col li a { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col li a:hover { color: #fff; }
+    .ft-col li span { font-size: 13px; }
+    .ft-btm { border-top: 1px solid #1F2937; padding-top: 20px; font-size: 12px; color: #4B5563; }
+    .logo-text-ft { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 800; color: #fff; }
+    .logo-text-ft span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="/" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="36" height="36" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a">News &amp; Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html"   class="nav-drop-item">News</a>
+          <div class="nav-drop-divider"></div>
+          <a href="/events.html" class="nav-drop-item">Events</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="/#community" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown">
+          <a href="/#community"                  class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-divider"></div>
+          <a href="/community-partnership.html"  class="nav-drop-item">Partnership Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="/community-forum.html"        class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a on">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-cta">
+      <a href="/#newsletter"          class="btn btn-ghost">Subscribe</a>
+      <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="/"                           class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="news.html"                  class="nav-mobile-a" onclick="closeMenu()">News</a>
+  <a href="/events.html"                class="nav-mobile-a" onclick="closeMenu()">Events</a>
+  <a href="/#community"                 class="nav-mobile-a" onclick="closeMenu()">EdTech Together</a>
+  <a href="/community-partnership.html" class="nav-mobile-a" onclick="closeMenu()">Partnership Events</a>
+  <a href="/community-forum.html"       class="nav-mobile-a" onclick="closeMenu()">Redefining Learning Forum</a>
+  <a href="programme.html"             class="nav-mobile-a accent" onclick="closeMenu()">Programme</a>
+  <a href="https://gem.edtechhub.com/"  class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
+  <div class="nav-mobile-divider"></div>
+  <div class="nav-mobile-cta">
+    <a href="/#newsletter"              class="btn btn-ghost"   onclick="closeMenu()">Subscribe</a>
+    <a href="mailto:info@edtechhub.com" class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="prog-hero">
+  <div class="wrap prog-hero-inner">
+    <div class="prog-status">2025 Edition · Completed</div>
+    <h1>Global Startup<br><em>Coach Award</em> 2025</h1>
+    <p class="prog-hero-sub">Championing the coaches who transform startups · London &amp; Global</p>
+    <div class="prog-stats-row">
+      <div>
+        <div class="prog-stat-val">$200K</div>
+        <div class="prog-stat-lbl">Prize Fund</div>
+      </div>
+      <div>
+        <div class="prog-stat-val">24</div>
+        <div class="prog-stat-lbl">Week Programme</div>
+      </div>
+      <div>
+        <div class="prog-stat-val">20</div>
+        <div class="prog-stat-lbl">Coaches Selected</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab-nav">
+    <button class="tab-btn on" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="eligibility">Eligibility</button>
+    <button class="tab-btn" data-tab="programme">Programme</button>
+    <button class="tab-btn" data-tab="dates">Dates</button>
+    <button class="tab-btn" data-tab="partners">Partners &amp; Press</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ── OVERVIEW ── -->
+<div class="tab-pane on" id="tab-overview">
+  <div class="wrap">
+    <div class="ov-kpi">
+      <div class="ov-kpi-card">
+        <div class="ov-kpi-val">$200,000</div>
+        <div class="ov-kpi-lbl">Total prize fund split across 1st, 2nd &amp; 3rd place</div>
+      </div>
+      <div class="ov-kpi-card">
+        <div class="ov-kpi-val">24 wks</div>
+        <div class="ov-kpi-lbl">Full programme duration from diagnosis to ceremony</div>
+      </div>
+      <div class="ov-kpi-card">
+        <div class="ov-kpi-val">Global</div>
+        <div class="ov-kpi-lbl">Open to startup coaches worldwide across all sectors</div>
+      </div>
+    </div>
+    <div class="ov-cols">
+      <div>
+        <div class="sec-lbl">Why It Exists</div>
+        <h2 class="sec-ttl">Coaches Change Everything</h2>
+        <p>Coaches are <strong>fundamental to startup development</strong>. They are a pivotal part in guiding founders to reach their full potential.</p>
+        <p>Unlike mentoring, coaching doesn't tell you what to do. Instead, it fosters <strong>independent thinking</strong> — and it's this mindset shift that drives transformative growth in founders.</p>
+        <p>The GSCA was created to <strong>recognise and celebrate the work coaches do behind the scenes</strong>. Their efforts deserve a spotlight.</p>
+      </div>
+      <div>
+        <div class="sec-lbl">The Mission</div>
+        <h2 class="sec-ttl">Transform Education Through Technology</h2>
+        <p>Whether transitioning from mentoring, or coming from a completely different background with transferable skills — the GSCA is for you.</p>
+        <p>We look for coaches with <strong>versatile experience across sectors</strong>. The mission: use coaching to improve <strong>access, equity, and quality of education</strong> globally.</p>
+        <p>Are you an impactful coach passionate about startup development? The GSCA is your stage.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ELIGIBILITY ── -->
+<div class="tab-pane" id="tab-eligibility">
+  <div class="wrap">
+    <div class="sec-lbl">Who Qualifies</div>
+    <h2 class="sec-ttl">Who Should Apply?</h2>
+    <p class="sec-desc">The GSCA welcomes coaches from all backgrounds. If you are passionate about startup development and driving impact in EdTech, this programme is for you.</p>
+    <div class="elig-grid">
+      <div class="elig-card">
+        <div class="elig-icon">🎯</div>
+        <div>
+          <h4>Active Startup Coaches</h4>
+          <p>Coaches currently working in startup development who want their impact recognised on a global stage.</p>
+        </div>
+      </div>
+      <div class="elig-card">
+        <div class="elig-icon">🔄</div>
+        <div>
+          <h4>Transitioning from Mentoring</h4>
+          <p>Professionals moving from a mentoring role to a coaching methodology, developing independent thinking in founders.</p>
+        </div>
+      </div>
+      <div class="elig-card">
+        <div class="elig-icon">🌐</div>
+        <div>
+          <h4>Cross-Sector Professionals</h4>
+          <p>Coaches with versatile experience across industries — tech, finance, education — with skills transferable to EdTech startups.</p>
+        </div>
+      </div>
+      <div class="elig-card">
+        <div class="elig-icon">💡</div>
+        <div>
+          <h4>Career Changers</h4>
+          <p>Individuals from non-coaching backgrounds with demonstrable transferable skills relevant to startup development.</p>
+        </div>
+      </div>
+      <div class="elig-card">
+        <div class="elig-icon">🚀</div>
+        <div>
+          <h4>EdTech Enthusiasts</h4>
+          <p>Individuals deeply passionate about the development of education technology startups and driving societal impact.</p>
+        </div>
+      </div>
+      <div class="elig-card">
+        <div class="elig-icon">📊</div>
+        <div>
+          <h4>Business-Background Coaches</h4>
+          <p>Coaches with EdTech and business backgrounds, recognised coaching qualifications, and proven startup experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROGRAMME ── -->
+<div class="tab-pane" id="tab-programme">
+  <div class="wrap">
+    <div class="sec-lbl">How It Works</div>
+    <h2 class="sec-ttl">24-Week Programme Structure</h2>
+    <p class="sec-desc">A structured journey from application to award ceremony — three phases designed to surface the world's most impactful startup coaches.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-top c1">
+          <div class="step-num n1">1</div>
+          <div>
+            <h3>Screening</h3>
+            <div class="step-period">Weeks 1 – 2</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>After reviewing all global applications, <strong>20 coaches</strong> are selected based on coaching qualifications, startup coaching experience, EdTech &amp; business background, and core coaching competencies.</p>
+          <div class="step-detail">🧑‍💼 <strong>20 coaches</strong> selected from global pool</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-top c2">
+          <div class="step-num n2">2</div>
+          <div>
+            <h3>Diagnosis</h3>
+            <div class="step-period">Weeks 3 – 6</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Each coach is <strong>matched with a pre-selected startup</strong>. Through intensive diagnosis, the coach outlines key objectives for the acceleration phase tailored to the startup's unique mission.</p>
+          <div class="step-detail">🔍 <strong>4 weeks</strong> of intensive startup diagnosis</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-top c3">
+          <div class="step-num n3">3</div>
+          <div>
+            <h3>Acceleration</h3>
+            <div class="step-period">Weeks 7 – 24</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Each coach conducts <strong>weekly 90-minute coaching sessions</strong> with their startup and submits a coaching report after every session over 20 weeks.</p>
+          <div class="step-detail">⏱ <strong>90 min/week</strong> · 20 sessions total</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DATES ── -->
+<div class="tab-pane" id="tab-dates">
+  <div class="wrap">
+    <div class="sec-lbl">Schedule</div>
+    <h2 class="sec-ttl">2025 Programme Timeline</h2>
+    <p class="sec-desc">The 2025 edition ran June–January. Stay tuned — applications for the 2026 edition will be announced soon.</p>
+    <div class="tl-wrap">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot past"></div>
+          <div class="tl-date">16 June 2025</div>
+          <div class="tl-title">Applications Closed</div>
+          <div class="tl-desc">Global applications reviewed. 20 coaches selected from the applicant pool.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot past"></div>
+          <div class="tl-date">1 July – 25 July 2025</div>
+          <div class="tl-title">Diagnosis Phase <span style="font-size:12px;color:var(--text-3);font-weight:400">(4 weeks)</span></div>
+          <div class="tl-desc">Coaches matched with startups. Intensive diagnosis and objective setting for the acceleration phase.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot past"></div>
+          <div class="tl-date">28 July – 12 December 2025</div>
+          <div class="tl-title">Acceleration Phase <span style="font-size:12px;color:var(--text-3);font-weight:400">(20 weeks)</span></div>
+          <div class="tl-desc">Weekly 90-minute coaching sessions. Coaching reports submitted after each session.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot past"></div>
+          <div class="tl-date">21 – 23 January 2026</div>
+          <div class="tl-title">Award Ceremony at Bett UK 2026 🏆</div>
+          <div class="tl-desc">Winners announced at the world's leading EdTech conference in London.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot future"></div>
+          <div class="tl-date current">2026 Edition</div>
+          <div class="tl-title">Applications Opening Soon</div>
+          <div class="tl-desc">The next edition of the Global Startup Coach Award is in preparation. Follow us to be notified.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PARTNERS & PRESS ── -->
+<div class="tab-pane" id="tab-partners">
+  <div class="wrap">
+    <div class="sec-lbl">Partners</div>
+    <h2 class="sec-ttl">Key Partners</h2>
+    <div class="partner-grid">
+      <div class="partner-card">GES Awards</div>
+      <div class="partner-card">MindCET</div>
+      <div class="partner-card">EdTech Impact</div>
+      <div class="partner-card">ICF.EI</div>
+    </div>
+
+    <div class="sec-lbl">In the Press</div>
+    <h2 class="sec-ttl">Press Coverage</h2>
+    <div class="press-grid">
+      <a href="https://sifted.eu/articles/coaching-founders-brnd" target="_blank" rel="noopener" class="press-card">
+        <div class="press-src">Sifted</div>
+        <div class="press-title">Coaching is proven to boost startup success — here's how</div>
+      </a>
+      <a href="https://edtechhub.com/contents/programme.php" target="_blank" rel="noopener" class="press-card">
+        <div class="press-src">EdTech HUB</div>
+        <div class="press-title">ESCA 2024 Ceremony at Bett UK — Event Summary</div>
+      </a>
+    </div>
+
+    <div class="past-card">
+      <div class="past-card-icon">🏅</div>
+      <div>
+        <h4>ESCA 2024 — The Predecessor to GSCA</h4>
+        <p>The award was first run as the EdTech Startup Coach Award (ESCA) at Bett UK 2024 in London. See the ceremony highlights and past winners.</p>
+        <a href="https://edtechhub.com/contents/programme.php" target="_blank" rel="noopener">View 2024 Summary ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a href="/" class="logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span class="logo-text-ft">EdTech<span>HUB</span></span>
+        </a>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/101362331/" target="_blank" rel="noopener">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2B 4BQ, UK</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.tab-nav').addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('on');
+    window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop - 60, behavior: 'smooth' });
+  });
+
+  const hamburger  = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
+</script>
+</body>
+</html>

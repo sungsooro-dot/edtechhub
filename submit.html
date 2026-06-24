@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Your News — EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; }
+    a     { text-decoration: none; color: inherit; }
+
+    :root {
+      --accent      : #16A34A;
+      --accent-h    : #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --border      : #E5E7EB;
+      --bg-surface  : #F8FAFC;
+      --bg-elevated : #F1F5F9;
+      --text-1      : #111827;
+      --text-2      : #6B7280;
+      --text-3      : #9CA3AF;
+      --max         : 1200px;
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    .header { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: #111827; }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; list-style: none; gap: 2px; flex: 1; }
+    .nav-item  { position: relative; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 4px; font-size: 15px; font-weight: 500; color: #4B5563; transition: color .15s; white-space: nowrap; }
+    .nav-a:hover { color: var(--text-1); }
+    .nav-a.on    { color: var(--accent); border-bottom: 2px solid var(--accent); }
+    .nav-a.gem   { color: var(--accent); }
+    .nav-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10);
+      min-width: 200px; padding: 6px 0;
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .18s, transform .18s, visibility .18s; z-index: 200;
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
+    .nav-drop-item:hover, .nav-drop-item.on { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nav-cta { display: flex; gap: 8px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .btn-ghost   { background: transparent; color: var(--text-2); }
+    .btn-ghost:hover { color: var(--text-1); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+    .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); transition: background .12s; }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 60%, #BBF7D0 100%);
+      padding: 64px 0 56px; border-bottom: 1px solid #A7F3D0;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .hero-tag::before { content: ''; width: 16px; height: 2px; background: var(--accent); }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+      color: #111827; line-height: 1.12; margin-bottom: 12px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub { font-size: 16px; color: #4B5563; max-width: 520px; line-height: 1.7; }
+
+    /* ── FORM SECTION ── */
+    .form-section { padding: 64px 0 80px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 360px; gap: 56px; align-items: start; }
+
+    /* Form */
+    .form-wrap { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 40px; }
+    .form-wrap h2 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 28px; }
+
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .field label span { color: var(--accent); }
+    .field input, .field textarea, .field select {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: #fff;
+      color: #111827; font-size: 14px; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .15s, box-shadow .15s;
+      appearance: none;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: #9CA3AF; }
+    .field textarea { resize: vertical; min-height: 100px; }
+    .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .type-opt { position: relative; }
+    .type-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .type-opt label {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 14px 8px; border-radius: 8px; border: 1.5px solid var(--border);
+      cursor: pointer; transition: border-color .15s, background .15s;
+      font-size: 13px; font-weight: 500; color: #4B5563; text-align: center;
+    }
+    .type-opt label .icon { font-size: 22px; }
+    .type-opt input[type="radio"]:checked + label {
+      border-color: var(--accent); background: #F0FDF4; color: var(--accent);
+    }
+
+    .field-hint { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .submit-btn {
+      width: 100%; padding: 14px; border-radius: 8px;
+      background: var(--accent); color: #fff;
+      font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif;
+      border: none; cursor: pointer; transition: background .15s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: var(--accent-h); }
+    .form-note { font-size: 12px; color: #9CA3AF; text-align: center; margin-top: 12px; line-height: 1.6; }
+
+    /* Success state */
+    .success-msg {
+      display: none; text-align: center; padding: 40px 20px;
+    }
+    .success-msg .icon { font-size: 48px; margin-bottom: 16px; }
+    .success-msg h3 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 8px; }
+    .success-msg p  { font-size: 15px; color: #4B5563; }
+
+    /* Sidebar */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .info-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 24px;
+    }
+    .info-card h4 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 12px; }
+    .info-card p, .info-card li { font-size: 13px; color: #4B5563; line-height: 1.65; }
+    .info-card ul { padding-left: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .info-card a { color: var(--accent); font-weight: 500; }
+    .info-card a:hover { text-decoration: underline; }
+    .process-step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .process-step:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent-muted); color: var(--accent);
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text { font-size: 13px; color: #4B5563; line-height: 1.5; padding-top: 3px; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111827; padding: 48px 0 28px; }
+    .ft-top { display: grid; grid-template-columns: 220px 1fr; gap: 48px; margin-bottom: 32px; }
+    .ft-brand p  { font-size: 13px; color: #9CA3AF; margin: 10px 0 14px; max-width: 180px; line-height: 1.65; }
+    .ft-brand a  { font-size: 12.5px; color: #9CA3AF; transition: color .15s; }
+    .ft-brand a:hover { color: #F9FAFB; }
+    .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .ft-col h5 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col a:hover { color: #F9FAFB; }
+    .ft-btm { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1F2937; padding-top: 22px; font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: .03em; }
+    .ft-legal { display: flex; gap: 20px; }
+    .ft-legal a { color: #6B7280; }
+    .ft-legal a:hover { color: #F9FAFB; }
+    .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; }
+    .back-top:hover { color: #F9FAFB; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav { height: 60px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .sidebar { order: -1; }
+      .form-wrap { padding: 28px 20px; }
+      .field-row { grid-template-columns: 1fr; }
+      .ft-top  { grid-template-columns: 1fr; gap: 28px; }
+      .ft-cols { grid-template-columns: 1fr 1fr; }
+      .ft-btm  { flex-direction: column; gap: 12px; text-align: center; }
+      .ft-legal { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      .type-grid { grid-template-columns: 1fr; }
+      .ft-cols { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ════════════════════════════════════ -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="/" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="36" height="36" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a on">News & Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html" class="nav-drop-item">News</a>
+          <div class="nav-drop-divider"></div>
+          <a href="news.html#events" class="nav-drop-item">Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="submit.html" class="nav-drop-item on">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown" style="min-width:210px;">
+          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
+          <div class="nav-drop-divider"></div>
+          <a href="networking.html" class="nav-drop-item">Cross-Cohort Networking</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-forum.html" class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-cta">
+      <a href="/#newsletter"             class="btn btn-ghost">Subscribe</a>
+      <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="option1-preview.html" class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="about.html"           class="nav-mobile-a" onclick="closeMenu()">About</a>
+  <a href="news.html"            class="nav-mobile-a" onclick="closeMenu()">News</a>
+  <a href="news.html#events"     class="nav-mobile-a" onclick="closeMenu()">Events</a>
+  <a href="submit.html"          class="nav-mobile-a accent" onclick="closeMenu()">Submit News / Event</a>
+  <a href="community-partnership.html" class="nav-mobile-a" onclick="closeMenu()">Partnership Initiatives</a>
+  <a href="community-forum.html" class="nav-mobile-a" onclick="closeMenu()">Redefining Learning Forum</a>
+  <a href="programme.html"       class="nav-mobile-a" onclick="closeMenu()">Programme</a>
+  <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
+  <div class="nav-mobile-divider"></div>
+  <div class="nav-mobile-cta">
+    <a href="/#newsletter"              class="btn btn-ghost"   onclick="closeMenu()">Subscribe</a>
+    <a href="mailto:info@edtechhub.com" class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ══ HERO ══════════════════════════════════ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-tag">News &amp; Events</div>
+      <h1>Share Your <span>EdTech Story</span></h1>
+      <p class="hero-sub">
+        Got news, an upcoming event, or a partnership to announce?
+        Submit it here and reach the global EdTech community through <span style="white-space:nowrap">EdTech HUB.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ FORM SECTION ══════════════════════════ -->
+  <section class="form-section">
+    <div class="wrap">
+      <div class="form-grid">
+
+        <!-- FORM -->
+        <div class="form-wrap">
+          <h2>Submission Form</h2>
+
+          <div id="form-area">
+            <form action="/api/submit" method="POST" id="submit-form">
+
+              <!-- Type -->
+              <div class="field">
+                <label>Submission Type <span>*</span></label>
+                <div class="type-grid">
+                  <div class="type-opt">
+                    <input type="radio" name="type" id="type-news" value="News" required/>
+                    <label for="type-news"><span class="icon">📰</span>News</label>
+                  </div>
+                  <div class="type-opt">
+                    <input type="radio" name="type" id="type-event" value="Event"/>
+                    <label for="type-event"><span class="icon">📅</span>Event</label>
+                  </div>
+                  <div class="type-opt">
+                    <input type="radio" name="type" id="type-partnership" value="Partnership"/>
+                    <label for="type-partnership"><span class="icon">🤝</span>Partnership</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Title -->
+              <div class="field">
+                <label for="title">Title <span>*</span></label>
+                <input type="text" id="title" name="title" placeholder="e.g. Our startup just raised £2M Series A" required/>
+              </div>
+
+              <!-- URL -->
+              <div class="field">
+                <label for="url">Link / URL <span>*</span></label>
+                <input type="url" id="url" name="url" placeholder="https://..."/>
+                <p class="field-hint">Link to your article, event page, or announcement</p>
+              </div>
+
+              <!-- Organisation + Role -->
+              <div class="field-row">
+                <div class="field" style="margin-bottom:0">
+                  <label for="org">Organisation <span>*</span></label>
+                  <input type="text" id="org" name="organisation" placeholder="Company / School / NGO" required/>
+                </div>
+                <div class="field" style="margin-bottom:0">
+                  <label for="role">Your Role</label>
+                  <select id="role" name="role">
+                    <option value="" disabled selected>Select…</option>
+                    <option>Startup Founder</option>
+                    <option>Investor</option>
+                    <option>Educator</option>
+                    <option>Researcher</option>
+                    <option>Partner / Corporation</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Contact email -->
+              <div class="field" style="margin-top:20px">
+                <label for="email">Contact Email <span>*</span></label>
+                <input type="email" id="email" name="_replyto" placeholder="you@company.com" required/>
+              </div>
+
+              <!-- Description -->
+              <div class="field">
+                <label for="desc">Description <span>*</span></label>
+                <textarea id="desc" name="description" rows="4" placeholder="Brief summary of your news or event (2–3 sentences)…" required></textarea>
+              </div>
+
+              <!-- Image URL (optional) -->
+              <div class="field">
+                <label for="image">Image URL <span style="color:#9CA3AF;font-weight:400">(optional)</span></label>
+                <input type="url" id="image" name="image_url" placeholder="https://... (thumbnail image)"/>
+                <p class="field-hint">A cover image or thumbnail to display alongside your submission</p>
+              </div>
+
+              <!-- Honeypot spam filter -->
+              <input type="text" name="_gotcha" style="display:none"/>
+              <input type="hidden" name="_subject" value="[EdTech HUB] New Submission"/>
+
+              <button type="submit" class="submit-btn">Submit for Review →</button>
+              <p class="form-note">
+                Your submission will be reviewed by our editorial team within 1–3 business days.<br>
+                We'll contact you via email if we need more information.
+              </p>
+            </form>
+          </div>
+
+          <!-- Success message (shown after submit) -->
+          <div class="success-msg" id="success-msg">
+            <div class="icon">✅</div>
+            <h3>Submission Received!</h3>
+            <p>Thank you for sharing with the EdTech HUB community.<br>Our team will review and get back to you within 1–3 business days.</p>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+          <div class="info-card">
+            <h4>📋 What We Accept</h4>
+            <ul>
+              <li>EdTech startup news &amp; funding rounds</li>
+              <li>Product launches &amp; announcements</li>
+              <li>Upcoming industry events</li>
+              <li>Research &amp; reports</li>
+              <li>Partnership announcements</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h4>⚙️ How It Works</h4>
+            <div class="process-step">
+              <div class="step-num">1</div>
+              <div class="step-text">Fill in the form and submit your news or event</div>
+            </div>
+            <div class="process-step">
+              <div class="step-num">2</div>
+              <div class="step-text">Our editorial team reviews within 1–3 business days</div>
+            </div>
+            <div class="process-step">
+              <div class="step-num">3</div>
+              <div class="step-text">Approved submissions are published on EdTech HUB and shared with our community</div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h4>💬 Questions?</h4>
+            <p>Reach out to us directly at<br>
+              <a href="mailto:info@edtechhub.com">info@edtechhub.com</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ═════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a href="/" class="logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span class="logo-text" style="font-size:15px;">EdTech<span>HUB</span></span>
+        </a>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/101362331/" target="_blank" rel="noopener">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/news.html">News</a></li>
+            <li><a href="/events.html">Events</a></li>
+            <li><a href="/programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="/#community">EdTech Together</a></li>
+            <li><a href="/community-partnership.html">Partnership Events</a></li>
+            <li><a href="/community-forum.html">Learning Forum</a></li>
+            <li><a href="/submit.html">Submit News</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2N 4BQ, UK</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+      <div class="ft-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+      <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hamburger menu
+  const hamburger  = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
+
+  // Form success handling
+  const form       = document.getElementById('submit-form');
+  const formArea   = document.getElementById('form-area');
+  const successMsg = document.getElementById('success-msg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    btn.textContent = 'Submitting…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        formArea.style.display = 'none';
+        successMsg.style.display = 'block';
+      } else {
+        btn.textContent = 'Submit for Review →';
+        btn.disabled = false;
+        alert('Something went wrong. Please try again or email us directly at info@edtechhub.com');
+      }
+    } catch {
+      btn.textContent = 'Submit for Review →';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again or email us directly at info@edtechhub.com');
+    }
+  });
+</script>
+</body>
+</html>

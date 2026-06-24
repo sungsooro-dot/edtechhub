@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News & Events — EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+
+    :root {
+      --accent:       #16A34A;
+      --accent-h:     #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --text-1:       #111827;
+      --text-2:       #6B7280;
+      --text-3:       #9CA3AF;
+      --border:       #E5E7EB;
+      --border-h:     #CBD5E1;
+      --bg-surface:   #F8FAFC;
+      --max:          1200px;
+    }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 7px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, border-color .15s; font-family: 'Inter', sans-serif; white-space: nowrap; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .btn-secondary { background: transparent; border: 1.5px solid var(--border-h); color: var(--text-1); padding: 10px 20px; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--text-2); padding: 8px 14px; font-size: 13px; border: none; }
+    .btn-ghost:hover { color: var(--text-1); }
+
+    /* ── NAV ── */
+    .header { background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; flex-shrink: 0; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-1); }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2px; list-style: none; flex: 1; }
+    .nav-item { position: relative; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
+    .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
+    .nav-a.on { color: var(--accent); }
+    .nav-a.gem { color: var(--accent); }
+    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
+    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-div { height: 1px; background: var(--border); margin: 4px 0; }
+    .nav-cta { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; margin-left: auto; cursor: pointer; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; }
+
+    /* About mega-dropdown */
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Mobile nav */
+    .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-div { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .nav-mobile-cta .btn { justify-content: center; }
+
+    /* ── PAGE HEADER ── */
+    .page-hero { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #F0FDF4 100%); border-bottom: 1px solid var(--border); padding: 52px 0 44px; }
+    .page-hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .page-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .page-hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; color: #111827; line-height: 1.15; }
+    .page-hero p { font-size: 15px; color: #4B5563; margin-top: 8px; max-width: 480px; }
+
+    /* ── TABS ── */
+    .page-tabs { background: #fff; border-bottom: 1px solid var(--border); }
+    .tabs-inner { display: flex; }
+    .tab { padding: 14px 24px; font-size: 14px; font-weight: 600; color: var(--text-2); border-bottom: 2px solid transparent; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; transition: color .15s; }
+    .tab:hover { color: var(--text-1); }
+    .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    .news-main { padding: 40px 0 64px; }
+    .news-layout { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start; }
+
+    /* ── FILTERS ── */
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+    .fp { padding: 6px 16px; border-radius: 9999px; font-size: 13px; font-weight: 500; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; transition: all .14s; }
+    .fp:hover { border-color: var(--border-h); color: var(--text-1); }
+    .fp.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
+    /* ── NEWS CARDS ── */
+    .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    .n-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: border-color .2s, box-shadow .2s; }
+    .n-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+    .n-img-placeholder { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+    .ph-green  { background: linear-gradient(135deg,#ECFDF5,#D1FAE5); }
+    .ph-blue   { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); }
+    .ph-orange { background: linear-gradient(135deg,#FFF7ED,#FFEDD5); }
+    .ph-slate  { background: linear-gradient(135deg,#F8FAFC,#F1F5F9); }
+    .ph-purple { background: linear-gradient(135deg,#FAF5FF,#EDE9FE); }
+    .ph-amber  { background: linear-gradient(135deg,#FFFBEB,#FEF3C7); }
+    .n-body { padding: 18px 20px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
+    .n-badge { display: inline-block; align-self: flex-start; padding: 3px 9px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .badge-innovation { background: rgba(22,163,74,.12); color: #15803D; }
+    .badge-funding    { background: rgba(37,99,235,.10);  color: #1D4ED8; }
+    .badge-research   { background: rgba(124,58,237,.10); color: #7C3AED; }
+    .badge-government { background: rgba(234,88,12,.10);  color: #C2410C; }
+    .badge-business   { background: rgba(15,118,110,.10); color: #0F766E; }
+    .n-src  { font-size: 13px; font-weight: 600; color: var(--text-2); }
+    .n-ttl  { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .n-excerpt { font-size: 13px; color: #4B5563; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .n-more { font-size: 13px; color: var(--text-2); font-weight: 500; margin-top: auto; transition: color .15s; }
+    .n-more:hover { color: var(--accent); }
+    .n-card-featured { grid-column: 1 / -1; flex-direction: row; }
+    .n-card-featured .n-img-placeholder { width: 360px; flex-shrink: 0; height: auto; min-height: 220px; }
+    .n-card-featured .n-ttl { font-size: 18px; -webkit-line-clamp: 3; }
+    .load-more { display: flex; justify-content: center; }
+
+    /* ── EVENTS GRID ── */
+    .events-section { display: none; }
+    .events-section.on { display: block; }
+    .news-section-content.off { display: none; }
+    .ev-full-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ev-full-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s, box-shadow .2s; }
+    .ev-full-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .ev-full-top { background: #F0FDF4; border-bottom: 1px solid #D1FAE5; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; }
+    .ev-full-flag { font-size: 11px; font-weight: 700; background: var(--accent-muted); color: var(--accent); padding: 3px 10px; border-radius: 4px; }
+    .ev-full-live { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--accent); }
+    .ev-full-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+    .ev-full-body { padding: 18px 20px; }
+    .ev-full-name { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 5px; }
+    .ev-full-sub  { font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
+    .ev-full-date { font-size: 12px; color: var(--text-3); margin-bottom: 14px; }
+    .ev-full-cta  { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--accent); }
+    .ev-full-cta:hover { color: var(--accent-h); }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .sb-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .sb-ttl { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 14px; }
+    .sb-event { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .sb-event:last-child { border-bottom: none; padding-bottom: 0; }
+    .sb-date { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 40px; height: 44px; background: var(--accent-muted); border-radius: 6px; color: var(--accent); }
+    .sb-day  { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; line-height: 1; }
+    .sb-mon  { font-size: 9px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+    .sb-info { display: flex; flex-direction: column; gap: 2px; }
+    .sb-ev-name { font-size: 13px; font-weight: 600; color: #111827; }
+    .sb-ev-loc  { font-size: 12px; color: var(--text-2); }
+    .sb-ev-flag { display: inline-block; font-size: 10px; font-weight: 700; background: var(--accent-muted); color: var(--accent); padding: 1px 6px; border-radius: 3px; margin-bottom: 2px; }
+    .sb-nl { background: #111827; border-radius: 10px; padding: 20px; }
+    .sb-nl h4 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .sb-nl p  { font-size: 12.5px; color: rgba(255,255,255,.55); margin-bottom: 14px; }
+    .sb-inp { width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #374151; background: #1F2937; color: #fff; font-size: 13px; outline: none; font-family: 'Inter', sans-serif; margin-bottom: 8px; }
+    .sb-inp::placeholder { color: #6B7280; }
+    .sb-inp:focus { border-color: var(--accent); }
+    .sb-submit { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .sb-submit:hover { background: var(--accent-h); }
+    .sb-tags { display: flex; flex-direction: column; gap: 6px; }
+    .sb-tag-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #fff; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text-1); font-weight: 500; cursor: pointer; transition: all .14s; }
+    .sb-tag-item:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-muted); }
+    .sb-count { font-size: 12px; color: var(--text-3); font-weight: 400; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111827; border-top: 1px solid var(--border); padding: 48px 0 28px; }
+    .ft-top  { display: grid; grid-template-columns: 220px 1fr; gap: 48px; margin-bottom: 32px; }
+    .ft-brand-logo { display: flex; align-items: center; gap: 10px; }
+    .ft-brand p { font-size: 13px; color: #9CA3AF; margin-top: 8px; margin-bottom: 14px; max-width: 180px; line-height: 1.65; }
+    .ft-brand a { font-size: 12.5px; color: #9CA3AF; }
+    .ft-brand a:hover { color: #F9FAFB; }
+    .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .ft-col h5 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col ul { display: flex; flex-direction: column; gap: 9px; }
+    .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col a:hover { color: #F9FAFB; }
+    .ft-btm { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1F2937; padding-top: 22px; font-size: 12px; color: #6B7280; flex-wrap: wrap; gap: 10px; }
+    .ft-legal { display: flex; gap: 20px; }
+    .ft-legal a { color: #6B7280; }
+    .ft-legal a:hover { color: #F9FAFB; }
+    .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; }
+
+    /* ── EVENT MAP (Events tab) ── */
+    .ev-map-wrap { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
+    #ev-map-news { width: 100%; height: 400px; background: #e8f4fd; }
+    @media (max-width: 640px) { #ev-map-news { height: 260px; } }
+    .ev-map-panel { position: absolute; top: 12px; right: 12px; bottom: 12px; width: 280px; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,.18); display: none; flex-direction: column; z-index: 500; overflow: hidden; }
+    .ev-map-panel.open { display: flex; }
+    .ev-mp-head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+    .ev-mp-country { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .ev-mp-count   { font-size: 14px; font-weight: 700; color: #111827; margin-top: 2px; }
+    .ev-mp-close { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 18px; line-height: 1; padding: 2px; }
+    .ev-mp-close:hover { color: var(--text-1); }
+    .ev-mp-list { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .ev-mp-item { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; background: #fff; transition: background .12s; }
+    .ev-mp-item:hover { background: #F0FDF4; }
+    .ev-mp-item-title { font-size: 13px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+    .ev-mp-item-meta  { font-size: 11px; color: var(--text-2); }
+    .ev-mp-item-btn { display: block; margin-top: 6px; padding: 5px 10px; background: var(--accent); color: #fff; border-radius: 5px; font-size: 11px; font-weight: 600; text-align: center; transition: background .12s; }
+    .ev-mp-item-btn:hover { background: var(--accent-h); }
+    @media (max-width: 640px) { .ev-map-panel { top: auto; right: 0; bottom: 0; left: 0; width: 100%; height: 55%; border-radius: 12px 12px 0 0; } }
+
+    /* ── EVENT LIST ITEMS ── */
+    .ev-list { display: flex; flex-direction: column; gap: 8px; }
+    .ev-item { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 16px 20px; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 6px; transition: background .15s; color: inherit; text-decoration: none; }
+    .ev-item:hover { background: #F0FDF4; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+    .ev-item-left { display: flex; gap: 14px; align-items: center; flex: 1; min-width: 0; }
+    .ev-dt { text-align: center; min-width: 48px; flex-shrink: 0; background: #F0FDF4; border-radius: 6px; padding: 5px 8px; border: 1px solid #D1FAE5; }
+    .ev-dt .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .ev-dt .dy { display: block; font-size: 20px; font-weight: 700; color: #111827; line-height: 1.1; }
+    .ev-info { flex: 1; min-width: 0; }
+    .ev-info h4 { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .ev-loc { font-size: 12px; color: var(--text-2); }
+    .ev-price-tag { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--accent-muted); color: var(--accent); }
+    .ev-price-tag.free { background: #EFF6FF; color: #3B82F6; }
+    .ev-arrow { color: var(--text-3); font-size: 16px; flex-shrink: 0; margin-left: 10px; transition: color .15s, transform .15s; }
+    .ev-item:hover .ev-arrow { color: var(--accent); transform: translateX(3px); }
+    .ev-pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 24px; }
+    .ev-pg-btn { min-width: 34px; height: 34px; border-radius: 6px; padding: 0 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text-2); display: flex; align-items: center; justify-content: center; transition: all .14s; }
+    .ev-pg-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .ev-pg-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .ev-pg-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* ── SEARCH BAR ── */
+    .search-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 0; }
+    .search-inner { display: flex; align-items: center; gap: 10px; }
+    .search-box { flex: 1; max-width: 520px; display: flex; align-items: center; gap: 8px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; transition: border-color .15s; }
+    .search-box:focus-within { border-color: var(--accent); }
+    .search-box input { flex: 1; border: none; background: transparent; font-size: 14px; color: var(--text-1); font-family: 'Inter', sans-serif; outline: none; }
+    .search-box input::placeholder { color: var(--text-3); }
+    .search-icon { color: var(--text-3); font-size: 14px; flex-shrink: 0; }
+    .clear-btn { padding: 7px 14px; background: transparent; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text-2); cursor: pointer; transition: background .12s; white-space: nowrap; }
+    .clear-btn:hover { background: var(--bg-surface); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1080px) { .news-layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .news-grid { grid-template-columns: 1fr; }
+      .n-card-featured { flex-direction: column; }
+      .n-card-featured .n-img-placeholder { width: 100%; height: 200px; }
+      .ev-full-grid { grid-template-columns: 1fr; }
+      .ft-top { grid-template-columns: 1fr; gap: 28px; }
+      .ft-cols { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="option1-preview.html" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="34" height="34" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a on">News & Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html" class="nav-drop-item">News</a>
+          <div class="nav-drop-div"></div>
+          <a href="news.html#events" class="nav-drop-item">Events</a>
+          <div class="nav-drop-div"></div>
+          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown" style="min-width:210px;">
+          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
+          <div class="nav-drop-div"></div>
+          <a href="networking.html" class="nav-drop-item">Cross-Cohort Networking</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-forum.html" class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-cta">
+      <a href="#" class="btn-ghost btn">Subscribe</a>
+      <a href="#" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<nav class="nav-mobile" id="mobileNav">
+  <a href="option1-preview.html" class="nav-mobile-a">Home</a>
+  <a href="#" class="nav-mobile-a">About</a>
+  <a href="news.html" class="nav-mobile-a accent">News & Events</a>
+  <a href="news.html#events" class="nav-mobile-a">EdTech Together</a>
+  <a href="programme.html" class="nav-mobile-a">Programme</a>
+  <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener">GEM ↗</a>
+  <div class="nav-mobile-div"></div>
+  <div class="nav-mobile-cta">
+    <a href="#" class="btn btn-secondary">Subscribe</a>
+    <a href="#" class="btn btn-primary">Contact Us</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- PAGE HEADER -->
+  <div class="page-hero">
+    <div class="wrap page-hero-inner">
+      <div>
+        <div class="page-tag">EdTech HUB</div>
+        <h1>News & Events</h1>
+        <p>Latest insights, funding news, policy updates, and upcoming events from the global EdTech ecosystem.</p>
+      </div>
+      <a href="submit.html" class="btn btn-primary">Submit News or Event</a>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="page-tabs">
+    <div class="wrap tabs-inner">
+      <button class="tab on" id="tab-news" onclick="switchTab('news')">📰 News</button>
+      <button class="tab" id="tab-events" onclick="switchTab('events')">📅 Events</button>
+    </div>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar">
+    <div class="wrap search-inner">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search news…" autocomplete="off"/>
+      </div>
+      <button class="clear-btn" id="clear-btn" onclick="clearSearch()" style="display:none;">✕ Clear</button>
+    </div>
+  </div>
+
+  <div class="news-main">
+    <div class="wrap">
+      <div class="news-layout">
+
+        <div>
+          <!-- NEWS -->
+          <div class="news-section-content" id="sec-news">
+            <div class="filters">
+              <button class="fp on" onclick="filterNews(this,'all')">All</button>
+              <button class="fp" onclick="filterNews(this,'innovation')">Innovation</button>
+              <button class="fp" onclick="filterNews(this,'funding')">Funding</button>
+              <button class="fp" onclick="filterNews(this,'research')">Research</button>
+              <button class="fp" onclick="filterNews(this,'government')">Government</button>
+              <button class="fp" onclick="filterNews(this,'business')">Business</button>
+            </div>
+            <div class="news-grid">
+
+              <a href="#" class="n-card n-card-featured" data-cat="innovation">
+                <div class="n-img-placeholder ph-green">🏙️</div>
+                <div class="n-body">
+                  <span class="n-badge badge-innovation">Innovation</span>
+                  <span class="n-src">Wistl</span>
+                  <h3 class="n-ttl">London EdTech Week 2026 concludes with record engagement and a renewed call to strengthen the UK's education research ecosystem</h3>
+                  <p class="n-excerpt">This year's London EdTech Week attracted over 5,000 attendees from 40 countries, featuring keynotes on AI-driven personalised learning and the future of accreditation.</p>
+                  <span class="n-more" style="margin-top:8px;">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="government">
+                <div class="n-img-placeholder ph-blue">🏛️</div>
+                <div class="n-body">
+                  <span class="n-badge badge-government">Government</span>
+                  <span class="n-src">Education Week</span>
+                  <h3 class="n-ttl">Congress Is Working on a New K-12 Budget. See What's Proposed for Key Programs</h3>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="research">
+                <div class="n-img-placeholder ph-slate">👩‍💻</div>
+                <div class="n-body">
+                  <span class="n-badge badge-research">Research</span>
+                  <span class="n-src">EdSurge</span>
+                  <h3 class="n-ttl">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
+                  <p class="n-excerpt">Growing concern among parents and educators is putting pressure on how schools evaluate and approve EdTech tools.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="innovation">
+                <div class="n-img-placeholder ph-orange">📣</div>
+                <div class="n-body">
+                  <span class="n-badge badge-innovation">Innovation</span>
+                  <span class="n-src">Tech Tactics</span>
+                  <h3 class="n-ttl">Tech Tactics Fall 2026 — Call for Speakers Now Open</h3>
+                  <p class="n-excerpt">Submit by Aug 3, 2026. TechTacticsInEducation.com/Speakers — Sept 23, 2026 | Online.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="funding">
+                <div class="n-img-placeholder ph-amber">💷</div>
+                <div class="n-body">
+                  <span class="n-badge badge-funding">Funding</span>
+                  <span class="n-src">TechCrunch</span>
+                  <h3 class="n-ttl">UK Government Backs £50M EdTech Innovation Fund for 2026</h3>
+                  <p class="n-excerpt">New funding to accelerate adoption of technology in state schools, with a focus on AI-assisted personalised learning tools.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="business">
+                <div class="n-img-placeholder ph-purple">🤖</div>
+                <div class="n-body">
+                  <span class="n-badge badge-business">Business</span>
+                  <span class="n-src">EdTech HUB</span>
+                  <h3 class="n-ttl">Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
+                  <p class="n-excerpt">What separates early-stage EdTech startups that scale from those that stall? A framework for building execution systems.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="research">
+                <div class="n-img-placeholder ph-blue">🔒</div>
+                <div class="n-body">
+                  <span class="n-badge badge-research">Research</span>
+                  <span class="n-src">EdSurge</span>
+                  <h3 class="n-ttl">Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
+                  <p class="n-excerpt">A recent breach targeting Canvas LMS has exposed ongoing vulnerabilities in school cybersecurity infrastructure.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+              <a href="#" class="n-card" data-cat="government">
+                <div class="n-img-placeholder ph-green">🌱</div>
+                <div class="n-body">
+                  <span class="n-badge badge-government">Government</span>
+                  <span class="n-src">BBC</span>
+                  <h3 class="n-ttl">England to Pilot AI Teaching Assistants in 100 State Schools This Autumn</h3>
+                  <p class="n-excerpt">The Department for Education pilots AI tools to support maths and literacy marking, targeting schools in lower-income areas.</p>
+                  <span class="n-more">Read More →</span>
+                </div>
+              </a>
+
+            </div>
+            <div class="load-more">
+              <button class="btn btn-secondary">Load More News</button>
+            </div>
+          </div>
+
+          <!-- EVENTS -->
+          <div class="events-section" id="sec-events">
+            <!-- World map -->
+            <div class="ev-map-wrap">
+              <div id="ev-map-news"></div>
+              <div class="ev-map-panel" id="ev-map-panel">
+                <div class="ev-mp-head">
+                  <div>
+                    <div class="ev-mp-country" id="ev-mp-country"></div>
+                    <div class="ev-mp-count"   id="ev-mp-count"></div>
+                  </div>
+                  <button class="ev-mp-close" onclick="closeEvPanel()">✕</button>
+                </div>
+                <div class="ev-mp-list" id="ev-mp-list"></div>
+              </div>
+            </div>
+            <!-- Event list -->
+            <div class="ev-list" id="ev-list">
+              <div style="padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Loading events…</div>
+            </div>
+            <div class="ev-pagination" id="ev-pagination"></div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+          <div class="sb-nl">
+            <h4>Stay in the Loop</h4>
+            <p>Weekly EdTech news & events to your inbox.</p>
+            <input class="sb-inp" type="email" placeholder="Email address"/>
+            <input class="sb-inp" type="text"  placeholder="Full name"/>
+            <button class="sb-submit">Subscribe</button>
+          </div>
+          <div class="sb-box" id="sb-topics">
+            <div class="sb-ttl">Browse by Topic</div>
+            <div class="sb-tags">
+              <div class="sb-tag-item">Innovation <span class="sb-count">24</span></div>
+              <div class="sb-tag-item">Funding <span class="sb-count">18</span></div>
+              <div class="sb-tag-item">Research <span class="sb-count">15</span></div>
+              <div class="sb-tag-item">Government <span class="sb-count">11</span></div>
+              <div class="sb-tag-item">Business <span class="sb-count">9</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="ft-brand-logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;">EdTech<span style="color:#16A34A;">HUB</span></span>
+        </div>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="option1-preview.html">Home</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="news.html#events">Events</a></li>
+            <li><a href="#">Programme</a></li>
+            <li><a href="#">GEM ↗</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Initiatives</a></li>
+            <li><a href="networking.html">Cross-Cohort Networking</a></li>
+            <li><a href="community-forum.html">Learning Forum</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2B 4BQ, UK</span></li>
+            <li><a href="#">Send a Message</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+      <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Submissions</a></div>
+      <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" async id="leaflet-js"></script>
+<script>
+  /* ── Tab switching ── */
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + tab).classList.add('on');
+    const sbTopics = document.getElementById('sb-topics');
+    const searchInput = document.getElementById('search-input');
+    if (tab === 'news') {
+      document.getElementById('sec-news').classList.remove('off');
+      document.getElementById('sec-events').classList.remove('on');
+      if (sbTopics) sbTopics.style.display = '';
+      if (searchInput) searchInput.placeholder = 'Search news…';
+      const q = searchInput ? searchInput.value.trim() : '';
+      if (q) filterNewsText(q);
+    } else {
+      document.getElementById('sec-news').classList.add('off');
+      document.getElementById('sec-events').classList.add('on');
+      if (sbTopics) sbTopics.style.display = 'none';
+      if (searchInput) searchInput.placeholder = 'Search events by name or city…';
+      initEventsTab();
+    }
+  }
+
+  /* ── News category filter ── */
+  function filterNews(btn, cat) {
+    document.querySelectorAll('#sec-news .fp').forEach(b => b.classList.remove('on'));
+    if (btn) btn.classList.add('on');
+    const q = (document.getElementById('search-input')||{}).value || '';
+    document.querySelectorAll('.n-card').forEach(card => {
+      const catOk = cat === 'all' || card.dataset.cat === cat;
+      const txtOk = !q || card.textContent.toLowerCase().includes(q.toLowerCase());
+      card.style.display = (catOk && txtOk) ? '' : 'none';
+    });
+  }
+
+  /* ── News text search ── */
+  function filterNewsText(q) {
+    const activeCat = (document.querySelector('#sec-news .fp.on') || {}).dataset || {};
+    const cat = activeCat.cat || 'all';
+    document.querySelectorAll('.n-card').forEach(card => {
+      const catOk = cat === 'all' || card.dataset.cat === cat;
+      const txtOk = !q || card.textContent.toLowerCase().includes(q.toLowerCase());
+      card.style.display = (catOk && txtOk) ? '' : 'none';
+    });
+  }
+
+  /* ── Search input ── */
+  document.getElementById('search-input').addEventListener('input', function() {
+    const q = this.value.trim();
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn) clearBtn.style.display = q ? '' : 'none';
+    const onEvents = document.getElementById('tab-events').classList.contains('on');
+    if (onEvents) {
+      evFiltered = q
+        ? evAllEvents.filter(e =>
+            (e.title||'').toLowerCase().includes(q.toLowerCase()) ||
+            (e.city||'').toLowerCase().includes(q.toLowerCase()) ||
+            (e.location||'').toLowerCase().includes(q.toLowerCase()))
+        : evAllEvents;
+      renderEvList(1);
+      if (evMapReady) plotEvPins(evFiltered);
+    } else {
+      filterNewsText(q);
+    }
+  });
+
+  function clearSearch() {
+    const inp = document.getElementById('search-input');
+    inp.value = '';
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn) clearBtn.style.display = 'none';
+    const onEvents = document.getElementById('tab-events').classList.contains('on');
+    if (onEvents) {
+      evFiltered = evAllEvents;
+      renderEvList(1);
+      if (evMapReady) plotEvPins(evFiltered);
+    } else {
+      filterNewsText('');
+    }
+  }
+
+  /* ── Hamburger ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  /* ── Events tab state ── */
+  let evMap = null, evMarkers = [], evAllEvents = [], evFiltered = [];
+  let evPage = 1, evMapReady = false, evDataReady = false;
+  const EV_PAGE_SIZE = 12;
+
+  function initEventsTab() {
+    if (!evDataReady) loadEventsData();
+    if (!evMapReady && typeof L !== 'undefined') {
+      initEvMap();
+    } else if (evMapReady && evMap) {
+      setTimeout(() => evMap.invalidateSize(), 50);
+    }
+  }
+
+  /* ── City/country coords ── */
+  const CC = {
+    'Online':[20,0],'Virtual':[20,0],'Remote':[20,0],
+    'London':[51.51,-0.13],'United Kingdom':[55.38,-3.44],'UK':[55.38,-3.44],'England':[52.36,-1.17],
+    'Singapore':[1.35,103.82],
+    'Seoul':[37.57,126.98],'South Korea':[35.91,127.77],
+    'Sydney':[-33.87,151.21],'Melbourne':[-37.81,144.96],'Australia':[-25.27,133.78],
+    'New York':[40.71,-74.01],'United States':[37.09,-95.71],'USA':[37.09,-95.71],
+    'Tokyo':[35.69,139.69],'Japan':[36.20,138.25],
+    'Dubai':[25.20,55.27],'UAE':[23.42,53.85],'United Arab Emirates':[23.42,53.85],
+    'Paris':[48.86,2.35],'France':[46.23,2.21],
+    'Berlin':[52.52,13.41],'Germany':[51.17,10.45],
+    'Amsterdam':[52.37,4.90],'Netherlands':[52.13,5.29],
+    'Barcelona':[41.39,2.15],'Madrid':[40.42,-3.70],'Spain':[40.46,-3.75],
+    'Toronto':[43.65,-79.38],'Vancouver':[49.28,-123.12],'Canada':[56.13,-106.35],
+    'Mumbai':[19.08,72.88],'Delhi':[28.61,77.21],'Bangalore':[12.97,77.59],'India':[20.59,78.96],
+    'Beijing':[39.91,116.39],'Shanghai':[31.23,121.47],'China':[35.86,104.20],
+    'Hong Kong':[22.32,114.17],'Taiwan':[25.04,121.56],
+    'Kuala Lumpur':[3.14,101.69],'Malaysia':[4.21,109.46],
+    'Bangkok':[13.75,100.50],'Thailand':[15.87,100.99],
+    'Lagos':[6.46,3.41],'Nigeria':[9.08,8.68],
+    'Nairobi':[-1.29,36.82],'Kenya':[-0.02,37.91],
+    'Johannesburg':[-26.20,28.04],'South Africa':[-30.56,22.94],
+    'Cairo':[30.04,31.24],'Egypt':[26.82,30.80],
+    'Brazil':[-14.24,-51.93],'Mexico':[23.63,-102.55],'Ireland':[53.41,-8.24],
+    'Israel':[31.05,34.85],'Italy':[41.87,12.57],'Sweden':[60.13,18.64],
+    'Switzerland':[46.82,8.23],'Poland':[51.92,19.15],'Portugal':[39.40,-8.22],
+    'Saudi Arabia':[23.89,45.08],'Qatar':[25.35,51.18],'Turkey':[38.96,35.24],
+    'Pakistan':[30.38,69.35],'Vietnam':[14.06,108.28],'Indonesia':[-0.79,113.92],
+    'Philippines':[12.88,121.77],'New Zealand':[-40.90,174.89],
+  };
+
+  function getCoords(c) {
+    if (!c) return null;
+    const n = c.trim();
+    if (CC[n]) return CC[n];
+    for (const [k, v] of Object.entries(CC)) {
+      if (n.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(n.toLowerCase())) return v;
+    }
+    return null;
+  }
+
+  function escH(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  /* ── Init Leaflet map ── */
+  function initEvMap() {
+    if (evMapReady) return;
+    evMap = L.map('ev-map-news', { zoomControl: true, scrollWheelZoom: false }).setView([25, 15], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18,
+    }).addTo(evMap);
+    evMap.on('click', closeEvPanel);
+    evMapReady = true;
+    if (evDataReady && evAllEvents.length) plotEvPins(evFiltered);
+  }
+
+  /* ── Plot pins by city ── */
+  function plotEvPins(events) {
+    if (!evMap) return;
+    evMarkers.forEach(m => evMap.removeLayer(m));
+    evMarkers = [];
+    const byCity = {};
+    events.forEach(e => {
+      const key = (e.city || e.location || 'Unknown').trim();
+      if (!byCity[key]) byCity[key] = [];
+      byCity[key].push(e);
+    });
+    Object.entries(byCity).forEach(([city, evs]) => {
+      const coords = getCoords(city);
+      if (!coords) return;
+      const isOnline = /online|virtual|remote/i.test(city);
+      const bg   = isOnline ? '#6B7280' : '#16A34A';
+      const cnt  = evs.length;
+      const size = Math.min(28 + cnt * 4, 52);
+      const fs   = size >= 44 ? 14 : 12;
+      const icon = L.divIcon({
+        className: '',
+        html: `<div style="width:${size}px;height:${size}px;background:${bg};border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform=''">${cnt}</div>`,
+        iconSize: [size, size], iconAnchor: [size/2, size/2],
+      });
+      const marker = L.marker(coords, { icon });
+      marker.on('click', () => openEvPanel(city, evs));
+      marker.addTo(evMap);
+      evMarkers.push(marker);
+    });
+  }
+
+  /* ── Side panel ── */
+  function openEvPanel(city, evs) {
+    const isOnline = /online|virtual|remote/i.test(city);
+    document.getElementById('ev-mp-country').textContent = isOnline ? 'Online / Virtual' : `📍 ${city}`;
+    document.getElementById('ev-mp-count').textContent   = `${evs.length} event${evs.length > 1 ? 's' : ''}`;
+    document.getElementById('ev-mp-list').innerHTML = evs.map(e => {
+      const rawDt = e.start_utc || e.event_start_dt || null;
+      const start = rawDt ? new Date(rawDt) : null;
+      const dateStr = start ? start.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+      return `<div class="ev-mp-item">
+        <div class="ev-mp-item-title">${escH(e.title || '')}</div>
+        <div class="ev-mp-item-meta">${dateStr || 'Date TBD'}</div>
+        ${e.url ? `<a href="${escH(e.url)}" class="ev-mp-item-btn" target="_blank" rel="noopener">View →</a>` : ''}
+      </div>`;
+    }).join('');
+    document.getElementById('ev-map-panel').classList.add('open');
+  }
+  function closeEvPanel() {
+    document.getElementById('ev-map-panel').classList.remove('open');
+  }
+
+  /* ── Title cleaner for DB scraped events ── */
+  function cleanTitle(raw) {
+    return (raw || '')
+      .replace(/^(research|event|news|upcoming)\s+/i, '')
+      .split(/\n/)[0]
+      .trim()
+      .substring(0, 110);
+  }
+
+  /* ── Load events: Eventbrite + DB combined ── */
+  async function loadEventsData() {
+    try {
+      const [ebRes, dbRes] = await Promise.all([
+        fetch('/api/upcoming').then(r => r.json()).catch(() => ({ events: [] })),
+        fetch('/api/db/events?page=1&limit=200').then(r => r.json()).catch(() => ({ events: [] })),
+      ]);
+
+      const ebEvents = (ebRes.events || []);
+
+      const dbEvents = (dbRes.events || []).map(e => ({
+        id       : 'db-' + e.id,
+        title    : cleanTitle(e.title),
+        url      : e.url || '#',
+        start_utc: e.event_start_dt || null,
+        location : [e.city, e.country].filter(Boolean).join(', ') || '',
+        city     : e.city || e.country || 'Global',
+        flag     : e.country || e.city || 'Global',
+        source   : 'db',
+      }));
+
+      evAllEvents = [...ebEvents, ...dbEvents];
+      evFiltered  = evAllEvents;
+      evDataReady = true;
+      renderEvList(1);
+      if (evMapReady) plotEvPins(evFiltered);
+    } catch {
+      document.getElementById('ev-list').innerHTML = '<div style="padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Could not load events.</div>';
+    }
+  }
+
+  /* ── Render paginated list ── */
+  function renderEvList(page) {
+    evPage = page;
+    const total  = evFiltered.length;
+    const pages  = Math.ceil(total / EV_PAGE_SIZE);
+    const start  = (page - 1) * EV_PAGE_SIZE;
+    const items  = evFiltered.slice(start, start + EV_PAGE_SIZE);
+    const listEl = document.getElementById('ev-list');
+    if (!items.length) {
+      listEl.innerHTML = '<div style="padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">No events found.</div>';
+      document.getElementById('ev-pagination').innerHTML = '';
+      return;
+    }
+    listEl.innerHTML = items.map(e => {
+      const rawDt = e.start_utc || e.event_start_dt || null;
+      const d    = rawDt ? new Date(rawDt) : null;
+      const mo   = d ? d.toLocaleString('en-US',{month:'short'}).toUpperCase() : '';
+      const dy   = d ? d.getDate() : '';
+      const time = d ? d.toLocaleString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}) : '';
+      const loc  = e.location || e.city || '';
+      const isDb = String(e.id).startsWith('db-');
+      return `<a href="${escH(e.url||'#')}" class="ev-item" target="_blank" rel="noopener">
+        <div class="ev-item-left">
+          ${d ? `<div class="ev-dt"><span class="mo">${escH(mo)}</span><span class="dy">${dy}</span></div>`
+              : `<div class="ev-dt" style="background:#F1F5F9;border-color:#E2E8F0;min-width:48px;"><span class="mo" style="color:#9CA3AF;">TBD</span></div>`}
+          <div class="ev-info">
+            <h4>${escH(e.title||'')}</h4>
+            <div class="ev-meta">
+              ${loc ? `<span class="ev-loc">📍 ${escH(loc)}</span>` : ''}
+              ${time ? `<span class="ev-loc">${escH(time)}</span>` : ''}
+              ${isDb ? '' : '<span class="ev-price-tag free">Free</span>'}
+            </div>
+          </div>
+        </div>
+        <span class="ev-arrow">→</span>
+      </a>`;
+    }).join('');
+    renderEvPagination(page, pages);
+  }
+
+  function renderEvPagination(page, pages) {
+    const el = document.getElementById('ev-pagination');
+    if (pages <= 1) { el.innerHTML = ''; return; }
+    const items = [];
+    items.push(`<button class="ev-pg-btn" onclick="goEvPage(${page-1})" ${page<=1?'disabled':''}>←</button>`);
+    const shown = new Set([1, pages]);
+    for (let p = Math.max(1,page-2); p <= Math.min(pages,page+2); p++) shown.add(p);
+    let prev = 0;
+    [...shown].sort((a,b)=>a-b).forEach(p => {
+      if (prev && p-prev > 1) items.push('<span style="font-size:13px;color:#9CA3AF;padding:0 4px;">…</span>');
+      items.push(`<button class="ev-pg-btn ${p===page?'on':''}" onclick="goEvPage(${p})">${p}</button>`);
+      prev = p;
+    });
+    items.push(`<button class="ev-pg-btn" onclick="goEvPage(${page+1})" ${page>=pages?'disabled':''}>→</button>`);
+    el.innerHTML = items.join('');
+  }
+
+  function goEvPage(p) {
+    if (p < 1) return;
+    renderEvList(p);
+    document.getElementById('sec-events').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  /* ── Leaflet async init ── */
+  function waitForLeaflet() {
+    if (typeof L !== 'undefined') {
+      if (document.getElementById('sec-events').classList.contains('on')) initEvMap();
+    } else {
+      setTimeout(waitForLeaflet, 100);
+    }
+  }
+  document.getElementById('leaflet-js').addEventListener('load', waitForLeaflet);
+  document.getElementById('leaflet-js').addEventListener('error', () => {
+    document.querySelector('.ev-map-wrap').style.display = 'none';
+  });
+
+  if (window.location.hash === '#events') switchTab('events');
+</script>
+</body>
+</html>
