@@ -268,7 +268,7 @@ app.get('/api/db/events/top', async (req, res) => {
              ec.country_name AS country
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
-      WHERE e.del_flag = 'N'
+      WHERE e.del_flag = 'N' AND e.event_start_dt IS NOT NULL
       ORDER BY e.publish_score DESC, e.id DESC
       LIMIT ${LIMIT}
     `);
@@ -288,8 +288,8 @@ app.get('/api/db/events', async (req, res) => {
 
   try {
     const baseWhere = q
-      ? `e.del_flag = 'N' AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
-      : `e.del_flag = 'N'`;
+      ? `e.del_flag = 'N' AND e.event_start_dt IS NOT NULL AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
+      : `e.del_flag = 'N' AND e.event_start_dt IS NOT NULL`;
     const qParam      = `%${q}%`;
     const listParams  = q ? [qParam, qParam, qParam, limit, offset] : [limit, offset];
     const countParams = q ? [qParam, qParam, qParam] : [];
