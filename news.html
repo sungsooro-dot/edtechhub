@@ -705,7 +705,7 @@
     if (!evMapReady && typeof L !== 'undefined') {
       initEvMap();
     } else if (evMapReady && evMap) {
-      setTimeout(() => evMap.invalidateSize(), 50);
+      setTimeout(() => evMap.invalidateSize(), 100);
     }
   }
 
@@ -934,7 +934,18 @@
     document.querySelector('.ev-map-wrap').style.display = 'none';
   });
 
-  if (window.location.hash === '#events') switchTab('events');
+  /* ── Hash-based tab activation (initial load + same-page nav) ── */
+  function activateFromHash() {
+    if (window.location.hash === '#events') {
+      switchTab('events');
+      setTimeout(() => {
+        document.getElementById('sec-events').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (evMapReady && evMap) evMap.invalidateSize();
+      }, 150);
+    }
+  }
+  activateFromHash();
+  window.addEventListener('hashchange', activateFromHash);
 </script>
 </body>
 </html>
