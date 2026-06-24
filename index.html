@@ -963,30 +963,6 @@
 
 
   <!-- ⑩ NEWSLETTER -->
-  <section class="nl-section" id="newsletter">
-    <div class="wrap nl-inner">
-      <div class="sec-lbl">Stay Connected</div>
-      <h2>Don't Miss Out</h2>
-      <p>Stay up to date with the latest trends, events, and activities in EdTech. Join our community newsletter.</p>
-      <form class="nl-form-wrap" onsubmit="return false">
-        <input class="nl-inp" type="email" placeholder="Email address" required/>
-        <input class="nl-inp" type="text"  placeholder="Full name" required/>
-        <select class="nl-inp" style="min-width:160px;">
-          <option value="" disabled selected>Your role</option>
-          <option>Startup</option>
-          <option>Startup Coach</option>
-          <option>Expert</option>
-          <option>Investor</option>
-          <option>Service Provider</option>
-          <option>Accelerator</option>
-          <option>Educator</option>
-          <option>Other</option>
-        </select>
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-      </form>
-    </div>
-  </section>
-
   <!-- ⑪ CONTACT (Actual form) -->
   <section class="contact-section" id="contact">
     <div class="wrap">
@@ -994,7 +970,7 @@
         <div class="contact-left">
           <div class="sec-lbl" style="color:#6EE7B7;">Get Involved</div>
           <h2>Interested in joining our community or internal events?</h2>
-          <p>Whether you're a startup founder, investor, educator, or industry expert — EdTech HUB has a place for you.</p>
+          <p>Whether you're a startup founder, investor, educator, or industry expert — EdTech HUB has a place for you. Fill in the form to get in touch — and tick the box below to receive our newsletter with the latest EdTech news, events, and opportunities.</p>
           <div class="contact-options">
             <div class="contact-opt">
               <span class="copt-icon">📧</span>
@@ -1022,6 +998,10 @@
             </select>
           </div>
           <div class="cf-field"><label>Message</label><textarea rows="4" placeholder="Tell us how we can help..."></textarea></div>
+          <div class="cf-field" style="flex-direction:row;align-items:center;gap:10px;">
+            <input type="checkbox" id="nlCheck" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;"/>
+            <label for="nlCheck" style="font-size:13px;color:#4B5563;cursor:pointer;margin:0;">Subscribe to our newsletter for the latest EdTech updates</label>
+          </div>
           <button type="submit" class="btn btn-primary">Send Message</button>
         </form>
       </div>
