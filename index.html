@@ -343,35 +343,149 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1080px) {
-      .hero-inner       { grid-template-columns: 1fr; }
-      .ev-card-hero     { display: none; }
-      .news-grid        { grid-template-columns: 1fr; }
-      .community-grid   { grid-template-columns: 1fr; }
-      .partnership-inner{ grid-template-columns: 1fr; }
-      .contact-inner    { grid-template-columns: 1fr; }
-      .ft-top           { grid-template-columns: 1fr; gap: 28px; }
+      .hero-inner        { grid-template-columns: 1fr; }
+      .ev-card-hero      { display: none; }
+      .contact-inner     { grid-template-columns: 1fr; }
+      .ft-top            { grid-template-columns: 1fr; gap: 24px; }
     }
     @media (max-width: 900px) {
-      .li-track { grid-auto-columns: calc((100% - 20px) / 2); }
+      .li-track   { grid-auto-columns: calc((100% - 20px) / 2); }
       .stats-grid { grid-template-columns: repeat(2,1fr); }
     }
+
+    /* ── MOBILE (768px) — ~50% size reduction ── */
     @media (max-width: 768px) {
+      .wrap { padding: 0 14px; }
+
+      /* nav */
+      .nav { height: 52px; }
+      .logo-text { font-size: 15px; }
+      .logo img  { width: 26px; height: 26px; }
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
-      .community-cards-col { grid-template-columns: 1fr; }
-      .programme-grid { grid-template-columns: 1fr 1fr; }
-      .ft-cols { grid-template-columns: 1fr 1fr; }
-      .ft-btm { flex-direction: column; align-items: flex-start; }
-      .news-grid { grid-template-columns: 1fr; }
-      .news-submit-banner { flex-direction: column; }
+
+      /* hero */
+      .hero { padding: 40px 0 36px; }
+      .hero h1 { font-size: 24px; }
+      .hero-sub { font-size: 13px; margin-bottom: 18px; }
+      .hero-btns { gap: 8px; }
+      .hero-stats { gap: 18px; padding-top: 18px; }
+      .hs-val { font-size: 20px; }
+      .hs-lbl { font-size: 11px; }
+
+      /* partners */
+      .partners-bar { padding: 12px 0; }
+      .partners-lbl { font-size: 9px; }
+
+      /* stats */
+      .stats-section { padding: 24px 0; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .stat-card  { padding: 14px 10px; }
+      .stat-num   { font-size: 28px; }
+      .stat-suffix { font-size: 16px; }
+      .stat-label  { font-size: 11px; }
+
+      /* sections — halve vertical padding */
+      .li-section, .news-section, .events-section,
+      .programme-section, .nl-section, .contact-section { padding: 32px 0; }
+
+      /* section headers */
+      .sec-hd    { margin-bottom: 16px; }
+      .sec-lbl   { font-size: 10px; margin-bottom: 4px; }
+      .sec-ttl   { font-size: 18px; }
+      .more-link { font-size: 12px; }
+
+      /* linkedin cards */
+      .li-track  { grid-auto-columns: calc(100% - 16px); }
+      .li-card   { padding: 14px; gap: 10px; }
+      .li-av     { width: 34px; height: 34px; font-size: 11px; }
+      .li-name   { font-size: 12px; }
+      .li-role   { font-size: 10.5px; }
+      .li-post   { font-size: 12.5px; }
+      .li-badge  { font-size: 9.5px; padding: 2px 7px; }
+      .li-cta    { padding: 14px 16px; flex-direction: column; gap: 12px; }
+      .li-cta-txt strong { font-size: 13px; }
+      .li-cta-txt p      { font-size: 12px; }
+      .li-controls { margin-top: 14px; gap: 10px; }
+      .li-nav-btn  { width: 32px; height: 32px; font-size: 13px; }
+
+      /* news */
+      .news-grid  { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .news-body  { padding: 12px; gap: 7px; }
+      .news-card h3 { font-size: 12px; }
+      .news-excerpt { font-size: 11.5px; -webkit-line-clamp: 2; }
+      .source-logo  { font-size: 10px; }
+      .news-date, .read-time { font-size: 10px; }
+      .news-badge { font-size: 9px; padding: 2px 6px; top: 6px; left: 6px; }
+      .news-footer { padding-top: 8px; }
+      .read-more-link { font-size: 11.5px; }
+      .engage-btn  { font-size: 10.5px; padding: 2px 7px; }
+      .filter-bar  { gap: 4px; margin-bottom: 14px; }
+      .filter-pill { font-size: 11px; padding: 4px 10px; }
+      .news-submit-banner { padding: 14px 16px; gap: 12px; flex-direction: column; }
+      .nsb-content strong { font-size: 13px; }
+      .nsb-content p      { font-size: 11.5px; }
+
+      /* events */
+      .et-schedule { max-width: 100%; }
+      .et-row      { padding: 10px 14px; gap: 8px; }
+      .et-flag     { min-width: 36px; height: 26px; font-size: 9px; }
+      .et-row-name { font-size: 12px; }
+      .et-row-loc  { font-size: 10px; }
+      .et-row-date { font-size: 9.5px; }
+      .et-view-all { font-size: 12.5px; padding: 10px; }
+      .et-sched-title { font-size: 13px; }
+      .et-sched-sub   { font-size: 10px; }
+
+      /* programme */
+      .programme-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .prog-hd  { margin-bottom: 20px; }
+      .prog-hd .sec-ttl { color: #fff; }
+      .prog-hd p { font-size: 13px; }
+      .prog-card { padding: 16px; }
+      .prog-icon { font-size: 22px; margin-bottom: 8px; }
+      .prog-card h4 { font-size: 13px; margin-bottom: 6px; }
+      .prog-card p  { font-size: 11.5px; }
+      .prog-num { font-size: 10px; margin-bottom: 8px; }
+
+      /* newsletter */
+      .nl-inner h2 { font-size: 20px; }
+      .nl-inner p  { font-size: 13px; margin-bottom: 18px; }
+      .nl-form-wrap { flex-direction: column; gap: 8px; }
+      .nl-inp { font-size: 13px; padding: 9px 12px; }
+
+      /* contact */
+      .contact-inner   { gap: 28px; }
+      .contact-left h2 { font-size: 20px; }
+      .contact-left p  { font-size: 13px; margin-bottom: 18px; }
+      .contact-form    { padding: 20px 16px; }
+      .contact-form h4 { font-size: 15px; margin-bottom: 16px; }
+      .cf-field        { margin-bottom: 12px; }
+      .cf-field label  { font-size: 12px; }
+      .cf-field input, .cf-field select, .cf-field textarea { font-size: 13px; padding: 8px 12px; }
+
+      /* footer */
+      .footer   { padding: 28px 0 18px; }
+      .ft-top   { margin-bottom: 20px; }
+      .ft-cols  { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .ft-col h5 { font-size: 9px; margin-bottom: 10px; }
+      .ft-col a, .ft-col span { font-size: 12px; }
+      .ft-brand p { font-size: 12px; }
+      .ft-btm { flex-direction: column; align-items: flex-start; padding-top: 14px; font-size: 11px; gap: 8px; }
+      .ft-legal { gap: 14px; }
+
+      /* buttons */
+      .btn    { font-size: 13px; padding: 9px 18px; }
+      .btn-lg { font-size: 14px; padding: 11px 22px; }
     }
+
     @media (max-width: 480px) {
-      .li-track { grid-auto-columns: calc(100% - 20px); }
-      .programme-grid { grid-template-columns: 1fr; }
-      .ft-cols { grid-template-columns: 1fr; }
-      .hero-btns { flex-direction: column; }
-      .nl-form-wrap { flex-direction: column; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .news-grid       { grid-template-columns: 1fr; gap: 10px; }
+      .programme-grid  { grid-template-columns: 1fr; }
+      .ft-cols         { grid-template-columns: 1fr; }
+      .stats-grid      { grid-template-columns: 1fr 1fr; }
+      .hero h1         { font-size: 21px; }
+      .hero-stats      { gap: 14px; }
     }
   </style>
 </head>
