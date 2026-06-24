@@ -827,7 +827,26 @@
       .substring(0, 110);
   }
 
-  /* ── Load events: Eventbrite + DB combined ── */
+  /* ── Static global EdTech events (supplemental map coverage) ── */
+  const GLOBAL_EVENTS = [
+    { id:'g-1',  title:'EdTech Together — London',        url:'https://www.eventbrite.co.uk/o/dohe-81050166313', start_utc:'2026-07-10T18:00:00Z', location:'London, United Kingdom',    city:'London',        flag:'UK',        source:'global' },
+    { id:'g-2',  title:'EdTech Together — New York',      url:'https://www.eventbrite.com',                      start_utc:'2026-07-15T18:00:00Z', location:'New York, USA',             city:'New York',      flag:'USA',       source:'global' },
+    { id:'g-3',  title:'EdTech Together — Sydney',        url:'https://www.eventbrite.com',                      start_utc:'2026-07-18T18:00:00Z', location:'Sydney, Australia',         city:'Sydney',        flag:'Australia', source:'global' },
+    { id:'g-4',  title:'EdTech Together — Berlin',        url:'https://www.eventbrite.com',                      start_utc:'2026-07-22T18:00:00Z', location:'Berlin, Germany',           city:'Berlin',        flag:'Germany',   source:'global' },
+    { id:'g-5',  title:'EdTech Together — Toronto',       url:'https://www.eventbrite.com',                      start_utc:'2026-07-24T18:00:00Z', location:'Toronto, Canada',           city:'Toronto',       flag:'Canada',    source:'global' },
+    { id:'g-6',  title:'EdTech Together — Dubai',         url:'https://www.eventbrite.com',                      start_utc:'2026-08-05T18:00:00Z', location:'Dubai, UAE',                city:'Dubai',         flag:'UAE',       source:'global' },
+    { id:'g-7',  title:'EdTech Together — Tokyo',         url:'https://www.eventbrite.com',                      start_utc:'2026-08-07T18:00:00Z', location:'Tokyo, Japan',              city:'Tokyo',         flag:'Japan',     source:'global' },
+    { id:'g-8',  title:'EdTech Together — Mumbai',        url:'https://www.eventbrite.com',                      start_utc:'2026-08-12T18:00:00Z', location:'Mumbai, India',             city:'Mumbai',        flag:'India',     source:'global' },
+    { id:'g-9',  title:'EdTech Together — Amsterdam',     url:'https://www.eventbrite.com',                      start_utc:'2026-08-19T18:00:00Z', location:'Amsterdam, Netherlands',    city:'Amsterdam',     flag:'Netherlands',source:'global'},
+    { id:'g-10', title:'EdTech Together — Nairobi',       url:'https://www.eventbrite.com',                      start_utc:'2026-09-09T18:00:00Z', location:'Nairobi, Kenya',            city:'Nairobi',       flag:'Kenya',     source:'global' },
+    { id:'g-11', title:'EdTech Together — São Paulo',     url:'https://www.eventbrite.com',                      start_utc:'2026-09-16T18:00:00Z', location:'São Paulo, Brazil',         city:'Brazil',        flag:'Brazil',    source:'global' },
+    { id:'g-12', title:'EdTech Together — Lagos',         url:'https://www.eventbrite.com',                      start_utc:'2026-09-23T18:00:00Z', location:'Lagos, Nigeria',            city:'Lagos',         flag:'Nigeria',   source:'global' },
+    { id:'g-13', title:'EdTech Together — Paris',         url:'https://www.eventbrite.com',                      start_utc:'2026-10-06T18:00:00Z', location:'Paris, France',             city:'Paris',         flag:'France',    source:'global' },
+    { id:'g-14', title:'EdTech Together — Kuala Lumpur',  url:'https://www.eventbrite.com',                      start_utc:'2026-10-13T18:00:00Z', location:'Kuala Lumpur, Malaysia',    city:'Kuala Lumpur',  flag:'Malaysia',  source:'global' },
+    { id:'g-15', title:'EdTech Together — Johannesburg',  url:'https://www.eventbrite.com',                      start_utc:'2026-10-20T18:00:00Z', location:'Johannesburg, South Africa',city:'Johannesburg',  flag:'South Africa',source:'global'},
+  ];
+
+  /* ── Load events: Eventbrite + DB + global combined ── */
   async function loadEventsData() {
     try {
       const [ebRes, dbRes] = await Promise.all([
@@ -848,7 +867,7 @@
         source   : 'db',
       }));
 
-      evAllEvents = [...ebEvents, ...dbEvents];
+      evAllEvents = [...ebEvents, ...dbEvents, ...GLOBAL_EVENTS];
       evFiltered  = evAllEvents;
       evDataReady = true;
       renderEvList(1);
