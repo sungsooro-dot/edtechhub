@@ -265,10 +265,11 @@ app.get('/api/db/events/top', async (req, res) => {
       SELECT e.id, e.title, e.url, NULL AS image,
              e.event_start_dt, e.event_end_dt, e.price,
              e.city_name AS city,
-             ec.country_name AS country
+             ec.country_name AS country,
+             e.latitude, e.longitude
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
-      WHERE e.del_flag = 'N' AND e.event_type = '1'
+      WHERE e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL)
       ORDER BY e.publish_score DESC, e.id DESC
       LIMIT ${LIMIT}
     `);
@@ -288,8 +289,8 @@ app.get('/api/db/events', async (req, res) => {
 
   try {
     const baseWhere = q
-      ? `e.del_flag = 'N' AND e.event_type = '1' AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
-      : `e.del_flag = 'N' AND e.event_type = '1'`;
+      ? `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
+      : `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL)`;
     const qParam      = `%${q}%`;
     const listParams  = q ? [qParam, qParam, qParam, limit, offset] : [limit, offset];
     const countParams = q ? [qParam, qParam, qParam] : [];
@@ -298,7 +299,8 @@ app.get('/api/db/events', async (req, res) => {
       SELECT e.id, e.title, e.url, NULL AS image,
              e.event_start_dt, e.event_end_dt, e.price,
              e.city_name AS city,
-             ec.country_name AS country
+             ec.country_name AS country,
+             e.latitude, e.longitude
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE ${baseWhere}

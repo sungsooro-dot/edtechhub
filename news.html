@@ -720,7 +720,9 @@
       byCity[key].push(e);
     });
     Object.entries(byCity).forEach(([city, evs]) => {
-      const coords = getCoords(city);
+      // DB 좌표 우선, 없으면 도시명 조회
+      const first = evs.find(e => e.latitude && e.longitude);
+      const coords = first ? [parseFloat(first.latitude), parseFloat(first.longitude)] : getCoords(city);
       if (!coords) return;
       const isOnline = /online|virtual|remote/i.test(city);
       const bg   = isOnline ? '#6B7280' : '#16A34A';
