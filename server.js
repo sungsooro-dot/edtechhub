@@ -220,37 +220,39 @@ app.get('/api/db/news/top', async (req, res) => {
   }
 });
 
-// ── DB: 뉴스 목록 (View All, 페이지네이션) ──────────
+// ── DB: 뉴스 목록 (View All, 페이지네이션, 카테고리 필터, 검색) ──────────
 app.get('/api/db/news', async (req, res) => {
   const page   = Math.max(1, parseInt(req.query.page)  || 1);
   const limit  = Math.min(20, parseInt(req.query.limit) || 12);
   const offset = (page - 1) * limit;
   const cat    = req.query.category || null;
+  const q      = (req.query.q || '').trim();
 
   try {
-    const baseWhere = cat ? 'n.del_flag = "N" AND n.category_id = ?' : 'n.del_flag = "N"';
-    const listParams  = cat ? [cat, limit, offset] : [limit, offset];
-    const countParams = cat ? [cat] : [];
+    const conds  = ['n.del_flag = "N"'];
+    const params = [];
+    if (cat) { conds.push('n.category_id = ?'); params.push(cat); }
+    if (q)   { conds.push('n.title LIKE ?');    params.push(`%${q}%`); }
+    const where = conds.join(' AND ');
 
     const [rows] = await db.query(
-      `SELECT n.id, n.title, n.publisher, n.url,
+      `SELECT n.id, n.title, n.publisher, n.url, n.category_id,
               CASE
                 WHEN n.thumbnail_img_path LIKE 'http%' THEN n.thumbnail_img_path
                 WHEN n.thumbnail_img_path IS NOT NULL AND n.thumbnail_img_path != ''
                   THEN CONCAT('https://edtechhub.com', n.thumbnail_img_path)
                 ELSE NULL
               END AS image,
-              n.description, n.publish_dt
+              n.publish_dt
        FROM news n
-       WHERE ${baseWhere}
+       WHERE ${where}
        ORDER BY n.publish_dt DESC
-       LIMIT ? OFFSET ?`, listParams);
+       LIMIT ? OFFSET ?`, [...params, limit, offset]);
 
     const [[countRow]] = await db.query(
-      `SELECT COUNT(*) AS total FROM news n WHERE ${baseWhere}`, countParams);
+      `SELECT COUNT(*) AS total FROM news n WHERE ${where}`, params);
 
-    const total = countRow.total;
-    res.json({ news: rows, total, page, limit, pages: Math.ceil(total / limit) });
+    res.json({ news: rows, total: countRow.total, page, limit, pages: Math.ceil(countRow.total / limit) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'DB error' });

@@ -359,90 +359,18 @@
           <!-- NEWS -->
           <div class="news-section-content" id="sec-news">
             <div class="filters">
-              <button class="fp on" onclick="filterNews(this,'all')">All</button>
-              <button class="fp" onclick="filterNews(this,'innovation')">Innovation</button>
-              <button class="fp" onclick="filterNews(this,'funding')">Funding</button>
-              <button class="fp" onclick="filterNews(this,'research')">Research</button>
-              <button class="fp" onclick="filterNews(this,'government')">Government</button>
-              <button class="fp" onclick="filterNews(this,'business')">Business</button>
+              <button class="fp on" data-catkey="all"        onclick="filterNews(this,'all')">All</button>
+              <button class="fp"    data-catkey="innovation" onclick="filterNews(this,'innovation')">Innovation</button>
+              <button class="fp"    data-catkey="funding"    onclick="filterNews(this,'funding')">Funding</button>
+              <button class="fp"    data-catkey="research"   onclick="filterNews(this,'research')">Research</button>
+              <button class="fp"    data-catkey="government" onclick="filterNews(this,'government')">Government</button>
+              <button class="fp"    data-catkey="business"   onclick="filterNews(this,'business')">Business</button>
             </div>
-            <div class="news-grid">
-
-              <a href="#" class="n-card" data-cat="innovation">
-                <div class="n-card-top"><span class="n-badge badge-innovation">Innovation</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=85&fit=crop&crop=entropy" alt="EdTech conference" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">Wistl</span>
-                  <h3 class="n-ttl">London EdTech Week 2026 concludes with record engagement and a renewed call to strengthen the UK's education research ecosystem</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="government">
-                <div class="n-card-top"><span class="n-badge badge-government">Government</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=85&fit=crop&crop=entropy" alt="Government building" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">Education Week</span>
-                  <h3 class="n-ttl">Congress Is Working on a New K-12 Budget. See What's Proposed for Key Programs</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="research">
-                <div class="n-card-top"><span class="n-badge badge-research">Research</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=85&fit=crop&crop=entropy" alt="Screen time research" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">EdSurge</span>
-                  <h3 class="n-ttl">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="innovation">
-                <div class="n-card-top"><span class="n-badge badge-innovation">Innovation</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=85&fit=crop&crop=entropy" alt="Tech conference" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">Tech Tactics</span>
-                  <h3 class="n-ttl">Tech Tactics Fall 2026 — Call for Speakers Now Open</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="funding">
-                <div class="n-card-top"><span class="n-badge badge-funding">Funding</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=85&fit=crop&crop=entropy" alt="EdTech funding" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">TechCrunch</span>
-                  <h3 class="n-ttl">UK Government Backs £50M EdTech Innovation Fund for 2026</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="business">
-                <div class="n-card-top"><span class="n-badge badge-business">Business</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=85&fit=crop&crop=entropy" alt="Startup team" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">EdTech HUB</span>
-                  <h3 class="n-ttl">Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="research">
-                <div class="n-card-top"><span class="n-badge badge-research">Research</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=85&fit=crop&crop=entropy" alt="Cybersecurity" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">EdSurge</span>
-                  <h3 class="n-ttl">Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
-              <a href="#" class="n-card" data-cat="government">
-                <div class="n-card-top"><span class="n-badge badge-government">Government</span></div><div class="n-img-placeholder"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=85&fit=crop&crop=entropy" alt="AI in classroom" loading="lazy"/></div>
-                <div class="n-body">
-                  <span class="n-src">BBC</span>
-                  <h3 class="n-ttl">England to Pilot AI Teaching Assistants in 100 State Schools This Autumn</h3>
-                  <span class="n-more">Read More →</span>
-                </div>
-              </a>
-
+            <div class="news-grid" id="news-grid">
+              <div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Loading news…</div>
             </div>
-            <div class="load-more">
-              <button class="btn btn-secondary">Load More News</button>
+            <div class="load-more" id="load-more-wrap" style="display:none;">
+              <button class="btn btn-secondary" onclick="loadMoreNews()">Load More News</button>
             </div>
           </div>
 
@@ -475,11 +403,11 @@
           <div class="sb-box" id="sb-topics">
             <div class="sb-ttl">Browse by Topic</div>
             <div class="sb-tags">
-              <div class="sb-tag-item">Innovation <span class="sb-count">24</span></div>
-              <div class="sb-tag-item">Funding <span class="sb-count">18</span></div>
-              <div class="sb-tag-item">Research <span class="sb-count">15</span></div>
-              <div class="sb-tag-item">Government <span class="sb-count">11</span></div>
-              <div class="sb-tag-item">Business <span class="sb-count">9</span></div>
+              <div class="sb-tag-item" onclick="filterNews(null,'innovation')" style="cursor:pointer;">EdTech Innovation <span class="sb-count">317</span></div>
+              <div class="sb-tag-item" onclick="filterNews(null,'funding')"    style="cursor:pointer;">Funding &amp; Finance <span class="sb-count">118</span></div>
+              <div class="sb-tag-item" onclick="filterNews(null,'research')"   style="cursor:pointer;">Research &amp; Insights <span class="sb-count">88</span></div>
+              <div class="sb-tag-item" onclick="filterNews(null,'government')" style="cursor:pointer;">Government &amp; Policy <span class="sb-count">58</span></div>
+              <div class="sb-tag-item" onclick="filterNews(null,'business')"   style="cursor:pointer;">Business <span class="sb-count">2</span></div>
             </div>
           </div>
           <div class="sb-nl">
@@ -571,27 +499,91 @@
     }
   }
 
-  /* ── News category filter ── */
-  function filterNews(btn, cat) {
-    document.querySelectorAll('#sec-news .fp').forEach(b => b.classList.remove('on'));
-    if (btn) btn.classList.add('on');
-    const q = (document.getElementById('search-input')||{}).value || '';
-    document.querySelectorAll('.n-card').forEach(card => {
-      const catOk = cat === 'all' || card.dataset.cat === cat;
-      const txtOk = !q || card.textContent.toLowerCase().includes(q.toLowerCase());
-      card.style.display = (catOk && txtOk) ? '' : 'none';
-    });
+  /* ── News: DB category mapping ── */
+  const NEWS_CATS = { all: null, innovation: 9, funding: 3, research: 4, government: 10, business: 2 };
+  const CAT_BADGE = {
+    9:  { cls: 'badge-innovation', label: 'Innovation' },
+    3:  { cls: 'badge-funding',    label: 'Funding' },
+    4:  { cls: 'badge-research',   label: 'Research' },
+    10: { cls: 'badge-government', label: 'Government' },
+    2:  { cls: 'badge-business',   label: 'Business' },
+  };
+  const CAT_IMG = {
+    9:  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80&fit=crop',
+    3:  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80&fit=crop',
+    4:  'https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=80&fit=crop',
+    10: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80&fit=crop',
+    2:  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80&fit=crop',
+  };
+
+  let newsCurCat = 'all', newsCurPage = 1, newsTotalPages = 1;
+  let newsSearchQ = '', newsSearchTimer = null;
+
+  function cleanNewsTitle(raw) {
+    return (raw || '').replace(/^\d{4}-\d{2}-\d{2}\s+/, '').split(/\n/)[0].trim().substring(0, 120);
   }
 
-  /* ── News text search ── */
-  function filterNewsText(q) {
-    const activeCat = (document.querySelector('#sec-news .fp.on') || {}).dataset || {};
-    const cat = activeCat.cat || 'all';
-    document.querySelectorAll('.n-card').forEach(card => {
-      const catOk = cat === 'all' || card.dataset.cat === cat;
-      const txtOk = !q || card.textContent.toLowerCase().includes(q.toLowerCase());
-      card.style.display = (catOk && txtOk) ? '' : 'none';
-    });
+  function renderNewsCard(item) {
+    const badge   = CAT_BADGE[item.category_id] || CAT_BADGE[9];
+    const fallback = CAT_IMG[item.category_id] || CAT_IMG[9];
+    const imgSrc  = item.image || fallback;
+    return `<a href="${escH(item.url||'#')}" class="n-card" target="_blank" rel="noopener">
+      <div class="n-card-top"><span class="n-badge ${badge.cls}">${badge.label}</span></div>
+      <div class="n-img-placeholder"><img src="${escH(imgSrc)}" alt="${escH(cleanNewsTitle(item.title))}" loading="lazy" onerror="this.src='${fallback}'"/></div>
+      <div class="n-body">
+        <span class="n-src">${escH(item.publisher||'')}</span>
+        <h3 class="n-ttl">${escH(cleanNewsTitle(item.title))}</h3>
+        <span class="n-more">Read More →</span>
+      </div>
+    </a>`;
+  }
+
+  async function loadNewsGrid(reset = true) {
+    const grid = document.getElementById('news-grid');
+    const catId = NEWS_CATS[newsCurCat] || '';
+    const page  = reset ? 1 : newsCurPage + 1;
+    if (reset) {
+      newsCurPage = 1;
+      grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Loading…</div>';
+    }
+    const params = new URLSearchParams({ page, limit: 12 });
+    if (catId) params.set('category', catId);
+    if (newsSearchQ) params.set('q', newsSearchQ);
+    try {
+      const res  = await fetch('/api/db/news?' + params);
+      const data = await res.json();
+      const items = data.news || [];
+      newsTotalPages = data.pages || 1;
+      newsCurPage    = data.page  || 1;
+      if (reset) {
+        grid.innerHTML = items.length
+          ? items.map(renderNewsCard).join('')
+          : '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">No articles found.</div>';
+      } else {
+        if (items.length) grid.insertAdjacentHTML('beforeend', items.map(renderNewsCard).join(''));
+      }
+      document.getElementById('load-more-wrap').style.display = newsCurPage < newsTotalPages ? '' : 'none';
+    } catch {
+      if (reset) grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Could not load news.</div>';
+    }
+  }
+
+  function loadMoreNews() { loadNewsGrid(false); }
+
+  /* ── News category filter ── */
+  function filterNews(btn, catKey) {
+    document.querySelectorAll('#sec-news .fp').forEach(b => b.classList.remove('on'));
+    if (btn) {
+      btn.classList.add('on');
+    } else {
+      // called from sidebar tag — find matching pill
+      const pill = document.querySelector(`#sec-news .fp[data-catkey="${catKey}"]`);
+      if (pill) pill.classList.add('on');
+    }
+    newsCurCat = catKey;
+    loadNewsGrid(true);
+    // scroll to grid top
+    document.getElementById('sec-news').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   /* ── Search input ── */
@@ -610,7 +602,9 @@
       renderEvList(1);
       if (evMapReady) plotEvPins(evFiltered);
     } else {
-      filterNewsText(q);
+      newsSearchQ = q;
+      clearTimeout(newsSearchTimer);
+      newsSearchTimer = setTimeout(() => loadNewsGrid(true), 350);
     }
   });
 
@@ -625,9 +619,13 @@
       renderEvList(1);
       if (evMapReady) plotEvPins(evFiltered);
     } else {
-      filterNewsText('');
+      newsSearchQ = '';
+      loadNewsGrid(true);
     }
   }
+
+  /* ── Initial news load ── */
+  loadNewsGrid(true);
 
   /* ── Hamburger ── */
   const hamburger = document.getElementById('hamburger');
