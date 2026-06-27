@@ -321,6 +321,56 @@ app.get('/api/db/events', async (req, res) => {
   }
 });
 
+// ── OG 이미지 파싱 + DB 캐싱 ──────────────────────────
+app.get('/api/og-img', async (req, res) => {
+  const rawUrl = decodeURIComponent(req.query.url || '');
+  if (!rawUrl.startsWith('http')) return res.json({ image: null });
+
+  try {
+    // DB 캐시 확인
+    const [[cached]] = await db.query(
+      'SELECT thumbnail_img_path FROM news WHERE url = ? AND thumbnail_img_path IS NOT NULL AND thumbnail_img_path != ""',
+      [rawUrl]
+    );
+    if (cached?.thumbnail_img_path) return res.json({ image: cached.thumbnail_img_path });
+
+    // 페이지 HTML 가져오기
+    const r = await fetch(rawUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; EdTechHUB/1.0; +https://edtechhub.com)' },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!r.ok) return res.json({ image: null });
+    const html = await r.text();
+
+    // og:image / twitter:image 추출
+    const patterns = [
+      /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
+      /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i,
+      /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i,
+    ];
+    let imgUrl = null;
+    for (const p of patterns) {
+      const m = html.match(p);
+      if (m?.[1]?.trim()) { imgUrl = m[1].trim(); break; }
+    }
+
+    // 상대 URL → 절대 URL 변환
+    if (imgUrl && !imgUrl.startsWith('http')) {
+      try { imgUrl = new URL(imgUrl, new URL(rawUrl).origin).href; } catch { imgUrl = null; }
+    }
+
+    // DB에 캐싱
+    if (imgUrl) {
+      db.query('UPDATE news SET thumbnail_img_path = ? WHERE url = ?', [imgUrl, rawUrl]).catch(() => {});
+    }
+
+    res.json({ image: imgUrl || null });
+  } catch {
+    res.json({ image: null });
+  }
+});
+
 // 배경 이미지 URL 추출 헬퍼 (절대/상대경로 모두 처리)
 function extractBgUrl(style = '') {
   const m = style.match(/url\(['"]?([^'")]+)['"]?\)/);

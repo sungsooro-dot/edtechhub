@@ -523,11 +523,40 @@
     return (raw || '').replace(/^\d{4}-\d{2}-\d{2}\s+/, '').split(/\n/)[0].trim().substring(0, 120);
   }
 
+  /* ── OG 이미지 큐 (동시 3개 fetch) ── */
+  const ogQueue = [];
+  let ogRunning = 0;
+  const OG_CONCURRENCY = 3;
+
+  function ogEnqueue(card, url) {
+    ogQueue.push({ card, url });
+    ogDrain();
+  }
+
+  async function ogDrain() {
+    if (ogRunning >= OG_CONCURRENCY || !ogQueue.length) return;
+    const { card, url } = ogQueue.shift();
+    ogRunning++;
+    try {
+      const r = await fetch('/api/og-img?url=' + encodeURIComponent(url));
+      const { image } = await r.json();
+      if (image) {
+        const img = card.querySelector('.n-img-placeholder img');
+        if (img) { img.src = image; img.onerror = null; }
+        card.removeAttribute('data-fetch-og');
+      }
+    } catch {}
+    ogRunning--;
+    ogDrain();
+  }
+
   function renderNewsCard(item) {
-    const badge   = CAT_BADGE[item.category_id] || CAT_BADGE[9];
+    const badge    = CAT_BADGE[item.category_id] || CAT_BADGE[9];
     const fallback = CAT_IMG[item.category_id] || CAT_IMG[9];
-    const imgSrc  = item.image || fallback;
-    return `<a href="${escH(item.url||'#')}" class="n-card" target="_blank" rel="noopener">
+    const hasImg   = !!item.image;
+    const imgSrc   = item.image || fallback;
+    const fetchAttr = (!hasImg && item.url) ? ` data-fetch-og="${escH(item.url)}"` : '';
+    return `<a href="${escH(item.url||'#')}" class="n-card"${fetchAttr} target="_blank" rel="noopener">
       <div class="n-card-top"><span class="n-badge ${badge.cls}">${badge.label}</span></div>
       <div class="n-img-placeholder"><img src="${escH(imgSrc)}" alt="${escH(cleanNewsTitle(item.title))}" loading="lazy" onerror="this.src='${fallback}'"/></div>
       <div class="n-body">
@@ -536,6 +565,13 @@
         <span class="n-more">Read More →</span>
       </div>
     </a>`;
+  }
+
+  function queueOgImages(container) {
+    container.querySelectorAll('.n-card[data-fetch-og]').forEach(card => {
+      const url = card.dataset.fetchOg;
+      if (url) ogEnqueue(card, url);
+    });
   }
 
   async function loadNewsGrid(reset = true) {
@@ -563,6 +599,7 @@
         if (items.length) grid.insertAdjacentHTML('beforeend', items.map(renderNewsCard).join(''));
       }
       document.getElementById('load-more-wrap').style.display = newsCurPage < newsTotalPages ? '' : 'none';
+      queueOgImages(grid);
     } catch {
       if (reset) grid.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Could not load news.</div>';
     }
