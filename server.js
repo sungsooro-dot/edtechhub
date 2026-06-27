@@ -342,17 +342,26 @@ app.get('/api/og-img', async (req, res) => {
     if (!r.ok) return res.json({ image: null });
     const html = await r.text();
 
-    // og:image / twitter:image 추출
-    const patterns = [
+    // 1차: og:image / twitter:image 메타 태그
+    const metaPatterns = [
       /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
       /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
       /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i,
       /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i,
     ];
     let imgUrl = null;
-    for (const p of patterns) {
+    for (const p of metaPatterns) {
       const m = html.match(p);
       if (m?.[1]?.trim()) { imgUrl = m[1].trim(); break; }
+    }
+
+    // 2차: 본문 첫 번째 콘텐츠 이미지 (srcset 있는 img)
+    if (!imgUrl) {
+      const bodyStart = html.search(/<body/i);
+      const bodyHtml  = bodyStart >= 0 ? html.slice(bodyStart) : html;
+      const SKIP = /favicon|icon|logo|avatar|sprite|1x1|pixel|blank|clear\.gif|\.svg/i;
+      const allSrcs = [...bodyHtml.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi)].map(m => m[1]);
+      imgUrl = allSrcs.find(s => s.startsWith('http') && !SKIP.test(s)) || null;
     }
 
     // 상대 URL → 절대 URL 변환
