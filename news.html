@@ -770,6 +770,8 @@
     });
 
     Object.entries(byCountry).forEach(([country, data]) => {
+      // 순수 온라인(지리적 위치 없음) → 지도 핀 제외
+      if (/^(online|virtual|remote|global)$/i.test(country.trim())) return;
       // DB 좌표 우선, 없으면 국가명으로 조회
       const coords = (data.lat && data.lng)
         ? [data.lat, data.lng]
@@ -843,16 +845,26 @@
 
       const ebEvents = (ebRes.events || []);
 
-      const dbEvents = (dbRes.events || []).map(e => ({
-        id       : 'db-' + e.id,
-        title    : cleanTitle(e.title),
-        url      : e.url || '#',
-        start_utc: e.event_start_dt || null,
-        location : [e.city, e.country].filter(Boolean).join(', ') || '',
-        city     : e.city || e.country || 'Global',
-        flag     : e.country || e.city || 'Global',
-        source   : 'db',
-      }));
+      const dbEvents = (dbRes.events || []).map(e => {
+        const city    = e.city    || '';
+        const country = e.country || '';
+        const loc     = city === country
+          ? (city ? (city.match(/online|virtual|remote/i) ? 'Online / Virtual' : city) : '')
+          : [city, country].filter(Boolean).join(', ');
+        return {
+          id       : 'db-' + e.id,
+          title    : cleanTitle(e.title),
+          url      : e.url || '#',
+          start_utc: e.event_start_dt || null,
+          location : loc || 'Global',
+          city     : city || country || 'Global',
+          country  : country || city || 'Global',
+          flag     : country || city || 'Global',
+          source   : 'db',
+          latitude : e.latitude,
+          longitude: e.longitude,
+        };
+      });
 
       evAllEvents = [...ebEvents, ...dbEvents];
       evFiltered  = evAllEvents;

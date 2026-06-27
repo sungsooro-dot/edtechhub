@@ -259,9 +259,44 @@ app.get('/api/db/news', async (req, res) => {
   }
 });
 
-// ── DB: 이벤트 Top Picks (지난 이벤트 제외, 부족 시 upcoming으로 보충) ───
+// ── 이벤트 날짜 파싱 (제목/URL에서 날짜 추출) ──────────
+function moNum(s) {
+  const m = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+  return m[(s||'').toLowerCase().slice(0,3)] ?? -1;
+}
+const MO = '(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+
+function extractEventDate(title, url) {
+  const t = ((title||'') + ' ' + (url||'')).toLowerCase();
+  let m;
+  // "24 june 2026" / "24th june 2026"
+  m = t.match(new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+${MO}\\s+(\\d{4})\\b`));
+  if (m) { const mn = moNum(m[2]); if (mn >= 0) return new Date(+m[3], mn, +m[1]); }
+  // "june 24, 2026" / "jun 24 2026"
+  m = t.match(new RegExp(`\\b${MO}\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s*(\\d{4})\\b`));
+  if (m) { const mn = moNum(m[1]); if (mn >= 0) return new Date(+m[3], mn, +m[2]); }
+  // URL: /24-june-2026/
+  m = (url||'').toLowerCase().match(new RegExp(`/(\\d{1,2})-${MO}-(\\d{4})/`));
+  if (m) { const mn = moNum(m[2]); if (mn >= 0) return new Date(+m[3], mn, +m[1]); }
+  return null;
+}
+
+function applyDateFilter(rows) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  return rows.map(e => {
+    if (e.event_start_dt) return e;
+    const d = extractEventDate(e.title, e.url);
+    if (!d || isNaN(d)) return e;
+    db.query('UPDATE event SET event_start_dt = ? WHERE id = ?', [d, e.id]).catch(() => {});
+    return { ...e, event_start_dt: d };
+  }).filter(e => {
+    if (!e.event_start_dt) return true;
+    return new Date(e.event_start_dt) >= today;
+  });
+}
+
+// ── DB: 이벤트 Top Picks ─────────────────────────────────
 app.get('/api/db/events/top', async (req, res) => {
-  const LIMIT = 6;
   try {
     const [rows] = await db.query(`
       SELECT e.id, e.title, e.url, NULL AS image,
@@ -272,10 +307,12 @@ app.get('/api/db/events/top', async (req, res) => {
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL)
+            AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE())
       ORDER BY e.publish_score DESC, e.id DESC
-      LIMIT ${LIMIT}
+      LIMIT 50
     `);
-    res.json({ events: rows });
+    const active = applyDateFilter(rows);
+    res.json({ events: active.slice(0, 6) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'DB error' });
@@ -284,19 +321,18 @@ app.get('/api/db/events/top', async (req, res) => {
 
 // ── DB: 이벤트 목록 (View All, 페이지네이션, 검색) ──────────
 app.get('/api/db/events', async (req, res) => {
-  const page   = Math.max(1, parseInt(req.query.page)  || 1);
-  const limit  = Math.min(500, parseInt(req.query.limit) || 12);
-  const offset = (page - 1) * limit;
-  const q      = (req.query.q || '').trim();
+  const page  = Math.max(1, parseInt(req.query.page)  || 1);
+  const limit = Math.min(500, parseInt(req.query.limit) || 12);
+  const q     = (req.query.q || '').trim();
 
   try {
     const baseWhere = q
-      ? `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
-      : `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL)`;
-    const qParam      = `%${q}%`;
-    const listParams  = q ? [qParam, qParam, qParam, limit, offset] : [limit, offset];
-    const countParams = q ? [qParam, qParam, qParam] : [];
+      ? `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE()) AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
+      : `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE())`;
+    const qParam = `%${q}%`;
+    const params = q ? [qParam, qParam, qParam] : [];
 
+    // 이벤트 수가 적어서 전체 fetch 후 JS에서 페이지네이션
     const [rows] = await db.query(`
       SELECT e.id, e.title, e.url, NULL AS image,
              e.event_start_dt, e.event_end_dt, e.price,
@@ -306,15 +342,14 @@ app.get('/api/db/events', async (req, res) => {
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE ${baseWhere}
-      ORDER BY e.publish_score DESC, e.id DESC
-      LIMIT ? OFFSET ?`, listParams);
+      ORDER BY e.event_start_dt ASC, e.publish_score DESC, e.id DESC`, params);
 
-    const [[{ total }]] = await db.query(
-      `SELECT COUNT(*) AS total FROM event e
-       LEFT JOIN event_country ec ON ec.id = e.country_id
-       WHERE ${baseWhere}`, countParams);
+    const active = applyDateFilter(rows);
+    const total  = active.length;
+    const pages  = Math.ceil(total / limit) || 1;
+    const offset = (page - 1) * limit;
 
-    res.json({ events: rows, total, page, limit, pages: Math.ceil(total / limit) });
+    res.json({ events: active.slice(offset, offset + limit), total, page, limit, pages });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'DB error' });
