@@ -342,7 +342,7 @@ app.get('/api/db/events', async (req, res) => {
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE ${baseWhere}
-      ORDER BY e.event_start_dt ASC, e.publish_score DESC, e.id DESC`, params);
+      ORDER BY ISNULL(e.event_start_dt), e.event_start_dt ASC, e.publish_score DESC, e.id DESC`, params);
 
     const active = applyDateFilter(rows);
     const total  = active.length;
