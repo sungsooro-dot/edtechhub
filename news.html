@@ -109,13 +109,9 @@
     .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
     .n-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: border-color .2s, box-shadow .2s; }
     .n-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-    .n-img-placeholder { width: 100%; height: 195px; display: flex; align-items: center; justify-content: center; font-size: 52px; position: relative; flex-shrink: 0; }
-    .ph-green  { background: linear-gradient(135deg,#ECFDF5,#D1FAE5); }
-    .ph-blue   { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); }
-    .ph-orange { background: linear-gradient(135deg,#FFF7ED,#FFEDD5); }
-    .ph-slate  { background: linear-gradient(135deg,#F8FAFC,#F1F5F9); }
-    .ph-purple { background: linear-gradient(135deg,#FAF5FF,#EDE9FE); }
-    .ph-amber  { background: linear-gradient(135deg,#FFFBEB,#FEF3C7); }
+    .n-img-placeholder { width: 100%; height: 195px; overflow: hidden; position: relative; flex-shrink: 0; background: var(--bg-surface); }
+    .n-img-placeholder img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; background: var(--bg-surface); transition: transform .3s; }
+    .n-card:hover .n-img-placeholder img { transform: scale(1.04); }
     .n-body { padding: 10px 12px; display: flex; flex-direction: column; flex: 1; gap: 6px; }
     .n-badge { position: absolute; top: 10px; left: 10px; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; z-index: 1; }
     .badge-innovation { background: rgba(22,163,74,.15); color: #15803D; }
@@ -372,7 +368,7 @@
             <div class="news-grid">
 
               <a href="#" class="n-card" data-cat="innovation">
-                <div class="n-img-placeholder ph-green"><span class="n-badge badge-innovation">Innovation</span>🏙️</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-innovation">Innovation</span><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=85&fit=crop&crop=entropy" alt="EdTech conference" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">Wistl</span>
                   <h3 class="n-ttl">London EdTech Week 2026 concludes with record engagement and a renewed call to strengthen the UK's education research ecosystem</h3>
@@ -382,7 +378,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="government">
-                <div class="n-img-placeholder ph-blue"><span class="n-badge badge-government">Government</span>🏛️</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-government">Government</span><img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=85&fit=crop&crop=entropy" alt="Government building" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">Education Week</span>
                   <h3 class="n-ttl">Congress Is Working on a New K-12 Budget. See What's Proposed for Key Programs</h3>
@@ -391,7 +387,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="research">
-                <div class="n-img-placeholder ph-slate"><span class="n-badge badge-research">Research</span>👩‍💻</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-research">Research</span><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=85&fit=crop&crop=entropy" alt="Screen time research" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">EdSurge</span>
                   <h3 class="n-ttl">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</h3>
@@ -401,7 +397,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="innovation">
-                <div class="n-img-placeholder ph-orange"><span class="n-badge badge-innovation">Innovation</span>📣</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-innovation">Innovation</span><img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=85&fit=crop&crop=entropy" alt="Tech conference" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">Tech Tactics</span>
                   <h3 class="n-ttl">Tech Tactics Fall 2026 — Call for Speakers Now Open</h3>
@@ -411,7 +407,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="funding">
-                <div class="n-img-placeholder ph-amber"><span class="n-badge badge-funding">Funding</span>💷</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-funding">Funding</span><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=85&fit=crop&crop=entropy" alt="EdTech funding" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">TechCrunch</span>
                   <h3 class="n-ttl">UK Government Backs £50M EdTech Innovation Fund for 2026</h3>
@@ -421,7 +417,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="business">
-                <div class="n-img-placeholder ph-purple"><span class="n-badge badge-business">Business</span>🤖</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-business">Business</span><img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=85&fit=crop&crop=entropy" alt="Startup team" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">EdTech HUB</span>
                   <h3 class="n-ttl">Accelerating Execution: The Operating System of High-Performing Early-Stage Teams</h3>
@@ -431,7 +427,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="research">
-                <div class="n-img-placeholder ph-blue"><span class="n-badge badge-research">Research</span>🔒</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-research">Research</span><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=85&fit=crop&crop=entropy" alt="Cybersecurity" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">EdSurge</span>
                   <h3 class="n-ttl">Latest Canvas Attack Shows Schools Still Struggle With Cybersecurity</h3>
@@ -441,7 +437,7 @@
               </a>
 
               <a href="#" class="n-card" data-cat="government">
-                <div class="n-img-placeholder ph-green"><span class="n-badge badge-government">Government</span>🌱</div>
+                <div class="n-img-placeholder "><span class="n-badge badge-government">Government</span><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=85&fit=crop&crop=entropy" alt="AI in classroom" loading="lazy"/></div>
                 <div class="n-body">
                   <span class="n-src">BBC</span>
                   <h3 class="n-ttl">England to Pilot AI Teaching Assistants in 100 State Schools This Autumn</h3>
