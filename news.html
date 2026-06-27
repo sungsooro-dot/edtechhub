@@ -708,34 +708,55 @@
     if (evDataReady && evAllEvents.length) plotEvPins(evFiltered);
   }
 
-  /* ── Plot pins by city ── */
+  /* ── Plot pins by country ── */
   function plotEvPins(events) {
     if (!evMap) return;
     evMarkers.forEach(m => evMap.removeLayer(m));
     evMarkers = [];
-    const byCity = {};
+
+    // 국가 기준으로 그룹핑 (온라인도 해당 국가에 포함)
+    const byCountry = {};
     events.forEach(e => {
-      const key = (e.city || e.location || 'Unknown').trim();
-      if (!byCity[key]) byCity[key] = [];
-      byCity[key].push(e);
+      const isOnline = /online|virtual|remote/i.test(e.city || '');
+      // 좌표가 있으면 그 좌표 기준 키, 없으면 country 기준
+      let key = e.country || e.city || 'Unknown';
+      if (!byCountry[key]) byCountry[key] = { events: [], lat: null, lng: null, hasOnline: false };
+      byCountry[key].events.push(e);
+      if (isOnline) byCountry[key].hasOnline = true;
+      // DB 좌표 우선 저장
+      if (!byCountry[key].lat && e.latitude && e.longitude) {
+        byCountry[key].lat = parseFloat(e.latitude);
+        byCountry[key].lng = parseFloat(e.longitude);
+      }
     });
-    Object.entries(byCity).forEach(([city, evs]) => {
-      // DB 좌표 우선, 없으면 도시명 조회
-      const first = evs.find(e => e.latitude && e.longitude);
-      const coords = first ? [parseFloat(first.latitude), parseFloat(first.longitude)] : getCoords(city);
+
+    Object.entries(byCountry).forEach(([country, data]) => {
+      // DB 좌표 우선, 없으면 국가명으로 조회
+      const coords = (data.lat && data.lng)
+        ? [data.lat, data.lng]
+        : getCoords(country);
       if (!coords) return;
-      const isOnline = /online|virtual|remote/i.test(city);
-      const bg   = isOnline ? '#6B7280' : '#16A34A';
-      const cnt  = evs.length;
-      const size = Math.min(28 + cnt * 4, 52);
-      const fs   = size >= 44 ? 14 : 12;
+
+      const evs    = data.events;
+      const allOnline = evs.every(e => /online|virtual|remote/i.test(e.city || ''));
+      const someOnline = data.hasOnline;
+      const bg     = allOnline ? '#6B7280' : '#16A34A';
+      const cnt    = evs.length;
+      const size   = Math.min(28 + cnt * 4, 52);
+      const fs     = size >= 44 ? 14 : 12;
+      const onlineDot = someOnline && !allOnline
+        ? `<div style="position:absolute;top:0;right:0;width:10px;height:10px;background:#6B7280;border:1.5px solid #fff;border-radius:50%;"></div>`
+        : '';
       const icon = L.divIcon({
         className: '',
-        html: `<div style="width:${size}px;height:${size}px;background:${bg};border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform=''">${cnt}</div>`,
+        html: `<div style="position:relative;width:${size}px;height:${size}px;">
+          <div style="width:${size}px;height:${size}px;background:${bg};border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform=''">${cnt}</div>
+          ${onlineDot}
+        </div>`,
         iconSize: [size, size], iconAnchor: [size/2, size/2],
       });
       const marker = L.marker(coords, { icon });
-      marker.on('click', () => openEvPanel(city, evs));
+      marker.on('click', () => openEvPanel(country, evs));
       marker.addTo(evMap);
       evMarkers.push(marker);
     });
@@ -743,8 +764,10 @@
 
   /* ── Side panel ── */
   function openEvPanel(city, evs) {
-    const isOnline = /online|virtual|remote/i.test(city);
-    document.getElementById('ev-mp-country').textContent = isOnline ? 'Online / Virtual' : `📍 ${city}`;
+    const allOnline = evs.every(e => /online|virtual|remote/i.test(e.city || ''));
+    const someOnline = evs.some(e => /online|virtual|remote/i.test(e.city || ''));
+    const label = allOnline ? 'Online / Virtual' : someOnline ? `📍 ${city} (incl. Online)` : `📍 ${city}`;
+    document.getElementById('ev-mp-country').textContent = label;
     document.getElementById('ev-mp-count').textContent   = `${evs.length} event${evs.length > 1 ? 's' : ''}`;
     document.getElementById('ev-mp-list').innerHTML = evs.map(e => {
       const rawDt = e.start_utc || e.event_start_dt || null;
