@@ -356,6 +356,51 @@ app.get('/api/db/events', async (req, res) => {
   }
 });
 
+// ── DB: 이벤트 Archive (지난 이벤트, 연도 필터, 검색) ──────────
+app.get('/api/db/events/archive', async (req, res) => {
+  const page  = Math.max(1, parseInt(req.query.page)  || 1);
+  const limit = Math.min(100, parseInt(req.query.limit) || 20);
+  const q     = (req.query.q || '').trim();
+  const year  = parseInt(req.query.year) || null;
+
+  try {
+    const conds  = ["e.del_flag = 'N'"];
+    const params = [];
+    if (q) { conds.push('(e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)'); params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
+
+    const [rows] = await db.query(`
+      SELECT e.id, e.title, e.url,
+             e.event_start_dt, e.city_name AS city,
+             ec.country_name AS country
+      FROM event e
+      LEFT JOIN event_country ec ON ec.id = e.country_id
+      WHERE ${conds.join(' AND ')}
+      ORDER BY ISNULL(e.event_start_dt), e.event_start_dt DESC, e.id DESC
+    `, params);
+
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const past = rows
+      .map(e => {
+        if (e.event_start_dt) return e;
+        const d = extractEventDate(e.title, e.url);
+        if (!d || isNaN(d)) return null;
+        db.query('UPDATE event SET event_start_dt = ? WHERE id = ?', [d, e.id]).catch(() => {});
+        return { ...e, event_start_dt: d };
+      })
+      .filter(e => e && e.event_start_dt && new Date(e.event_start_dt) < now)
+      .filter(e => !year || new Date(e.event_start_dt).getFullYear() === year);
+
+    const years  = [...new Set(past.map(e => new Date(e.event_start_dt).getFullYear()))].sort((a, b) => b - a);
+    const total  = past.length;
+    const offset = (page - 1) * limit;
+
+    res.json({ events: past.slice(offset, offset + limit), total, page, limit, pages: Math.ceil(total / limit) || 1, years });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
 // ── OG 이미지 파싱 + DB 캐싱 ──────────────────────────
 app.get('/api/og-img', async (req, res) => {
   const rawUrl = decodeURIComponent(req.query.url || '');
