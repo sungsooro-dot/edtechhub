@@ -107,30 +107,27 @@
 
     /* ── NEWS CARDS ── */
     .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-    .n-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: border-color .2s, box-shadow .2s; }
-    .n-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 20px rgba(0,0,0,.07); }
-    .n-img-placeholder { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 52px; position: relative; }
+    .n-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: border-color .2s, box-shadow .2s; }
+    .n-card:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .n-img-placeholder { width: 100%; height: 195px; display: flex; align-items: center; justify-content: center; font-size: 52px; position: relative; flex-shrink: 0; }
     .ph-green  { background: linear-gradient(135deg,#ECFDF5,#D1FAE5); }
     .ph-blue   { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); }
     .ph-orange { background: linear-gradient(135deg,#FFF7ED,#FFEDD5); }
     .ph-slate  { background: linear-gradient(135deg,#F8FAFC,#F1F5F9); }
     .ph-purple { background: linear-gradient(135deg,#FAF5FF,#EDE9FE); }
     .ph-amber  { background: linear-gradient(135deg,#FFFBEB,#FEF3C7); }
-    .n-body { padding: 14px 16px; display: flex; flex-direction: column; flex: 1; gap: 6px; }
-    .n-badge { position: absolute; top: 10px; left: 10px; padding: 3px 9px; border-radius: 4px; font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; z-index: 1; }
+    .n-body { padding: 10px 12px; display: flex; flex-direction: column; flex: 1; gap: 6px; }
+    .n-badge { position: absolute; top: 10px; left: 10px; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; z-index: 1; }
     .badge-innovation { background: rgba(22,163,74,.15); color: #15803D; }
     .badge-funding    { background: rgba(37,99,235,.12);  color: #1D4ED8; }
     .badge-research   { background: rgba(124,58,237,.12); color: #7C3AED; }
     .badge-government { background: rgba(234,88,12,.12);  color: #C2410C; }
     .badge-business   { background: rgba(15,118,110,.12); color: #0F766E; }
     .n-src  { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 700; color: var(--text-1); display: inline-block; align-self: flex-start; }
-    .n-ttl  { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: #111827; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .n-excerpt { font-size: 14px; color: #4B5563; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .n-more { font-size: 14px; color: var(--text-2); font-weight: 500; margin-top: auto; transition: color .15s; }
-    .n-more:hover { color: var(--accent); }
-    .n-card-featured { grid-column: 1 / -1; flex-direction: row; }
-    .n-card-featured .n-img-placeholder { width: 360px; flex-shrink: 0; height: auto; min-height: 220px; }
-    .n-card-featured .n-ttl { font-size: 22px; -webkit-line-clamp: 3; }
+    .n-ttl  { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: #111827; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .n-excerpt { font-size: 12px; color: #4B5563; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .n-more { font-size: 12px; font-weight: 600; color: var(--accent); margin-top: auto; padding-top: 6px; border-top: 1px solid var(--border); transition: color .15s; }
+    .n-more:hover { color: var(--accent-h); }
     .load-more { display: flex; justify-content: center; }
 
     /* ── EVENTS GRID ── */
@@ -374,13 +371,13 @@
             </div>
             <div class="news-grid">
 
-              <a href="#" class="n-card n-card-featured" data-cat="innovation">
+              <a href="#" class="n-card" data-cat="innovation">
                 <div class="n-img-placeholder ph-green"><span class="n-badge badge-innovation">Innovation</span>🏙️</div>
                 <div class="n-body">
                   <span class="n-src">Wistl</span>
                   <h3 class="n-ttl">London EdTech Week 2026 concludes with record engagement and a renewed call to strengthen the UK's education research ecosystem</h3>
                   <p class="n-excerpt">This year's London EdTech Week attracted over 5,000 attendees from 40 countries, featuring keynotes on AI-driven personalised learning and the future of accreditation.</p>
-                  <span class="n-more" style="margin-top:8px;">Read More →</span>
+                  <span class="n-more">Read More →</span>
                 </div>
               </a>
 
