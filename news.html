@@ -542,7 +542,11 @@
       const { image } = await r.json();
       if (image) {
         const img = card.querySelector('.n-img-placeholder img');
-        if (img) { img.src = image; img.onerror = null; }
+        if (img) {
+          const fallbackSrc = img.src;
+          img.onerror = () => { img.src = fallbackSrc; img.onerror = null; };
+          img.src = image;
+        }
         card.removeAttribute('data-fetch-og');
       }
     } catch {}
