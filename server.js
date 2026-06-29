@@ -220,7 +220,13 @@ app.get('/api/db/news/top', async (req, res) => {
   }
 });
 
-// ── DB: 뉴스 목록 (View All, 페이지네이션, 카테고리 필터, 검색) ──────────
+const NEWS_IMG_CASE = `CASE
+  WHEN n.thumbnail_img_path LIKE 'http%' THEN n.thumbnail_img_path
+  WHEN n.thumbnail_img_path IS NOT NULL AND n.thumbnail_img_path != ''
+    THEN CONCAT('https://edtechhub.com', n.thumbnail_img_path)
+  ELSE NULL END AS image`;
+
+// ── DB: 뉴스 목록 — 최근 14일 (View All, 페이지네이션, 카테고리, 검색) ──
 app.get('/api/db/news', async (req, res) => {
   const page   = Math.max(1, parseInt(req.query.page)  || 1);
   const limit  = Math.min(20, parseInt(req.query.limit) || 12);
@@ -229,30 +235,75 @@ app.get('/api/db/news', async (req, res) => {
   const q      = (req.query.q || '').trim();
 
   try {
-    const conds  = ['n.del_flag = "N"'];
+    // 최근 14일 기준. 없으면 가장 최근 스크랩 배치 그대로 표시
+    const [[batchRow]] = await db.query(
+      `SELECT MAX(publish_dt) AS latest FROM news WHERE del_flag='N'`);
+    const latest    = batchRow?.latest ? new Date(batchRow.latest) : new Date();
+    const cutoff    = new Date(latest); cutoff.setDate(cutoff.getDate() - 14);
+    const cutoffStr = cutoff.toISOString().slice(0, 19).replace('T', ' ');
+
+    const conds  = ['n.del_flag = "N"', `n.publish_dt >= '${cutoffStr}'`];
     const params = [];
     if (cat) { conds.push('n.category_id = ?'); params.push(cat); }
     if (q)   { conds.push('n.title LIKE ?');    params.push(`%${q}%`); }
     const where = conds.join(' AND ');
 
     const [rows] = await db.query(
-      `SELECT n.id, n.title, n.publisher, n.url, n.category_id,
-              CASE
-                WHEN n.thumbnail_img_path LIKE 'http%' THEN n.thumbnail_img_path
-                WHEN n.thumbnail_img_path IS NOT NULL AND n.thumbnail_img_path != ''
-                  THEN CONCAT('https://edtechhub.com', n.thumbnail_img_path)
-                ELSE NULL
-              END AS image,
-              n.publish_dt
-       FROM news n
-       WHERE ${where}
-       ORDER BY n.publish_dt DESC
-       LIMIT ? OFFSET ?`, [...params, limit, offset]);
+      `SELECT n.id, n.title, n.publisher, n.url, n.category_id, ${NEWS_IMG_CASE}, n.publish_dt
+       FROM news n WHERE ${where}
+       ORDER BY n.publish_dt DESC LIMIT ? OFFSET ?`, [...params, limit, offset]);
 
     const [[countRow]] = await db.query(
       `SELECT COUNT(*) AS total FROM news n WHERE ${where}`, params);
 
     res.json({ news: rows, total: countRow.total, page, limit, pages: Math.ceil(countRow.total / limit) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
+// ── DB: 뉴스 Archive (14일 이상 지난 기사) ──────────────────
+app.get('/api/db/news/archive', async (req, res) => {
+  const page  = Math.max(1, parseInt(req.query.page)  || 1);
+  const limit = Math.min(50, parseInt(req.query.limit) || 20);
+  const cat   = req.query.category || null;
+  const q     = (req.query.q || '').trim();
+  const year  = parseInt(req.query.year)  || null;
+  const month = parseInt(req.query.month) || null;
+
+  try {
+    const [[batchRow]] = await db.query(
+      `SELECT MAX(publish_dt) AS latest FROM news WHERE del_flag='N'`);
+    const latest    = batchRow?.latest ? new Date(batchRow.latest) : new Date();
+    const cutoff    = new Date(latest); cutoff.setDate(cutoff.getDate() - 14);
+    const cutoffStr = cutoff.toISOString().slice(0, 19).replace('T', ' ');
+
+    const conds  = ['n.del_flag = "N"', `n.publish_dt < '${cutoffStr}'`];
+    const params = [];
+    if (cat)   { conds.push('n.category_id = ?');      params.push(cat); }
+    if (q)     { conds.push('n.title LIKE ?');          params.push(`%${q}%`); }
+    if (year)  { conds.push('YEAR(n.publish_dt) = ?');  params.push(year); }
+    if (month) { conds.push('MONTH(n.publish_dt) = ?'); params.push(month); }
+    const where = conds.join(' AND ');
+
+    const [rows] = await db.query(
+      `SELECT n.id, n.title, n.publisher, n.url, n.category_id, ${NEWS_IMG_CASE}, n.publish_dt
+       FROM news n WHERE ${where}
+       ORDER BY n.publish_dt DESC LIMIT ? OFFSET ?`, [...params, limit, (page - 1) * limit]);
+
+    const [[countRow]] = await db.query(
+      `SELECT COUNT(*) AS total FROM news n WHERE ${where}`, params);
+
+    const [yearRows] = await db.query(
+      `SELECT DISTINCT YEAR(publish_dt) AS yr FROM news
+       WHERE del_flag='N' AND publish_dt < '${cutoffStr}' ORDER BY yr DESC`);
+
+    res.json({
+      news: rows, total: countRow.total, page, limit,
+      pages: Math.ceil(countRow.total / limit) || 1,
+      years: yearRows.map(r => r.yr),
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'DB error' });

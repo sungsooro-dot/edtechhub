@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Archive — EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+    :root {
+      --accent: #16A34A; --accent-h: #15803D; --accent-muted: rgba(22,163,74,.10);
+      --text-1: #111827; --text-2: #6B7280; --text-3: #9CA3AF;
+      --border: #E5E7EB; --border-h: #CBD5E1; --bg-surface: #F8FAFC; --max: 1200px;
+    }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+    .btn { display:inline-flex;align-items:center;gap:6px;padding:11px 22px;border-radius:7px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:background .15s;font-family:'Inter',sans-serif;white-space:nowrap; }
+    .btn-primary { background:var(--accent);color:#fff; } .btn-primary:hover { background:var(--accent-h); }
+    .btn-ghost { background:transparent;color:var(--text-2);padding:8px 14px;font-size:13px;border:none; } .btn-ghost:hover { color:var(--text-1); }
+
+    /* NAV */
+    .header { background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05); }
+    .nav { display:flex;align-items:center;height:64px;gap:4px; }
+    .logo { display:flex;align-items:center;gap:10px;margin-right:20px;flex-shrink:0; }
+    .logo-text { font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--text-1); }
+    .logo-text span { color:var(--accent); }
+    .nav-links { display:flex;gap:2px;list-style:none;flex:1; }
+    .nav-item { position:relative; }
+    .nav-a { display:block;padding:6px 13px;border-radius:5px;font-size:14px;font-weight:500;color:#4B5563;transition:color .15s,background .15s;white-space:nowrap; }
+    .nav-a:hover { color:var(--text-1);background:var(--bg-surface); } .nav-a.on { color:var(--accent); } .nav-a.gem { color:var(--accent); }
+    .nav-dropdown { position:absolute;top:calc(100% + 8px);left:0;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.10);min-width:190px;padding:6px 0;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s;z-index:200; }
+    .nav-item:hover .nav-dropdown { opacity:1;visibility:visible;transform:translateY(0); }
+    .nav-drop-item { display:block;padding:9px 16px;font-size:14px;font-weight:500;color:#374151;transition:background .12s,color .12s; }
+    .nav-drop-item:hover { background:#F0FDF4;color:var(--accent); }
+    .nav-drop-div { height:1px;background:var(--border);margin:4px 0; }
+    .nav-cta { display:flex;gap:8px;align-items:center;flex-shrink:0; }
+    .nav-hamburger { display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;margin-left:auto;cursor:pointer; }
+    .nav-hamburger span { display:block;width:22px;height:2px;background:var(--text-1);border-radius:2px; }
+    .nav-mobile { display:none;flex-direction:column;position:fixed;top:64px;left:0;right:0;bottom:0;background:#fff;z-index:99;padding:20px 24px;gap:4px;overflow-y:auto;border-top:1px solid var(--border); }
+    .nav-mobile.open { display:flex; }
+    .nav-mobile-a { display:block;padding:13px 16px;border-radius:8px;font-size:16px;font-weight:500;color:var(--text-1); }
+    .nav-mobile-a.accent { color:var(--accent); }
+    .nav-mobile-div { height:1px;background:var(--border);margin:8px 0; }
+    .nav-mobile-cta { display:flex;flex-direction:column;gap:8px;margin-top:16px; }
+    .nav-mobile-cta .btn { justify-content:center; }
+
+    /* PAGE HERO */
+    .page-hero { background:linear-gradient(135deg,#F0FDF4 0%,#DCFCE7 50%,#F0FDF4 100%);border-bottom:1px solid var(--border);padding:48px 0 40px; }
+    .page-tag { font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px; }
+    .page-hero h1 { font-family:'Sora',sans-serif;font-size:clamp(26px,4vw,36px);font-weight:700;color:#111827;line-height:1.15; }
+    .page-hero p { font-size:15px;color:#4B5563;margin-top:8px;max-width:520px; }
+    .hero-back { display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--accent);margin-bottom:16px; }
+    .hero-back:hover { color:var(--accent-h); }
+
+    /* TOOLBAR */
+    .toolbar { background:#fff;border-bottom:1px solid var(--border);padding:12px 0; }
+    .toolbar-inner { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .search-box { display:flex;align-items:center;gap:8px;background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;padding:9px 14px;transition:border-color .15s;flex:1;max-width:400px; }
+    .search-box:focus-within { border-color:var(--accent); }
+    .search-box input { flex:1;border:none;background:transparent;font-size:14px;color:var(--text-1);font-family:'Inter',sans-serif;outline:none; }
+    .search-box input::placeholder { color:var(--text-3); }
+    .pill-group { display:flex;gap:6px;flex-wrap:wrap; }
+    .fp { padding:5px 14px;border-radius:9999px;font-size:13px;font-weight:500;background:var(--bg-surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .14s; }
+    .fp:hover { border-color:var(--border-h);color:var(--text-1); }
+    .fp.on { background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600; }
+    .yp { padding:5px 14px;border-radius:9999px;font-size:13px;font-weight:500;background:var(--bg-surface);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .14s; }
+    .yp:hover { border-color:var(--border-h);color:var(--text-1); }
+    .yp.on { background:#111827;border-color:#111827;color:#fff;font-weight:600; }
+    .clear-btn { padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:7px;font-size:13px;color:var(--text-2);cursor:pointer;transition:background .12s;white-space:nowrap; }
+    .clear-btn:hover { background:var(--bg-surface); }
+    .divider-pill { width:1px;height:20px;background:var(--border);flex-shrink:0;align-self:center; }
+
+    /* MAIN */
+    .archive-main { padding:36px 0 64px; }
+    .archive-stats { font-size:13px;color:var(--text-2);margin-bottom:24px; }
+    .archive-stats strong { color:var(--text-1); }
+
+    /* MONTH GROUP */
+    .month-group { margin-bottom:32px; }
+    .month-label { font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:12px; }
+
+    /* ARCHIVE NEWS CARD */
+    .an-item { display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:background .15s,border-color .15s;color:inherit;text-decoration:none; }
+    .an-item:hover { background:#F9FAFB;border-color:var(--border-h); }
+    .an-thumb { width:64px;height:48px;border-radius:5px;overflow:hidden;flex-shrink:0;background:var(--bg-surface); }
+    .an-thumb img { width:100%;height:100%;object-fit:cover;display:block; }
+    .an-body { flex:1;min-width:0; }
+    .an-meta { display:flex;gap:6px;align-items:center;margin-bottom:4px;flex-wrap:wrap; }
+    .an-badge { font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:3px; }
+    .badge-innovation { background:rgba(22,163,74,.12);color:#15803D; }
+    .badge-funding    { background:rgba(37,99,235,.10);color:#1D4ED8; }
+    .badge-research   { background:rgba(124,58,237,.10);color:#7C3AED; }
+    .badge-government { background:rgba(234,88,12,.10);color:#C2410C; }
+    .badge-business   { background:rgba(15,118,110,.10);color:#0F766E; }
+    .an-src { font-size:11px;font-weight:600;color:var(--text-2); }
+    .an-ttl { font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#111827;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+    .an-arrow { color:var(--text-3);font-size:14px;flex-shrink:0; }
+
+    /* PAGINATION */
+    .ar-pagination { display:flex;align-items:center;justify-content:center;gap:6px;margin-top:32px; }
+    .ar-pg-btn { min-width:34px;height:34px;border-radius:6px;padding:0 10px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text-2);display:flex;align-items:center;justify-content:center;transition:all .14s; }
+    .ar-pg-btn:hover:not(:disabled) { border-color:#111827;color:#111827; }
+    .ar-pg-btn.on { background:#111827;border-color:#111827;color:#fff; }
+    .ar-pg-btn:disabled { opacity:.35;cursor:not-allowed; }
+
+    .empty { padding:60px 20px;text-align:center; }
+    .empty h3 { font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--text-2);margin-bottom:8px; }
+    .empty p { font-size:13px;color:var(--text-3);margin-top:6px; }
+
+    /* FOOTER */
+    .footer { background:#111827;border-top:1px solid var(--border);padding:48px 0 28px; }
+    .ft-top { display:grid;grid-template-columns:220px 1fr;gap:48px;margin-bottom:32px; }
+    .ft-brand-logo { display:flex;align-items:center;gap:10px; }
+    .ft-brand p { font-size:13px;color:#9CA3AF;margin-top:8px;margin-bottom:14px;max-width:180px;line-height:1.65; }
+    .ft-brand a { font-size:12.5px;color:#9CA3AF; } .ft-brand a:hover { color:#F9FAFB; }
+    .ft-cols { display:grid;grid-template-columns:repeat(3,1fr);gap:24px; }
+    .ft-col h5 { font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#6B7280;margin-bottom:14px; }
+    .ft-col ul { display:flex;flex-direction:column;gap:9px; }
+    .ft-col a, .ft-col span { font-size:13px;color:#9CA3AF;transition:color .15s; }
+    .ft-col a:hover { color:#F9FAFB; }
+    .ft-btm { display:flex;justify-content:space-between;align-items:center;border-top:1px solid #1F2937;padding-top:22px;font-size:12px;color:#6B7280;flex-wrap:wrap;gap:10px; }
+    .ft-legal { display:flex;gap:20px; }
+    .ft-legal a { color:#6B7280; } .ft-legal a:hover { color:#F9FAFB; }
+    .back-top { background:none;border:none;font-size:12px;color:#6B7280;cursor:pointer;letter-spacing:.08em;text-transform:uppercase; }
+
+    @media (max-width:768px) {
+      .nav-links, .nav-cta { display:none; } .nav-hamburger { display:flex; }
+      .ft-top { grid-template-columns:1fr;gap:28px; } .ft-cols { grid-template-columns:1fr 1fr; }
+      .search-box { max-width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="option1-preview.html" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="34" height="34" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
+      <li class="nav-item">
+        <a href="news.html" class="nav-a on">News &amp; Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="news.html" class="nav-drop-item">News</a>
+          <div class="nav-drop-div"></div>
+          <a href="news-archive.html" class="nav-drop-item">News Archive</a>
+          <div class="nav-drop-div"></div>
+          <a href="news.html#events" class="nav-drop-item">Events</a>
+          <div class="nav-drop-div"></div>
+          <a href="events-archive.html" class="nav-drop-item">Past Events Archive</a>
+          <div class="nav-drop-div"></div>
+          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown" style="min-width:210px;">
+          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
+          <div class="nav-drop-div"></div>
+          <a href="networking.html" class="nav-drop-item">Cross-Cohort Networking</a>
+          <div class="nav-drop-div"></div>
+          <a href="community-forum.html" class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-cta">
+      <a href="#" class="btn-ghost btn">Subscribe</a>
+      <a href="#" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
+    </div>
+  </nav>
+</header>
+<nav class="nav-mobile" id="mobileNav">
+  <a href="option1-preview.html" class="nav-mobile-a">Home</a>
+  <a href="about.html" class="nav-mobile-a">About</a>
+  <a href="news.html" class="nav-mobile-a accent">News &amp; Events</a>
+  <a href="news-archive.html" class="nav-mobile-a accent">News Archive</a>
+  <a href="events-archive.html" class="nav-mobile-a">Past Events Archive</a>
+  <a href="programme.html" class="nav-mobile-a">Programme</a>
+  <div class="nav-mobile-div"></div>
+  <div class="nav-mobile-cta"><a href="#" class="btn btn-primary">Contact Us</a></div>
+</nav>
+
+<main>
+  <div class="page-hero">
+    <div class="wrap">
+      <a href="news.html" class="hero-back">← Back to News</a>
+      <div class="page-tag">EdTech HUB</div>
+      <h1>News Archive</h1>
+      <p>Browse all past EdTech news, research, and insights from the global ecosystem.</p>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="wrap toolbar-inner">
+      <div class="search-box">
+        <span style="color:var(--text-3);font-size:14px;">🔍</span>
+        <input type="text" id="arch-search" placeholder="Search news archive…" autocomplete="off"/>
+      </div>
+      <button class="clear-btn" id="arch-clear" style="display:none;" onclick="clearSearch()">✕ Clear</button>
+      <div class="divider-pill"></div>
+      <div class="pill-group" id="cat-pills">
+        <button class="fp on" data-cat="" onclick="setCat(this,'')">All</button>
+        <button class="fp" data-cat="9"  onclick="setCat(this,'9')">Innovation</button>
+        <button class="fp" data-cat="3"  onclick="setCat(this,'3')">Funding</button>
+        <button class="fp" data-cat="4"  onclick="setCat(this,'4')">Research</button>
+        <button class="fp" data-cat="10" onclick="setCat(this,'10')">Government</button>
+        <button class="fp" data-cat="2"  onclick="setCat(this,'2')">Business</button>
+      </div>
+      <div class="divider-pill"></div>
+      <div class="pill-group" id="year-pills">
+        <button class="yp on" data-year="" onclick="setYear(this,'')">All Years</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="archive-main">
+    <div class="wrap">
+      <div class="archive-stats" id="arch-stats"></div>
+      <div id="arch-list"><div class="empty"><h3>Loading…</h3></div></div>
+      <div class="ar-pagination" id="arch-pagination"></div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="ft-brand-logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;">EdTech<span style="color:#16A34A;">HUB</span></span>
+        </div>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col"><h5>Navigate</h5><ul>
+          <li><a href="option1-preview.html">Home</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="news-archive.html">News Archive</a></li>
+          <li><a href="news.html#events">Events</a></li>
+          <li><a href="events-archive.html">Past Events</a></li>
+        </ul></div>
+        <div class="ft-col"><h5>Community</h5><ul>
+          <li><a href="news.html#events">EdTech Together</a></li>
+          <li><a href="community-partnership.html">Partnership Initiatives</a></li>
+          <li><a href="networking.html">Cross-Cohort Networking</a></li>
+          <li><a href="community-forum.html">Learning Forum</a></li>
+        </ul></div>
+        <div class="ft-col"><h5>Contact</h5><ul>
+          <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
+          <li><span>22 Bishopsgate, London</span></li>
+          <li><span>EC2B 4BQ, UK</span></li>
+          <li><a href="#">Send a Message</a></li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+      <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Submissions</a></div>
+      <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const CAT_BADGE = {
+    9:  { cls:'badge-innovation', label:'Innovation' },
+    3:  { cls:'badge-funding',    label:'Funding' },
+    4:  { cls:'badge-research',   label:'Research' },
+    10: { cls:'badge-government', label:'Government' },
+    2:  { cls:'badge-business',   label:'Business' },
+  };
+  const CAT_FB = {
+    9:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200&q=70&fit=crop',
+    3:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=200&q=70&fit=crop',
+    4:'https://images.unsplash.com/photo-1588072432836-e10032774350?w=200&q=70&fit=crop',
+    10:'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=200&q=70&fit=crop',
+    2:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=200&q=70&fit=crop',
+  };
+
+  let archPage=1, archCat='', archYear='', archQ='', archPages=1, archTotal=0, archTimer=null;
+
+  function escH(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function cleanTitle(r){ return (r||'').replace(/^\d{4}-\d{2}-\d{2}\s+/,'').split(/\n/)[0].trim().substring(0,120); }
+
+  async function loadArchive(reset=true) {
+    if (reset) archPage=1;
+    const p = new URLSearchParams({ page:archPage, limit:20 });
+    if (archCat)  p.set('category', archCat);
+    if (archYear) p.set('year', archYear);
+    if (archQ)    p.set('q', archQ);
+    document.getElementById('arch-list').innerHTML = '<div class="empty"><h3>Loading…</h3></div>';
+    try {
+      const res  = await fetch('/api/db/news/archive?' + p);
+      const data = await res.json();
+      archPages = data.pages || 1;
+      archTotal = data.total || 0;
+      if (reset && data.years?.length) buildYearPills(data.years);
+      const catLabel = archCat ? (CAT_BADGE[archCat]?.label || '') : '';
+      document.getElementById('arch-stats').innerHTML =
+        `<strong>${archTotal}</strong> article${archTotal!==1?'s':''}` +
+        (catLabel ? ` in <strong>${catLabel}</strong>` : '') +
+        (archYear  ? ` from <strong>${archYear}</strong>` : '') +
+        (archQ     ? ` matching "<strong>${escH(archQ)}</strong>"` : '');
+      renderList(data.news || []);
+      renderPagination();
+    } catch {
+      document.getElementById('arch-list').innerHTML = '<div class="empty"><h3>Could not load archive.</h3></div>';
+    }
+  }
+
+  function buildYearPills(years) {
+    const c = document.getElementById('year-pills');
+    c.innerHTML = `<button class="yp ${archYear===''?'on':''}" data-year="" onclick="setYear(this,'')">All Years</button>`
+      + years.map(y=>`<button class="yp ${archYear==y?'on':''}" data-year="${y}" onclick="setYear(this,'${y}')">${y}</button>`).join('');
+  }
+
+  function setCat(btn, cat) {
+    archCat = cat;
+    document.querySelectorAll('#cat-pills .fp').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    loadArchive(true);
+  }
+  function setYear(btn, year) {
+    archYear = year;
+    document.querySelectorAll('#year-pills .yp').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    loadArchive(true);
+  }
+
+  /* ── Render: month-grouped ── */
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function renderList(items) {
+    const list = document.getElementById('arch-list');
+    if (!items.length) {
+      list.innerHTML = '<div class="empty"><h3>No articles found.</h3><p>Try adjusting filters or search terms.</p></div>';
+      return;
+    }
+    const groups = {};
+    items.forEach(n => {
+      const d  = n.publish_dt ? new Date(n.publish_dt) : null;
+      const key = d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}` : 'Unknown';
+      const lbl = d ? `${MONTHS[d.getMonth()]} ${d.getFullYear()}` : 'Date Unknown';
+      if (!groups[key]) groups[key] = { label: lbl, items: [] };
+      groups[key].items.push(n);
+    });
+    list.innerHTML = Object.entries(groups)
+      .sort(([a],[b]) => b.localeCompare(a))
+      .map(([, g]) => `
+        <div class="month-group">
+          <div class="month-label">${g.label}</div>
+          ${g.items.map(renderItem).join('')}
+        </div>`).join('');
+  }
+
+  function renderItem(n) {
+    const badge   = CAT_BADGE[n.category_id] || CAT_BADGE[9];
+    const fallback = CAT_FB[n.category_id]   || CAT_FB[9];
+    const imgSrc  = n.image || fallback;
+    const title   = cleanTitle(n.title);
+    return `<a href="${escH(n.url||'#')}" class="an-item" target="_blank" rel="noopener">
+      <div class="an-thumb"><img src="${escH(imgSrc)}" alt="" loading="lazy" onerror="this.src='${fallback}'"/></div>
+      <div class="an-body">
+        <div class="an-meta">
+          <span class="an-badge ${badge.cls}">${badge.label}</span>
+          ${n.publisher ? `<span class="an-src">${escH(n.publisher)}</span>` : ''}
+        </div>
+        <div class="an-ttl">${escH(title)}</div>
+      </div>
+      <span class="an-arrow">→</span>
+    </a>`;
+  }
+
+  function renderPagination() {
+    const el = document.getElementById('arch-pagination');
+    if (archPages<=1){ el.innerHTML=''; return; }
+    const items=[];
+    items.push(`<button class="ar-pg-btn" onclick="goPage(${archPage-1})" ${archPage<=1?'disabled':''}>←</button>`);
+    const shown=new Set([1,archPages]);
+    for(let p=Math.max(1,archPage-2);p<=Math.min(archPages,archPage+2);p++) shown.add(p);
+    let prev=0;
+    [...shown].sort((a,b)=>a-b).forEach(p=>{
+      if(prev&&p-prev>1) items.push('<span style="font-size:13px;color:#9CA3AF;padding:0 4px;">…</span>');
+      items.push(`<button class="ar-pg-btn ${p===archPage?'on':''}" onclick="goPage(${p})">${p}</button>`);
+      prev=p;
+    });
+    items.push(`<button class="ar-pg-btn" onclick="goPage(${archPage+1})" ${archPage>=archPages?'disabled':''}>→</button>`);
+    el.innerHTML=items.join('');
+  }
+
+  function goPage(p) {
+    if(p<1||p>archPages) return;
+    archPage=p; loadArchive(false);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  document.getElementById('arch-search').addEventListener('input', function() {
+    const q = this.value.trim();
+    document.getElementById('arch-clear').style.display = q?'':'none';
+    archQ = q;
+    clearTimeout(archTimer);
+    archTimer = setTimeout(()=>loadArchive(true), 350);
+  });
+  function clearSearch() {
+    document.getElementById('arch-search').value='';
+    document.getElementById('arch-clear').style.display='none';
+    archQ=''; loadArchive(true);
+  }
+
+  document.getElementById('hamburger').addEventListener('click', ()=>{
+    const open=document.getElementById('mobileNav').classList.toggle('open');
+    document.body.style.overflow=open?'hidden':'';
+  });
+
+  loadArchive(true);
+</script>
+</body>
+</html>
