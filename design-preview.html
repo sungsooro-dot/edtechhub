@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EdTech HUB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html  { scroll-behavior: smooth; }
+    body  { font-family: 'Inter', 'DM Sans', system-ui, sans-serif; background: #FFFFFF; color: #111827; line-height: 1.6; }
+    a     { text-decoration: none; color: inherit; }
+
+    :root {
+      --bg         : #FFFFFF;
+      --bg-surface : #F8FAFC;
+      --bg-elevated: #F1F5F9;
+      --border     : #E5E7EB;
+      --border-h   : #CBD5E1;
+      --accent     : #16A34A;
+      --accent-h   : #15803D;
+      --accent-muted: rgba(22,163,74,.10);
+      --link       : #2563EB;
+      --text-1     : #111827;
+      --text-2     : #6B7280;
+      --text-3     : #9CA3AF;
+      --green      : #16A34A;
+      --green-muted: rgba(22,163,74,.10);
+      --blue-muted : rgba(37,99,235,.10);
+      --max        : 1200px;
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* ── BUTTONS ────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 24px; border-radius: 6px;
+      font-size: 14px; font-weight: 600; letter-spacing: .01em;
+      cursor: pointer; border: none; transition: background var(--transition-fast, .15s);
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary   { background: var(--accent);     color: #fff; }
+    .btn-primary:hover { background: var(--accent-h); }
+    .btn-secondary { background: transparent; border: 1px solid var(--border-h); color: var(--text-1); padding: 11px 22px; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost     { background: transparent; color: var(--text-2); padding: 8px 16px; font-size: 13px; }
+    .btn-ghost:hover { color: var(--text-1); }
+    .btn-outline-green { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+    .btn-outline-green:hover { background: var(--accent); color: #fff; }
+
+    /* ── TAGS ───────────────────────────────── */
+    .tag {
+      display: inline-block; padding: 3px 10px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+    }
+    .tag-orange { background: var(--accent-muted); color: var(--accent); }
+    .tag-blue   { background: var(--blue-muted);   color: #60A5FA; }
+    .tag-green  { background: var(--green-muted);  color: #34D399; }
+    .tag-gray   { background: rgba(156,163,175,.12); color: var(--text-2); }
+
+    /* ── NAV ────────────────────────────────── */
+    .header {
+      background: #fff;
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; }
+    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-1); }
+    .logo-text span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2px; list-style: none; flex: 1; }
+    .nav-item { position: relative; }
+    .nav-a {
+      display: block; padding: 6px 13px; border-radius: 4px;
+      font-size: 15px; font-weight: 500; color: #4B5563; transition: color .15s;
+      white-space: nowrap;
+    }
+    .nav-a:hover { color: var(--text-1); }
+    .nav-a.on    { color: var(--accent); border-bottom: 2px solid var(--accent); }
+    .nav-a.gem   { color: var(--accent); }
+
+    /* ── 드롭다운 ─── */
+    .nav-dropdown {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10);
+      min-width: 160px; padding: 6px 0;
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity .18s, transform .18s, visibility .18s;
+      z-index: 200;
+    }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-mega { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-6px); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,.12); width: 740px; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-item:hover .nav-mega { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .mega-hd { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .mega-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .mega-card { display: flex; flex-direction: column; gap: 5px; padding: 14px 12px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: background .14s, border-color .14s; }
+    .mega-card:hover { background: #F0FDF4; border-color: #A7F3D0; }
+    .mega-icon { font-size: 22px; margin-bottom: 2px; }
+    .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .nav-drop-item {
+      display: block; padding: 9px 16px;
+      font-size: 14px; font-weight: 500; color: #374151;
+      transition: background .12s, color .12s;
+    }
+    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
+    .nav-drop-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+    .nav-cta { display: flex; gap: 8px; align-items: center; }
+    .nav-icon { color: var(--text-2); transition: color .15s; cursor: pointer; }
+    .nav-icon:hover { color: var(--text-1); }
+
+    /* ── GEM HERO BANNER ────────────────────── */
+    .gem-banner {
+      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #F0FDF4 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 72px; position: relative; overflow: hidden;
+    }
+    .gem-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 70% 50%, rgba(22,163,74,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .gem-inner { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: center; }
+    .gem-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 18px;
+    }
+    .gem-tag::before { content:''; width:16px; height:2px; background:var(--accent); }
+    .gem-banner h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(32px, 4vw, 48px); font-weight: 700;
+      line-height: 1.15; letter-spacing: -.02em; color: #111827; margin-bottom: 14px;
+    }
+    .gem-banner h1 span { color: var(--accent); }
+    .gem-sub { font-size: 16px; color: #4B5563; max-width: 440px; margin-bottom: 28px; line-height: 1.7; }
+    .gem-btns { display: flex; gap: 12px; margin-bottom: 40px; }
+    .gem-stats { display: flex; gap: 32px; padding-top: 28px; border-top: 1px solid #D1FAE5; }
+    .gs-val { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; }
+    .gs-val sup { font-size: 14px; color: var(--accent); }
+    .gs-lbl { font-size: 12px; color: #6B7280; margin-top: 2px; }
+
+    /* Next event card */
+    .ev-card-hero {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .ech-top { background: #F0FDF4; border-bottom: 1px solid #D1FAE5; padding: 18px 20px; }
+    .ech-live {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--accent-muted); color: var(--accent);
+      font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px;
+    }
+    .ech-dot { width:5px; height:5px; background:var(--accent); border-radius:50%; animation:blink 1.4s infinite; }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .ech-title { font-family:'Sora',sans-serif; font-size:16px; font-weight:700; color:#111827; margin-bottom:3px; }
+    .ech-sub   { font-size:11.5px; color:#6B7280; }
+    .ech-body  { padding:16px 20px; }
+    .ech-row {
+      display:flex; gap:10px; align-items:center;
+      padding:10px 0; border-bottom:1px solid #F3F4F6;
+    }
+    .ech-row:last-of-type { border-bottom:none; }
+    .ech-time { font-size:10px; font-weight:600; color:var(--accent); min-width:44px; }
+    .ech-info { font-size:13px; color:#111827; font-weight:500; }
+    .ech-info small { display:block; font-size:11px; color:#9CA3AF; font-weight:400; }
+    .ech-loading { font-size:13px; color:#9CA3AF; padding:16px 0; text-align:center; }
+    .ech-city-row {
+      display:flex; align-items:center; gap:12px;
+      padding:11px 0; border-bottom:1px solid #F3F4F6;
+      text-decoration:none; transition:background .12s; cursor:pointer;
+      border-radius:4px;
+    }
+    .ech-city-row:last-child { border-bottom:none; }
+    .ech-city-row:hover .ech-city-name { color:var(--accent); }
+    .ech-city-row:hover .ech-city-arrow { color:var(--accent); transform:translateX(3px); }
+    .ech-flag {
+      min-width:44px; height:32px; border-radius:6px; padding:0 6px;
+      background:var(--accent-muted); color:var(--accent);
+      font-size:10px; font-weight:700; letter-spacing:.5px;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+    }
+    .ech-city-info { display:flex; flex-direction:column; flex:1; }
+    .ech-city-name     { font-size:13px; font-weight:700; color:#111827; transition:color .12s; }
+    .ech-city-subtitle { font-size:11.5px; color:#4B5563; margin-top:2px; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+    .ech-city-date     { font-size:10.5px; color:#9CA3AF; margin-top:3px; }
+    .ech-city-arrow { font-size:15px; color:#D1D5DB; transition:color .12s, transform .12s; }
+
+    .ech-cta {
+      display:block; margin:16px 20px 20px;
+      background:var(--accent); color:#fff; text-align:center;
+      padding:12px; border-radius:6px; font-size:14px; font-weight:600;
+      transition:background .15s;
+    }
+    .ech-cta:hover { background:var(--accent-h); }
+
+    /* ── SECTION COMMONS ────────────────────── */
+    .section { padding: 48px 0; }
+    .sec-hd { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+    .sec-hd-left {}
+    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .sec-ttl { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: #111827; }
+    .more-link { font-size: 15px; font-weight: 600; color: #6B7280; transition: color .15s; }
+    .more-link:hover { color: #111827; }
+
+    /* ── TOP NEWS ───────────────────────────── */
+    .news-section { background: #fff; border-top: 1px solid var(--border); }
+
+    .filters {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      padding-bottom: 20px; margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fp {
+      padding: 5px 14px; border-radius: var(--radius-full, 9999px);
+      font-size: 13px; font-weight: 500;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      color: var(--text-2); cursor: pointer; transition: all .14s;
+      font-family: 'Inter', sans-serif;
+    }
+    .fp:hover { border-color: var(--border-h); color: var(--text-1); }
+    .fp.on    { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* 2-col featured grid */
+    .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .n-card {
+      background: #fff; padding: 20px 24px;
+      border: 1px solid var(--border); border-radius: 8px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .n-card:hover { border-color: #A7F3D0; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+
+    .n-thumb { height: 160px; border-radius: 6px; overflow: hidden; position: relative; margin-bottom: 16px; background: #F8FAFC; }
+    .n-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .thumb-a { background: linear-gradient(135deg, #ECFDF5, #D1FAE5); }
+    .thumb-b { background: linear-gradient(135deg, #F0F9FF, #DBEAFE); }
+    .thumb-c { background: linear-gradient(135deg, #F0FDF4, #BBF7D0); }
+    .thumb-d { background: linear-gradient(135deg, #FFFBEB, #FEF08A); }
+
+    .n-bdg { position: absolute; top: 10px; left: 12px; }
+    .n-meta { font-size: 12px; color: #6B7280; margin-bottom: 8px; }
+    .n-src  { font-weight: 600; color: #374151; margin-right: 6px; }
+    .n-ttl  {
+      font-size: 15px; font-weight: 600; color: #111827;
+      line-height: 1.38; margin-bottom: 12px; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .n-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .n-more { font-size: 13px; color: #6B7280; font-weight: 500; transition: color .15s; }
+    .n-more:hover { color: var(--accent); }
+    .n-likes { font-size: 12px; color: #9CA3AF; }
+    .n-paywall {
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+      color: #92400E; background: #FEF3C7; border: 1px solid #FDE68A;
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* ── COMMUNITY EVENTS LIST ──────────────── */
+    .comm-section { background: #F8FAFC; border-top: 1px solid var(--border); }
+    .comm-list { display: flex; flex-direction: column; gap: 2px; }
+    .comm-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; padding: 20px;
+      border-left: 3px solid var(--accent);
+      border: 1px solid var(--border); border-left: 3px solid var(--accent);
+      border-radius: 6px; margin-bottom: 8px;
+      transition: background .15s, box-shadow .15s;
+      cursor: pointer; color: inherit; text-decoration: none;
+    }
+    .comm-item:hover { background: #F0FDF4; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+    .comm-item:last-child { margin-bottom: 0; }
+    .ci-left { display: flex; gap: 16px; align-items: center; }
+    .ci-date {
+      text-align: center; min-width: 48px;
+      background: #F0FDF4; border-radius: 6px; padding: 6px 10px;
+      border: 1px solid #D1FAE5;
+    }
+    .ci-date .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .ci-date .dy { display: block; font-size: 20px; font-weight: 700; color: #111827; line-height: 1.1; }
+    .ci-info h4  { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 3px; }
+    .ci-info p   { font-size: 13px; color: #6B7280; }
+    .ci-meta { display: flex; gap: 8px; margin-top: 6px; }
+    .ci-arrow { color: #9CA3AF; font-size: 18px; transition: color .15s, transform .15s; }
+    .comm-item:hover .ci-arrow { color: var(--accent); transform: translateX(3px); }
+
+    /* ── EVENT PICKS GRID ───────────────────── */
+    .events-section { background: #fff; border-top: 1px solid var(--border); }
+    .ev-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .ev-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .ev-card:hover { border-color: #A7F3D0; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .ev-top { height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    .ev-emoji { font-size: 28px; }
+    .ev-dp { text-align: center; background: rgba(255,255,255,.75); border-radius: 5px; padding: 5px 10px; }
+    .ev-dp .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+    .ev-dp .dy { display: block; font-size: 20px; font-weight: 700; color: #111827; line-height: 1.1; }
+    .ev-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+    .ev-loc  { font-size: 10px; font-weight: 600; color: #9CA3AF; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 5px; }
+    .ev-ttl  { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 8px; line-height: 1.35; }
+    .ev-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; margin-top: auto; }
+    .ev-tag  { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: #F3F4F6; color: #6B7280; }
+    .ev-btn  {
+      display: block; text-align: center; padding: 10px;
+      background: var(--accent); color: #fff; border-radius: 6px;
+      font-size: 13px; font-weight: 600; transition: background .15s;
+    }
+    .ev-btn:hover { background: var(--accent-h); }
+
+    /* ── PARTNERS ───────────────────────────── */
+    .partners-section { background: #F8FAFC; border-top: 1px solid var(--border); padding: 40px 0; }
+    .partners-inner { text-align: center; }
+    .partners-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #9CA3AF; margin-bottom: 20px; }
+    .partner-logos { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .partner-logo {
+      padding: 8px 18px; border-radius: 6px; border: 1px solid var(--border);
+      font-size: 12.5px; font-weight: 600; color: #9CA3AF; background: #fff;
+      transition: color .2s, border-color .2s;
+    }
+    .partner-logo:hover { color: var(--accent); border-color: #A7F3D0; }
+
+    /* ── NEWSLETTER ─────────────────────────── */
+    /* ── EXPLORE SECTION ── */
+    .explore-section { padding: 56px 0; border-top: 1px solid var(--border); background: #fff; }
+    .explore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .explore-grid { grid-template-columns: 1fr; } }
+    .explore-card {
+      border-radius: 12px; padding: 40px 36px; min-height: 260px;
+      display: flex; flex-direction: column; gap: 12px;
+      border: 1px solid var(--border);
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .explore-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.07); }
+    .explore-programme { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border-color: #A7F3D0; }
+    .explore-gem       { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border-color: #BFDBFE; }
+    .explore-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .explore-programme .explore-tag { color: #15803D; }
+    .explore-gem       .explore-tag { color: #1D4ED8; }
+    .explore-card h3 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: #111827; line-height: 1.2; }
+    .explore-card p  { font-size: 14px; color: var(--text-2); line-height: 1.65; flex: 1; }
+    .explore-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 20px; border-radius: 6px; font-size: 13px; font-weight: 600;
+      align-self: flex-start; margin-top: 8px; transition: background .15s;
+    }
+    .explore-programme .explore-link { background: #16A34A; color: #fff; }
+    .explore-programme .explore-link:hover { background: #15803D; }
+    .explore-gem .explore-link { background: #2563EB; color: #fff; }
+    .explore-gem .explore-link:hover { background: #1D4ED8; }
+    .explore-icon { font-size: 32px; margin-bottom: 4px; }
+
+    .nl-section { background: #F0FDF4; border-top: 1px solid #D1FAE5; padding: 64px 0; }
+    .nl-inner { max-width: 560px; margin: 0 auto; text-align: center; }
+    .nl-inner h2 { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 10px; }
+    .nl-inner p  { font-size: 15px; color: #4B5563; margin-bottom: 28px; line-height: 1.65; }
+    .nl-form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .nl-inp {
+      flex: 1; min-width: 180px; padding: 10px 14px; border-radius: 6px;
+      border: 1px solid #D1D5DB; background: #fff;
+      color: #111827; font-size: 14px; outline: none;
+      font-family: 'Inter', sans-serif; transition: border-color .15s;
+    }
+    .nl-inp::placeholder { color: #9CA3AF; }
+    .nl-inp:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
+
+    /* ── FOOTER ─────────────────────────────── */
+    .footer { background: #111827; border-top: 1px solid var(--border); padding: 48px 0 28px; }
+    .ft-top { display: grid; grid-template-columns: 220px 1fr; gap: 48px; margin-bottom: 32px; }
+    .ft-brand p   { font-size: 13px; color: #9CA3AF; margin: 10px 0 14px; max-width: 180px; line-height: 1.65; }
+    .ft-brand a   { font-size: 12.5px; color: #9CA3AF; transition: color .15s; }
+    .ft-brand a:hover { color: #F9FAFB; }
+    .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .ft-col h5 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
+    .ft-col a:hover { color: #F9FAFB; }
+    .ft-btm {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid #1F2937; padding-top: 22px;
+      font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: .03em;
+    }
+    .ft-legal { display: flex; gap: 20px; }
+    .ft-legal a { color: #6B7280; }
+    .ft-legal a:hover { color: #F9FAFB; }
+    .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; }
+    .back-top:hover { color: #F9FAFB; }
+
+    /* ══ MOBILE NAV ══════════════════════════════ */
+    .nav-hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      padding: 8px; margin-left: auto; color: var(--text-1);
+      flex-direction: column; gap: 5px;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: currentColor; border-radius: 2px;
+      transition: transform .2s, opacity .2s;
+    }
+    .nav-mobile {
+      display: none; flex-direction: column;
+      position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+      background: #fff; z-index: 99;
+      padding: 20px 24px; gap: 4px;
+      overflow-y: auto;
+      border-top: 1px solid var(--border);
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile-a {
+      display: block; padding: 13px 16px; border-radius: 8px;
+      font-size: 16px; font-weight: 500; color: var(--text-1);
+      transition: background .12s;
+    }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--accent); }
+    .nav-mobile-divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .nav-mobile-cta .btn { text-align: center; justify-content: center; }
+
+    /* ══ RESPONSIVE ══════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Nav */
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav { height: 60px; }
+
+      /* Hero */
+      .gem-banner { padding: 40px 0 36px; }
+      .gem-inner  { grid-template-columns: 1fr; gap: 32px; }
+      .gem-banner h1 { font-size: clamp(26px, 7vw, 36px); }
+      .gem-sub    { font-size: 15px; max-width: 100%; }
+      .gem-btns   { flex-wrap: wrap; }
+      .gem-stats  { gap: 20px; flex-wrap: wrap; }
+      .gs-val     { font-size: 22px; }
+
+      /* Sections */
+      .section { padding: 36px 0; }
+      .sec-hd  { flex-direction: column; gap: 10px; align-items: flex-start; }
+
+      /* News */
+      .news-grid { grid-template-columns: 1fr; }
+
+      /* Community events */
+      .ci-info h4 { font-size: 14px; }
+
+      /* Featured events */
+      .ev-grid { grid-template-columns: 1fr; }
+
+      /* Footer */
+      .ft-top  { grid-template-columns: 1fr; gap: 28px; }
+      .ft-cols { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .ft-btm  { flex-direction: column; gap: 12px; text-align: center; }
+      .ft-legal { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { padding: 0 16px; }
+      .gem-banner h1 { font-size: 24px; }
+      .gem-btns .btn { width: 100%; justify-content: center; }
+      .gem-stats { display: grid; grid-template-columns: 1fr 1fr; }
+      .ft-cols { grid-template-columns: 1fr; }
+      .nl-form { flex-direction: column; }
+      .nl-inp, .nl-form .btn { width: 100%; box-sizing: border-box; }
+      .comm-item { padding: 14px 16px; }
+      .ci-date { min-width: 40px; padding: 5px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ════════════════════════════════════ -->
+<header class="header">
+  <nav class="nav wrap">
+    <a href="#" class="logo">
+      <img src="logo.png" alt="EdTech HUB" width="36" height="36" style="object-fit:contain;"/>
+      <span class="logo-text">EdTech<span>HUB</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-item"><a href="#home"      class="nav-a">Home</a></li>
+      <li class="nav-item">
+        <a href="about.html" class="nav-a">About ▾</a>
+        <div class="nav-mega">
+          <div class="mega-hd">Our Initiatives</div>
+          <div class="mega-grid">
+            <a href="programme.html" class="mega-card">
+              <div class="mega-icon">🎓</div>
+              <div class="mega-tag" style="color:#16A34A;">Programme</div>
+              <div class="mega-name">Global Startup Coach Award</div>
+              <div class="mega-desc">A 24-week programme celebrating the world's most impactful EdTech startup coaches.</div>
+            </a>
+            <a href="https://gem.edtechhub.com/" class="mega-card" target="_blank" rel="noopener">
+              <div class="mega-icon">🌍</div>
+              <div class="mega-tag" style="color:#2563EB;">Global Resource Map</div>
+              <div class="mega-name">EdTech GEM</div>
+              <div class="mega-desc">EdTech organisations mapped across 50+ countries worldwide.</div>
+            </a>
+            <a href="community-forum.html" class="mega-card">
+              <div class="mega-icon">💡</div>
+              <div class="mega-tag" style="color:#D97706;">Community</div>
+              <div class="mega-name">Redefining Learning Forum</div>
+              <div class="mega-desc">Educators and innovators challenging assumptions about the future of learning.</div>
+            </a>
+            <a href="community-partnership.html" class="mega-card">
+              <div class="mega-icon">🌐</div>
+              <div class="mega-tag" style="color:#7C3AED;">Partnership</div>
+              <div class="mega-name">Partnership Initiatives</div>
+              <div class="mega-desc">Driving innovation through strategic partnerships across the ecosystem.</div>
+            </a>
+            <a href="networking.html" class="mega-card">
+              <div class="mega-icon">🔗</div>
+              <div class="mega-tag" style="color:#0D9488;">Networking</div>
+              <div class="mega-name">Cross-Cohort Networking</div>
+              <div class="mega-desc">Connect across programmes and cohorts to build lasting relationships.</div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#news" class="nav-a">News &amp; Events ▾</a>
+        <div class="nav-dropdown">
+          <a href="#news"       class="nav-drop-item">News</a>
+          <div class="nav-drop-divider"></div>
+          <a href="#events"     class="nav-drop-item">Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="#community" class="nav-a">Community ▾</a>
+        <div class="nav-dropdown">
+          <a href="#community"                   class="nav-drop-item">EdTech Together</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-partnership.html"  class="nav-drop-item">Partnership Events</a>
+          <div class="nav-drop-divider"></div>
+          <a href="community-forum.html"        class="nav-drop-item">Redefining Learning Forum</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
+      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+    </ul>
+    <!-- 햄버거 버튼 (모바일) -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-cta">
+      <a href="https://www.linkedin.com/showcase/101362331/" target="_blank" rel="noopener" class="nav-icon" title="LinkedIn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="#newsletter" class="btn btn-ghost" style="font-size:13px;padding:7px 14px;">Subscribe</a>
+      <a href="#"           class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<!-- 모바일 메뉴 -->
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="#home"      class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="#news"      class="nav-mobile-a" onclick="closeMenu()">News</a>
+  <a href="#events"    class="nav-mobile-a" onclick="closeMenu()">Events</a>
+  <a href="#community"                  class="nav-mobile-a" onclick="closeMenu()">EdTech Together</a>
+  <a href="community-partnership.html" class="nav-mobile-a" onclick="closeMenu()">Partnership Events</a>
+  <a href="community-forum.html"       class="nav-mobile-a" onclick="closeMenu()">Redefining Learning Forum</a>
+  <a href="programme.html"              class="nav-mobile-a" onclick="closeMenu()">Programme</a>
+  <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
+  <div class="nav-mobile-divider"></div>
+  <div class="nav-mobile-cta">
+    <a href="#newsletter" class="btn btn-ghost" onclick="closeMenu()">Subscribe</a>
+    <a href="#"           class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ══ GEM HERO BANNER ════════════════════════ -->
+  <section class="gem-banner" id="home">
+    <div class="wrap gem-inner">
+      <div>
+        <div class="gem-tag">Global EdTech Ecosystem</div>
+        <h1>Connecting Startups,<br>Investors &amp; Educators<br><span>Shaping the Future</span></h1>
+        <p class="gem-sub">The go-to platform for insights, opportunities, and connections in the global EdTech ecosystem.</p>
+        <div class="gem-btns">
+          <a href="#events"  class="btn btn-primary">Register</a>
+          <a href="#news"    class="btn btn-secondary">Latest News</a>
+        </div>
+        <div class="gem-stats">
+          <div><div class="gs-val">500<sup>+</sup></div><div class="gs-lbl">EdTech Startups</div></div>
+          <div><div class="gs-val">30<sup>+</sup></div><div class="gs-lbl">Countries</div></div>
+          <div><div class="gs-val">6</div><div class="gs-lbl">Global Partners</div></div>
+        </div>
+      </div>
+      <div class="ev-card-hero">
+        <div class="ech-top">
+          <div class="ech-live"><div class="ech-dot"></div>Registration Open</div>
+          <div class="ech-title">EdTech Together</div>
+          <div class="ech-sub">Monthly · Global Events</div>
+        </div>
+        <div class="ech-body" id="ech-cities">
+          <div class="ech-loading">Loading events…</div>
+        </div>
+        <a id="ech-view-all" href="https://www.eventbrite.co.uk/o/dohe-81050166313" class="ech-cta" target="_blank" rel="noopener">View All Events →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TOP NEWS PICKS ═════════════════════════ -->
+  <section class="news-section section" id="news">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div class="sec-hd-left">
+          <div class="sec-lbl">News &amp; Insights</div>
+          <h2 class="sec-ttl">Top News Picks</h2>
+        </div>
+        <a href="news.html" class="more-link">View all news →</a>
+      </div>
+      <div class="filters" id="news-filters">
+        <button class="fp on"  data-cat="">All</button>
+        <button class="fp" data-cat="9">Innovation</button>
+        <button class="fp" data-cat="3">Funding</button>
+        <button class="fp" data-cat="4">Research</button>
+        <button class="fp" data-cat="10">Government</button>
+        <button class="fp" data-cat="2">Business</button>
+      </div>
+      <div class="news-grid" id="news-grid">
+        <div class="n-card" style="grid-column:1/-1;align-items:center;justify-content:center;padding:40px;color:#9CA3AF;font-size:14px;">Loading news…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COMMUNITY EVENTS LIST ══════════════════ -->
+  <section class="comm-section section" id="community">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div class="sec-hd-left">
+          <div class="sec-lbl">Community</div>
+          <h2 class="sec-ttl">Upcoming Events</h2>
+        </div>
+        <a href="events.html" class="more-link">View all events →</a>
+      </div>
+      <div class="comm-list" id="upcoming-list">
+        <div class="comm-item" style="justify-content:center;color:#9CA3AF;font-size:14px;border-left-color:#E5E7EB;">Loading events…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TOP EVENT PICKS ════════════════════════ -->
+  <section class="events-section section" id="events">
+    <div class="wrap">
+      <div class="sec-hd">
+        <div class="sec-hd-left">
+          <div class="sec-lbl">Top Picks</div>
+          <h2 class="sec-ttl">Featured Events</h2>
+        </div>
+        <a href="events.html" class="more-link">View all →</a>
+      </div>
+      <div class="ev-grid" id="featured-events-grid">
+        <div class="ev-card" style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;border:none;">Loading events…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EXPLORE: PROGRAMME + GEM ══════════════ -->
+  <section class="explore-section">
+    <div class="wrap">
+      <div class="sec-hd" style="margin-bottom:24px;">
+        <div class="sec-hd-left">
+          <div class="sec-lbl">Explore More</div>
+          <h2 class="sec-ttl">EdTech HUB Initiatives</h2>
+        </div>
+      </div>
+      <div class="explore-grid">
+        <div class="explore-card explore-programme">
+          <div class="explore-icon">🏆</div>
+          <div class="explore-tag">Programme</div>
+          <h3>Global Startup Coach Award</h3>
+          <p>A 24-week programme celebrating the coaches behind the world's most impactful EdTech startups. $200,000 prize fund. Global applicants.</p>
+          <a href="programme.html" class="explore-link">Learn More →</a>
+        </div>
+        <div class="explore-card explore-gem">
+          <div class="explore-icon">🌍</div>
+          <div class="explore-tag">Global Resource Map</div>
+          <h3>EdTech Global Resource Map</h3>
+          <p>Discover EdTech organisations, accelerators, and initiatives mapped across 50+ countries. Find partners, funding, and opportunities worldwide.</p>
+          <a href="https://gem.edtechhub.com/" target="_blank" rel="noopener" class="explore-link">Explore the Map ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ NEWSLETTER ═════════════════════════════ -->
+  <section class="nl-section" id="newsletter">
+    <div class="wrap nl-inner">
+      <h2>Stay in the Loop</h2>
+      <p>Latest trends, events, and opportunities in EdTech — straight to your inbox.</p>
+      <form class="nl-form" onsubmit="return false">
+        <input class="nl-inp" type="email" placeholder="Email address"/>
+        <input class="nl-inp" type="text"  placeholder="Full name"/>
+        <a href="#" class="btn btn-primary">Subscribe</a>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ═════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a href="#" class="logo">
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <span class="logo-text" style="font-size:15px;">EdTech<span>HUB</span></span>
+        </a>
+        <p>Connecting the global EdTech ecosystem.</p>
+        <a href="https://www.linkedin.com/showcase/101362331/" target="_blank" rel="noopener">Follow on LinkedIn ↗</a>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">News</a></li>
+            <li><a href="#">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Community</h5>
+          <ul>
+            <li><a href="#community">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Events</a></li>
+            <li><a href="community-forum.html">Learning Forum</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="#">info@edtechhub.com</a></li>
+            <li><span>22 Bishopsgate, London</span></li>
+            <li><span>EC2B 4BQ, UK</span></li>
+            <li><a href="#">Send a Message</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-btm">
+      <span>© 2026 DOHE Global. All rights reserved.</span>
+      <div class="ft-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Submissions</a>
+      </div>
+      <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Upcoming Events 로드
+  async function loadUpcoming() {
+    const list = document.getElementById('upcoming-list');
+    try {
+      const res  = await fetch('/api/upcoming');
+      const data = await res.json();
+      if (!data.events?.length) {
+        list.innerHTML = '<div class="comm-item" style="justify-content:center;color:#9CA3AF;font-size:14px;border-left-color:#E5E7EB;">No upcoming events</div>';
+        return;
+      }
+      const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+      list.innerHTML = data.events.map(e => {
+        const d  = e.start_utc ? new Date(e.start_utc) : null;
+        const mo = d ? MONTHS[d.getMonth()] : '---';
+        const dy = d ? d.getDate().toString().padStart(2,'0') : '--';
+        const isOnline = e.city === 'Online';
+        const tagClass = isOnline ? 'tag-blue' : 'tag-orange';
+        const tagLabel = isOnline ? 'Online' : 'In-Person';
+        return `
+          <a class="comm-item" href="${e.url}" target="_blank" rel="noopener" style="text-decoration:none;">
+            <div class="ci-left">
+              <div class="ci-date"><span class="mo">${mo}</span><span class="dy">${dy}</span></div>
+              <div class="ci-info">
+                <h4>${e.title}</h4>
+                <div class="ci-meta">
+                  <span class="tag ${tagClass}">${tagLabel}</span>
+                  ${!isOnline ? `<span class="tag tag-gray">${e.city}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <span class="ci-arrow">→</span>
+          </a>`;
+      }).join('');
+    } catch {
+      list.innerHTML = '<div class="comm-item" style="justify-content:center;color:#9CA3AF;font-size:14px;border-left-color:#E5E7EB;">Could not load events</div>';
+    }
+  }
+  loadUpcoming();
+
+  // 유료 구독 필요 도메인 목록
+  const PAYWALLED = new Set([
+    'www.edweek.org', 'edweek.org',
+    'www.tes.com', 'tes.com',
+    'www.edsurge.com', 'edsurge.com',
+    'www.ft.com', 'ft.com',
+    'www.wsj.com', 'wsj.com',
+    'www.economist.com', 'economist.com',
+    'www.thetimes.co.uk', 'thetimes.co.uk',
+  ]);
+  function isPaywalled(url) {
+    try { return PAYWALLED.has(new URL(url).hostname); }
+    catch { return false; }
+  }
+
+  // 뉴스 로드 (All = 실시간 스크래핑, 카테고리 = DB)
+  async function loadNews(cat = '') {
+    const grid = document.getElementById('news-grid');
+    grid.innerHTML = '<div class="n-card" style="grid-column:1/-1;padding:40px;color:#9CA3AF;text-align:center;border:none;">Loading…</div>';
+    try {
+      let news;
+      if (!cat) {
+        // All: 실시간 스크래핑
+        const res  = await fetch('/api/news');
+        const data = await res.json();
+        news = (data.news || []).slice(0, 4).map(n => ({
+          url: n.url, image: n.image, source: n.source, title: n.title
+        }));
+      } else {
+        // 카테고리: DB에서 4개
+        const res  = await fetch(`/api/db/news?category=${cat}&limit=4&page=1`);
+        const data = await res.json();
+        news = (data.news || []).map(n => ({
+          url: n.url, image: n.image, source: n.publisher, title: n.title
+        }));
+      }
+      if (!news.length) {
+        grid.innerHTML = '<div class="n-card" style="grid-column:1/-1;padding:40px;color:#9CA3AF;text-align:center;border:none;">No news available</div>';
+        return;
+      }
+      grid.innerHTML = news.map(n => `
+        <a class="n-card" href="${n.url}" target="_blank" rel="noopener">
+          <div class="n-thumb ${n.image ? '' : 'thumb-a'}">
+            ${n.image ? `<img src="/api/img?url=${encodeURIComponent(n.image)}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.className='n-thumb thumb-a'">` : ''}
+          </div>
+          <div class="n-meta">${n.source ? `<span class="n-src">${n.source}</span>` : ''}</div>
+          <h3 class="n-ttl">${n.title}</h3>
+          <div class="n-foot">
+            <span class="n-more">Read More →</span>
+            ${isPaywalled(n.url) ? '<span class="n-paywall">🔒 Subscription</span>' : ''}
+          </div>
+        </a>`).join('');
+    } catch {
+      grid.innerHTML = '<div class="n-card" style="grid-column:1/-1;padding:40px;color:#9CA3AF;text-align:center;border:none;">Could not load news</div>';
+    }
+  }
+
+  // 필터 버튼 클릭
+  document.getElementById('news-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.fp');
+    if (!btn) return;
+    document.querySelectorAll('#news-filters .fp').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    loadNews(btn.dataset.cat);
+  });
+
+  loadNews();
+
+  // Eventbrite 이벤트 로드
+  async function loadEvents() {
+    const container = document.getElementById('ech-cities');
+    try {
+      const res  = await fetch('/api/events');
+      const data = await res.json();
+      if (data.orgUrl) {
+        document.getElementById('ech-view-all').href = data.orgUrl;
+      }
+      if (!data.events?.length) {
+        container.innerHTML = '<div class="ech-loading">No upcoming events</div>';
+        return;
+      }
+      container.innerHTML = data.events.map(e => {
+        let dateStr = '';
+        if (e.start_utc) {
+          const start = new Date(e.start_utc);
+          const end   = e.end_utc ? new Date(e.end_utc) : null;
+          const fmt   = o => start.toLocaleString('en-US', o);
+          const day   = fmt({ weekday: 'long' });
+          const mon   = fmt({ month: 'long', day: 'numeric' });
+          const t1    = fmt({ hour: 'numeric', minute: '2-digit', hour12: true });
+          const t2    = end
+            ? end.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' })
+            : '';
+          dateStr = `${day}, ${mon}${t2 ? ` &bull; ${t1} &ndash; ${t2}` : ` &bull; ${t1}`}`;
+        }
+        return `
+          <a href="${e.url}" class="ech-city-row" target="_blank" rel="noopener">
+            <div class="ech-flag">${e.flag}</div>
+            <div class="ech-city-info">
+              <span class="ech-city-name">EdTech Together &mdash; ${e.city}</span>
+              ${e.subtitle ? `<span class="ech-city-subtitle">${e.subtitle}</span>` : ''}
+              <span class="ech-city-date">${dateStr}</span>
+            </div>
+            <span class="ech-city-arrow">→</span>
+          </a>`;
+      }).join('');
+    } catch {
+      container.innerHTML = '<div class="ech-loading">Could not load events</div>';
+    }
+  }
+  loadEvents();
+
+
+  // 네비게이션 클릭 시 활성화
+  const navLinks = document.querySelectorAll('.nav-a[href^="#"]');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.forEach(l => l.classList.remove('on'));
+      link.classList.add('on');
+    });
+  });
+
+  // 스크롤 시 현재 섹션 자동 활성화
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(l => l.classList.remove('on'));
+        const active = document.querySelector(`.nav-a[href="#${id}"]`);
+        if (active) active.classList.add('on');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // 햄버거 메뉴 토글
+  const hamburger  = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // 배경 스크롤 시 메뉴 닫기
+  window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
+
+  // Featured Events (DB top picks)
+  const CARD_BGSV = [
+    'linear-gradient(135deg,#DCFCE7,#BBF7D0)',
+    'linear-gradient(135deg,#DBEAFE,#BFDBFE)',
+    'linear-gradient(135deg,#FEF9C3,#FEF08A)',
+    'linear-gradient(135deg,#FCE7F3,#FBCFE8)',
+    'linear-gradient(135deg,#EDE9FE,#DDD6FE)',
+    'linear-gradient(135deg,#FFEDD5,#FED7AA)',
+  ];
+  async function loadFeaturedEvents() {
+    const grid = document.getElementById('featured-events-grid');
+    try {
+      const res  = await fetch('/api/db/events/top');
+      const data = await res.json();
+      if (!data.events?.length) { grid.innerHTML = ''; return; }
+      grid.innerHTML = data.events.slice(0, 3).map((e, i) => {
+        const d   = e.event_start_dt ? new Date(e.event_start_dt) : null;
+        const mo  = d ? d.toLocaleString('en-US', { month:'short' }).toUpperCase() : '---';
+        const dy  = d ? d.getDate() : '--';
+        const loc = e.country || 'Global';
+        const isFree = /free/i.test(e.price || '');
+        const isOnline = /online|webinar/i.test(e.title || '');
+        const tag1 = isOnline ? 'Online' : 'In-Person';
+        const tag2 = isFree   ? 'Free'   : (e.price || '');
+        const btnLabel = 'Register';
+        return `
+          <div class="ev-card">
+            <div class="ev-top" style="background:${CARD_BGSV[i % CARD_BGSV.length]}">
+              <span></span>
+              <div class="ev-dp"><span class="mo">${mo}</span><span class="dy">${dy}</span></div>
+            </div>
+            <div class="ev-body">
+              <div class="ev-loc">${loc}</div>
+              <div class="ev-ttl">${e.title}</div>
+              <div class="ev-tags">
+                <span class="ev-tag">${tag1}</span>
+                ${tag2 ? `<span class="ev-tag">${tag2}</span>` : ''}
+              </div>
+              <a href="${e.url || '#'}" class="ev-btn" target="_blank" rel="noopener">${btnLabel}</a>
+            </div>
+          </div>`;
+      }).join('');
+    } catch { grid.innerHTML = ''; }
+  }
+  loadFeaturedEvents();
+</script>
+</body>
+</html>

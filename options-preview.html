@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EdTech HUB — Layout Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal:       #74BBB4;
+      --teal-mid:   #90C6C5;
+      --teal-light: #B0D6D9;
+      --teal-pale:  #CEF0F2;
+      --navy:       #364356;
+      --navy-dark:  #263040;
+      --navy-darker:#1a2230;
+      --white:      #ffffff;
+      --off-white:  #F7FAFA;
+      --text:       #1e2c3a;
+      --muted:      #7a9099;
+      --border:     #C8E0DE;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--navy-darker);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--navy);
+      border-bottom: 1px solid rgba(116,187,180,.15);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-bar-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .top-bar-title span { color: var(--teal); }
+    .top-bar-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid rgba(116,187,180,.25);
+      background: transparent;
+      color: rgba(255,255,255,.45);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tab-btn:hover { color: var(--white); border-color: rgba(116,187,180,.5); }
+    .tab-btn.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: var(--navy);
+    }
+
+    /* ── LAYOUT ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .compare-wrap {
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── OPTION HEADER ── */
+    .option-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 32px;
+      background: rgba(116,187,180,.05);
+      border: 1px solid rgba(116,187,180,.15);
+      border-radius: 16px;
+    }
+    .option-label {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--navy);
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+    .option-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: -.5px;
+    }
+    .option-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,.5);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── COMPARISON GRID ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .compare-col h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,.4);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(116,187,180,.1);
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .section-list { display: flex; flex-direction: column; gap: 6px; }
+    .sec-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .sec-block .sec-icon { font-size: 16px; flex-shrink: 0; }
+    .sec-block .sec-name { flex: 1; }
+    .sec-block .sec-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Keep */
+    .sec-keep {
+      background: rgba(116,187,180,.06);
+      border-color: rgba(116,187,180,.2);
+      color: rgba(255,255,255,.75);
+    }
+    .sec-keep .sec-tag { background: rgba(116,187,180,.15); color: var(--teal); }
+    /* Remove */
+    .sec-remove {
+      background: rgba(230,57,70,.06);
+      border-color: rgba(230,57,70,.2);
+      color: rgba(255,255,255,.4);
+      text-decoration: line-through;
+    }
+    .sec-remove .sec-tag { background: rgba(230,57,70,.15); color: #E63946; }
+    /* Merge */
+    .sec-merge {
+      background: rgba(255,200,0,.05);
+      border-color: rgba(255,200,0,.2);
+      color: rgba(255,255,255,.75);
+    }
+    .sec-merge .sec-tag { background: rgba(255,200,0,.15); color: #FFC800; }
+    /* New */
+    .sec-new {
+      background: rgba(69,123,157,.08);
+      border-color: rgba(69,123,157,.3);
+      color: rgba(255,255,255,.75);
+    }
+    .sec-new .sec-tag { background: rgba(69,123,157,.2); color: #74b9e0; }
+
+    /* ── MOCKUP PHONE ── */
+    .mockup-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .mockup-device {
+      background: var(--navy);
+      border: 2px solid rgba(116,187,180,.2);
+      border-radius: 16px;
+      overflow: hidden;
+      width: 320px;
+      flex-shrink: 0;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .mockup-device.mockup-desktop {
+      width: 100%;
+      max-width: 860px;
+    }
+    .mockup-label {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,.3);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 8px;
+      border-bottom: 1px solid rgba(116,187,180,.1);
+    }
+
+    /* ── MINI MOCKUP SECTIONS ── */
+    .mock-nav {
+      background: rgba(54,67,86,.9);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(116,187,180,.1);
+    }
+    .mock-logo { width: 24px; height: 24px; background: var(--teal); border-radius: 4px; }
+    .mock-nav-links { display: flex; gap: 8px; }
+    .mock-nav-dot { width: 28px; height: 6px; background: rgba(255,255,255,.15); border-radius: 3px; }
+    .mock-nav-btn { width: 50px; height: 20px; background: var(--teal); border-radius: 4px; }
+    .mock-hamburger { display: none; flex-direction: column; gap: 3px; }
+    .mock-hamburger span { display: block; width: 16px; height: 2px; background: rgba(255,255,255,.5); border-radius: 1px; }
+
+    .mock-section {
+      padding: 16px;
+      border-bottom: 1px solid rgba(116,187,180,.07);
+    }
+    .mock-section:last-child { border-bottom: none; }
+    .mock-section-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .mock-hero {
+      background: linear-gradient(135deg, rgba(54,67,86,.9), rgba(26,34,48,.9));
+      padding: 24px 16px;
+      border-bottom: 1px solid rgba(116,187,180,.07);
+    }
+    .mock-hero-h { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; color: var(--white); line-height: 1.3; margin-bottom: 8px; }
+    .mock-hero-h span { color: var(--teal); }
+    .mock-hero-p { font-size: 10px; color: rgba(255,255,255,.4); line-height: 1.5; margin-bottom: 12px; max-width: 200px; }
+    .mock-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .mock-btn-p { background: var(--teal); color: var(--navy); padding: 6px 12px; border-radius: 5px; font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 700; }
+    .mock-btn-o { background: transparent; border: 1px solid rgba(255,255,255,.3); color: rgba(255,255,255,.6); padding: 6px 12px; border-radius: 5px; font-size: 9px; }
+    .mock-stats { display: flex; gap: 8px; margin-top: 12px; }
+    .mock-stat { flex: 1; text-align: center; }
+    .mock-stat-n { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 900; color: var(--white); }
+    .mock-stat-l { font-size: 8px; color: rgba(255,255,255,.35); }
+
+    .mock-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .mock-cards-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .mock-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(116,187,180,.12);
+      border-radius: 6px;
+      padding: 10px;
+    }
+    .mock-card-icon { font-size: 14px; margin-bottom: 4px; }
+    .mock-card-title { font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+    .mock-card-text { font-size: 8px; color: rgba(255,255,255,.3); line-height: 1.4; }
+    .mock-card-link { font-size: 8px; color: var(--teal); font-weight: 600; margin-top: 6px; display: block; }
+
+    .mock-news-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(116,187,180,.1);
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 6px;
+    }
+    .mock-news-card:last-child { margin-bottom: 0; }
+    .mock-badge { display: inline-block; background: rgba(116,187,180,.2); color: var(--teal); font-size: 7px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-bottom: 5px; }
+    .mock-news-title { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600; color: var(--white); line-height: 1.4; }
+
+    .mock-event-featured {
+      background: rgba(116,187,180,.06);
+      border: 1px solid rgba(116,187,180,.15);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .mock-ev-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(116,187,180,.12); color: var(--teal); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-bottom: 6px; }
+    .mock-ev-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; }
+    .mock-ev-title { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .mock-ev-sub { font-size: 9px; color: rgba(255,255,255,.4); margin-bottom: 10px; }
+    .mock-ev-list { display: flex; flex-direction: column; gap: 4px; }
+    .mock-ev-item { display: flex; gap: 6px; align-items: center; font-size: 8px; color: rgba(255,255,255,.5); }
+    .mock-ev-check { color: var(--teal); font-weight: 700; }
+
+    .mock-persona-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+    .mock-p-tab { flex: 1; padding: 6px 4px; text-align: center; border-radius: 5px; font-family: 'Poppins', sans-serif; font-size: 8px; font-weight: 600; border: 1px solid rgba(116,187,180,.2); color: rgba(255,255,255,.4); }
+    .mock-p-tab.active { background: var(--teal); color: var(--navy); border-color: var(--teal); }
+
+    .mock-initiatives { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .mock-init-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(116,187,180,.1);
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mock-init-icon { font-size: 16px; flex-shrink: 0; }
+    .mock-init-title { font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 700; color: var(--white); }
+    .mock-init-sub { font-size: 8px; color: rgba(255,255,255,.3); }
+
+    .mock-section-bg-dark {
+      background: rgba(26,34,48,.6);
+    }
+    .mock-nl {
+      background: rgba(116,187,180,.06);
+      border-top: 1px solid rgba(116,187,180,.1);
+      padding: 16px;
+    }
+    .mock-nl-title { font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+    .mock-nl-row { display: flex; gap: 6px; }
+    .mock-inp { flex: 1; background: rgba(255,255,255,.07); border: 1px solid rgba(116,187,180,.2); border-radius: 4px; height: 26px; }
+    .mock-sub-btn { background: var(--teal); color: var(--navy); padding: 0 10px; border-radius: 4px; font-size: 9px; font-weight: 700; display: flex; align-items: center; font-family: 'Poppins', sans-serif; }
+
+    .mock-footer {
+      background: var(--navy-darker);
+      border-top: 1px solid rgba(116,187,180,.07);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mock-footer-text { font-size: 8px; color: rgba(255,255,255,.2); }
+
+    /* ── PROS/CONS TABLE ── */
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .pros-cons-box {
+      background: rgba(116,187,180,.04);
+      border: 1px solid rgba(116,187,180,.12);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .pros-cons-box h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .pros-cons-box.pros h4 { color: var(--teal); }
+    .pros-cons-box.cons h4 { color: rgba(230,57,70,.8); }
+    .pros-cons-box ul { display: flex; flex-direction: column; gap: 8px; list-style: none; }
+    .pros-cons-box li {
+      font-size: 13px;
+      color: rgba(255,255,255,.6);
+      line-height: 1.5;
+      padding-left: 16px;
+      position: relative;
+    }
+    .pros-cons-box.pros li::before { content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+    .pros-cons-box.cons li::before { content: '✗'; position: absolute; left: 0; color: rgba(230,57,70,.7); font-weight: 700; }
+
+    /* ── EFFORT BADGE ── */
+    .effort-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(116,187,180,.05);
+      border: 1px solid rgba(116,187,180,.1);
+      border-radius: 10px;
+    }
+    .effort-label { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.4); }
+    .effort-dots { display: flex; gap: 5px; }
+    .effort-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .effort-dot.filled { background: var(--teal); }
+    .effort-dot.empty { background: rgba(116,187,180,.15); border: 1px solid rgba(116,187,180,.2); }
+    .effort-desc { font-size: 13px; color: rgba(255,255,255,.55); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: rgba(116,187,180,.08);
+      margin: 32px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .compare-grid { grid-template-columns: 1fr; }
+      .compare-wrap { padding: 16px; }
+      .top-bar { padding: 14px 16px; flex-direction: column; gap: 12px; }
+      .tabs { justify-content: center; }
+      .mockup-device.mockup-desktop { max-width: 100%; }
+      .mock-nav-links { display: none; }
+      .mock-hamburger { display: flex; }
+    }
+    @media (max-width: 600px) {
+      .pros-cons-grid { grid-template-columns: 1fr; }
+      .mock-cards-3 { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div>
+    <div class="top-bar-title">EdTech<span>HUB</span> — Layout Options Preview</div>
+    <div class="top-bar-sub">3가지 구조 옵션 시각 비교 · 탭을 눌러 전환하세요</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('opt1')">Option 1<br><span style="font-size:10px;font-weight:400;">Hub & Spoke</span></button>
+    <button class="tab-btn"        onclick="showPage('opt2')">Option 2<br><span style="font-size:10px;font-weight:400;">Persona 기반</span></button>
+    <button class="tab-btn"        onclick="showPage('opt3')">Option 3<br><span style="font-size:10px;font-weight:400;">Flagship + 지원</span></button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     OPTION 1 — Hub & Spoke
+════════════════════════════════════════════════ -->
+<div class="page active" id="opt1">
+<div class="compare-wrap">
+
+  <div class="option-header">
+    <div class="option-label">Option 1</div>
+    <div class="option-title">Hub & Spoke — "홈은 입구만"</div>
+    <p class="option-desc">
+      홈페이지는 6개 이니셔티브를 카드로 소개하는 가벼운 허브 역할만.
+      각 이니셔티브는 자체 서브 페이지(/events, /community, /programme 등)에서 깊게 설명.
+    </p>
+  </div>
+
+  <!-- SECTION COMPARISON -->
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h3>현재 (14 섹션)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦸</span><span class="sec-name">Hero</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners Ticker</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-remove"><span class="sec-icon">📊</span><span class="sec-name">Stats</span><span class="sec-tag">삭제</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">📰</span><span class="sec-name">News (3 기사)</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">💬</span><span class="sec-name">LinkedIn Voices</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">📅</span><span class="sec-name">Events (대형 카드)</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🤝</span><span class="sec-name">Community</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🌐</span><span class="sec-name">Partnership</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🎓</span><span class="sec-name">Programme</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🗺️</span><span class="sec-name">GEM</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📧</span><span class="sec-name">Contact</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <h3>Option 1 — 홈페이지 (6 섹션)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦸</span><span class="sec-name">Hero — "Ecosystem 입구"</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-new"><span class="sec-icon">🗂️</span><span class="sec-name">What We Do — 6 이니셔티브 카드</span><span class="sec-tag">신규</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+        <div style="height:16px;"></div>
+        <div style="padding:14px 16px; background:rgba(116,187,180,.06); border:1px dashed rgba(116,187,180,.25); border-radius:8px;">
+          <div style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;">서브 페이지 (새로 생성)</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">📰 /news — 뉴스 + LinkedIn Voices</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">📅 /events — 전체 이벤트</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🤝 /community — EdTech Together + Forum</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🌐 /partnership — Partnership</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🎓 /programme — Programme</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MOCKUP -->
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;">Visual Mockup</div>
+  </div>
+  <div class="mockup-wrap">
+    <!-- Mobile -->
+    <div>
+      <div class="mockup-label">📱 Mobile</div>
+      <div class="mockup-device">
+        <div class="mock-nav">
+          <div class="mock-logo"></div>
+          <div class="mock-hamburger"><span></span><span></span><span></span></div>
+        </div>
+        <div class="mock-hero">
+          <div class="mock-hero-h">Connecting<br>Startups,<br>Investors &<br><span>Educators</span></div>
+          <p class="mock-hero-p">The go-to platform for the global EdTech ecosystem.</p>
+          <div class="mock-btns">
+            <div class="mock-btn-p">Explore</div>
+            <div class="mock-btn-o">News</div>
+          </div>
+        </div>
+        <div class="mock-section mock-section-bg-dark">
+          <div class="mock-section-label">What We Do</div>
+          <div class="mock-cards">
+            <div class="mock-card"><div class="mock-card-icon">🤝</div><div class="mock-card-title">EdTech Together</div><div class="mock-card-text">Monthly events London & online</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🌐</div><div class="mock-card-title">Partnership</div><div class="mock-card-text">Together not against each other</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🔗</div><div class="mock-card-title">Cross-Cohort</div><div class="mock-card-text">Connect across programmes</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">💬</div><div class="mock-card-title">Forum</div><div class="mock-card-text">Redefining Learning Forum</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🎓</div><div class="mock-card-title">Programme</div><div class="mock-card-text">Structured startup support</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🗺️</div><div class="mock-card-title">GEM</div><div class="mock-card-text">Global Resource Map</div><a class="mock-card-link">Explore ↗</a></div>
+          </div>
+        </div>
+        <div class="mock-nl">
+          <div class="mock-nl-title">Stay in the Loop</div>
+          <div class="mock-nl-row">
+            <div class="mock-inp"></div>
+            <div class="mock-sub-btn">Subscribe</div>
+          </div>
+        </div>
+        <div class="mock-footer">
+          <div class="mock-footer-text">© 2026 DOHE Global</div>
+          <div class="mock-footer-text">Privacy · Terms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop -->
+    <div style="width:100%;max-width:860px;">
+      <div class="mockup-label">🖥️ Desktop</div>
+      <div class="mockup-device mockup-desktop">
+        <div class="mock-nav" style="padding:12px 24px;">
+          <div class="mock-logo"></div>
+          <div class="mock-nav-links">
+            <div class="mock-nav-dot"></div>
+            <div class="mock-nav-dot"></div>
+            <div class="mock-nav-dot"></div>
+            <div class="mock-nav-dot"></div>
+          </div>
+          <div class="mock-nav-btn"></div>
+        </div>
+        <div class="mock-hero" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:32px 24px;align-items:center;">
+          <div>
+            <div class="mock-hero-h" style="font-size:22px;">Connecting Startups,<br>Investors &<br><span>Educators</span></div>
+            <p class="mock-hero-p" style="max-width:100%;margin-bottom:14px;">The go-to platform for the global EdTech ecosystem.</p>
+            <div class="mock-btns"><div class="mock-btn-p">Explore the Ecosystem</div><div class="mock-btn-o">Latest News</div></div>
+          </div>
+          <div style="background:rgba(116,187,180,.08);border:1px solid rgba(116,187,180,.15);border-radius:10px;padding:16px;">
+            <div style="font-size:9px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Our Partners</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,.06);padding:4px 10px;border-radius:4px;color:rgba(255,255,255,.4);">GES Awards</span>
+              <span style="font-size:9px;background:rgba(255,255,255,.06);padding:4px 10px;border-radius:4px;color:rgba(255,255,255,.4);">MindCET</span>
+              <span style="font-size:9px;background:rgba(255,255,255,.06);padding:4px 10px;border-radius:4px;color:rgba(255,255,255,.4);">EdTech Impact</span>
+              <span style="font-size:9px;background:rgba(255,255,255,.06);padding:4px 10px;border-radius:4px;color:rgba(255,255,255,.4);">Global EdTech</span>
+            </div>
+          </div>
+        </div>
+        <div class="mock-section mock-section-bg-dark" style="padding:20px 24px;">
+          <div class="mock-section-label" style="font-size:9px;margin-bottom:12px;">What We Do — Our Initiatives</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div class="mock-card"><div class="mock-card-icon">🤝</div><div class="mock-card-title">EdTech Together</div><div class="mock-card-text">Monthly events in London & online webinars</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🌐</div><div class="mock-card-title">Partnership Initiatives</div><div class="mock-card-text">Together, not against each other</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🔗</div><div class="mock-card-title">Cross-Cohort Networking</div><div class="mock-card-text">Build lasting relationships</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">💬</div><div class="mock-card-title">Redefining Learning Forum</div><div class="mock-card-text">Conversations across stakeholders</div><a class="mock-card-link">Learn more →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🎓</div><div class="mock-card-title">Programme</div><div class="mock-card-text">Structured startup support at every stage</div><a class="mock-card-link">Apply →</a></div>
+            <div class="mock-card"><div class="mock-card-icon">🗺️</div><div class="mock-card-title">GEM</div><div class="mock-card-text">Global EdTech Resource Map</div><a class="mock-card-link">Explore ↗</a></div>
+          </div>
+        </div>
+        <div class="mock-nl" style="padding:20px 24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;">
+            <div>
+              <div class="mock-nl-title">Stay in the Loop</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.3);">Latest trends & events, straight to your inbox.</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              <div class="mock-inp" style="width:140px;height:30px;"></div>
+              <div class="mock-inp" style="width:120px;height:30px;"></div>
+              <div class="mock-sub-btn" style="padding:0 14px;height:30px;">Subscribe</div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-footer" style="padding:12px 24px;">
+          <div class="mock-footer-text">© 2026 DOHE Global. All rights reserved.</div>
+          <div class="mock-footer-text">Privacy · Terms · Submissions</div>
+          <div class="mock-footer-text">↑ TOP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROS/CONS -->
+  <div class="pros-cons-grid">
+    <div class="pros-cons-box pros">
+      <h4>장점</h4>
+      <ul>
+        <li>홈이 가장 단순해짐 — 방문자가 빠르게 원하는 곳으로 이동</li>
+        <li>각 이니셔티브를 서브 페이지에서 깊이 있게 설명 가능</li>
+        <li>SEO 각 페이지마다 최적화 가능</li>
+        <li>Django 전환 시 URL 구조가 깔끔하게 정리됨</li>
+        <li>콘텐츠 반복 완전 제거</li>
+      </ul>
+    </div>
+    <div class="pros-cons-box cons">
+      <h4>단점</h4>
+      <ul>
+        <li>서브 페이지 5개를 새로 만들어야 함 — 작업량 많음</li>
+        <li>홈에 콘텐츠가 너무 없어 보일 수 있음</li>
+        <li>이벤트·뉴스 같은 다이나믹 콘텐츠가 홈에서 안 보임</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="effort-row">
+    <span class="effort-label">작업 난이도</span>
+    <div class="effort-dots">
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot empty"></div>
+    </div>
+    <span class="effort-desc">서브 페이지 5개 신규 제작 필요 — 큰 작업</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     OPTION 2 — Persona
+════════════════════════════════════════════════ -->
+<div class="page" id="opt2">
+<div class="compare-wrap">
+
+  <div class="option-header">
+    <div class="option-label">Option 2</div>
+    <div class="option-title">Persona 기반 — "나는 누구인가"</div>
+    <p class="option-desc">
+      방문자 유형(스타트업 / 투자자 / 교육자 / 파트너)에 따라 다른 콘텐츠를 보여줌.
+      콘텐츠는 그대로 유지하되, 적합한 것만 필터링해서 노출.
+    </p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h3>현재 (14 섹션 / 모두에게 동일)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🦸</span><span class="sec-name">Hero (일반적)</span><span class="sec-tag">변경</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-remove"><span class="sec-icon">📊</span><span class="sec-name">Stats (단순 숫자)</span><span class="sec-tag">삭제</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">📰</span><span class="sec-name">News</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">💬</span><span class="sec-name">LinkedIn Voices</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">📅</span><span class="sec-name">Events</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🤝</span><span class="sec-name">Community</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🌐</span><span class="sec-name">Partnership</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🎓</span><span class="sec-name">Programme</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🗺️</span><span class="sec-name">GEM</span><span class="sec-tag">이동 →</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📧</span><span class="sec-name">Contact</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <h3>Option 2 — 홈페이지 (7 섹션)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-new"><span class="sec-icon">🦸</span><span class="sec-name">Hero + Persona 탭 선택</span><span class="sec-tag">신규</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-new"><span class="sec-icon">🎯</span><span class="sec-name">Persona별 추천 섹션 (동적)</span><span class="sec-tag">신규</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📰</span><span class="sec-name">News (필터 유지)</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+        <div style="height:16px;"></div>
+        <div style="padding:14px 16px; background:rgba(116,187,180,.06); border:1px dashed rgba(116,187,180,.25); border-radius:8px;">
+          <div style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:var(--teal);margin-bottom:8px;">Persona별 노출 콘텐츠</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🚀 Startup → EdTech Together + Programme + GEM</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">💰 Investor → Partnership + Events + GEM</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🎓 Educator → Forum + EdTech Together + News</span>
+            <span style="font-size:12px;color:rgba(255,255,255,.5);">🌐 Partner → Partnership + Community + Contact</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;">Visual Mockup</div>
+  </div>
+  <div class="mockup-wrap">
+    <!-- Mobile -->
+    <div>
+      <div class="mockup-label">📱 Mobile</div>
+      <div class="mockup-device">
+        <div class="mock-nav">
+          <div class="mock-logo"></div>
+          <div class="mock-hamburger"><span></span><span></span><span></span></div>
+        </div>
+        <div class="mock-hero">
+          <div class="mock-hero-h" style="font-size:13px;margin-bottom:6px;">I am a...</div>
+          <div class="mock-persona-tabs">
+            <div class="mock-p-tab active">🚀 Startup</div>
+            <div class="mock-p-tab">💰 Investor</div>
+            <div class="mock-p-tab">🎓 Educator</div>
+            <div class="mock-p-tab">🌐 Partner</div>
+          </div>
+          <div style="background:rgba(116,187,180,.08);border:1px solid rgba(116,187,180,.15);border-radius:6px;padding:10px;">
+            <div style="font-size:9px;font-weight:700;color:var(--teal);margin-bottom:6px;">FOR STARTUPS</div>
+            <div class="mock-hero-h" style="font-size:13px;">Connect, pitch,<br>and grow your<br><span>EdTech startup</span></div>
+            <p class="mock-hero-p" style="margin-bottom:10px;">Join EdTech Together, apply to our Programme, and get discovered on GEM.</p>
+            <div class="mock-btns"><div class="mock-btn-p">Reserve a Spot</div></div>
+          </div>
+        </div>
+        <div class="mock-section mock-section-bg-dark">
+          <div class="mock-section-label">Recommended for you</div>
+          <div class="mock-initiatives">
+            <div class="mock-init-card"><div class="mock-init-icon">🤝</div><div><div class="mock-init-title">EdTech Together</div><div class="mock-init-sub">Monthly networking</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">🎓</div><div><div class="mock-init-title">Programme</div><div class="mock-init-sub">Startup support</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">🗺️</div><div><div class="mock-init-title">GEM</div><div class="mock-init-sub">Global map</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">📅</div><div><div class="mock-init-title">Events</div><div class="mock-init-sub">Upcoming</div></div></div>
+          </div>
+        </div>
+        <div class="mock-section">
+          <div class="mock-section-label">Latest News</div>
+          <div class="mock-news-card"><div class="mock-badge">AI & Learning</div><div class="mock-news-title">AI-powered adaptive learning gives teachers superpowers</div></div>
+          <div class="mock-news-card"><div class="mock-badge">Investment</div><div class="mock-news-title">EdTech market consolidating fast — what it means for startups</div></div>
+        </div>
+        <div class="mock-nl">
+          <div class="mock-nl-title">Stay in the Loop</div>
+          <div class="mock-nl-row"><div class="mock-inp"></div><div class="mock-sub-btn">Subscribe</div></div>
+        </div>
+        <div class="mock-footer">
+          <div class="mock-footer-text">© 2026 DOHE Global</div>
+          <div class="mock-footer-text">Privacy · Terms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop -->
+    <div style="width:100%;max-width:860px;">
+      <div class="mockup-label">🖥️ Desktop</div>
+      <div class="mockup-device mockup-desktop">
+        <div class="mock-nav" style="padding:12px 24px;">
+          <div class="mock-logo"></div>
+          <div class="mock-nav-links">
+            <div class="mock-nav-dot"></div><div class="mock-nav-dot"></div>
+            <div class="mock-nav-dot"></div><div class="mock-nav-dot"></div>
+          </div>
+          <div class="mock-nav-btn"></div>
+        </div>
+        <div class="mock-hero" style="padding:28px 24px;">
+          <div style="text-align:center;margin-bottom:16px;">
+            <div style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">I am a...</div>
+            <div style="display:inline-flex;gap:6px;background:rgba(255,255,255,.05);padding:4px;border-radius:8px;">
+              <div style="padding:8px 18px;background:var(--teal);color:var(--navy);border-radius:6px;font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;">🚀 Startup</div>
+              <div style="padding:8px 18px;color:rgba(255,255,255,.4);font-size:10px;font-weight:600;font-family:'Poppins',sans-serif;">💰 Investor</div>
+              <div style="padding:8px 18px;color:rgba(255,255,255,.4);font-size:10px;font-weight:600;font-family:'Poppins',sans-serif;">🎓 Educator</div>
+              <div style="padding:8px 18px;color:rgba(255,255,255,.4);font-size:10px;font-weight:600;font-family:'Poppins',sans-serif;">🌐 Partner</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;">
+            <div>
+              <div style="font-size:9px;font-weight:700;color:var(--teal);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">For Startups</div>
+              <div class="mock-hero-h" style="font-size:18px;">Connect, pitch,<br>and grow your<br><span>EdTech startup</span></div>
+              <p class="mock-hero-p" style="max-width:100%;margin-bottom:14px;">Join EdTech Together, apply to our Programme, and get discovered on GEM.</p>
+              <div class="mock-btns"><div class="mock-btn-p">Reserve a Spot</div><div class="mock-btn-o">See Programme</div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="mock-init-card"><div class="mock-init-icon">🤝</div><div><div class="mock-init-title">EdTech Together — Monthly Networking</div><div class="mock-init-sub">London & online · Next event: Jun 12</div></div></div>
+              <div class="mock-init-card"><div class="mock-init-icon">🎓</div><div><div class="mock-init-title">Programme — Startup Support</div><div class="mock-init-sub">Discovery · Development · Growth · Global</div></div></div>
+              <div class="mock-init-card"><div class="mock-init-icon">🗺️</div><div><div class="mock-init-title">GEM — Get Discovered</div><div class="mock-init-sub">List your startup on the Global Resource Map</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-section" style="padding:16px 24px;">
+          <div class="mock-section-label">Latest News</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="mock-news-card"><div class="mock-badge">AI & Learning</div><div class="mock-news-title">AI-powered adaptive learning gives teachers superpowers in London schools</div></div>
+            <div class="mock-news-card"><div class="mock-badge">Investment</div><div class="mock-news-title">EdTech market consolidating fast — 3 acquisitions in 90 days</div></div>
+          </div>
+        </div>
+        <div class="mock-nl" style="padding:16px 24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;">
+            <div><div class="mock-nl-title">Stay in the Loop</div><div style="font-size:9px;color:rgba(255,255,255,.3);">Latest trends & events, straight to your inbox.</div></div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              <div class="mock-inp" style="width:130px;height:28px;"></div>
+              <div class="mock-inp" style="width:110px;height:28px;"></div>
+              <div class="mock-sub-btn" style="padding:0 14px;height:28px;">Subscribe</div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-footer" style="padding:10px 24px;">
+          <div class="mock-footer-text">© 2026 DOHE Global. All rights reserved.</div>
+          <div class="mock-footer-text">Privacy · Terms · Submissions</div>
+          <div class="mock-footer-text">↑ TOP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pros-cons-grid">
+    <div class="pros-cons-box pros">
+      <h4>장점</h4>
+      <ul>
+        <li>콘텐츠 삭제 없이 정리 — 모든 이니셔티브 살아있음</li>
+        <li>방문자가 자신에게 맞는 것만 보게 됨 (전환율 ↑)</li>
+        <li>Startup / Investor / Educator 각각 다른 메시지</li>
+        <li>Stripe, HubSpot 등이 쓰는 최신 B2B 방식</li>
+      </ul>
+    </div>
+    <div class="pros-cons-box cons">
+      <h4>단점</h4>
+      <ul>
+        <li>구현 난이도 가장 높음 (JavaScript 로직 필요)</li>
+        <li>방문자가 탭을 클릭하지 않으면 기본값만 봄</li>
+        <li>초기 설계가 복잡 — 잘못 만들면 오히려 혼란</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="effort-row">
+    <span class="effort-label">작업 난이도</span>
+    <div class="effort-dots">
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+    </div>
+    <span class="effort-desc">UX 설계 + JS 인터랙션 구현 필요 — 가장 복잡한 작업</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     OPTION 3 — Flagship + Supporting
+════════════════════════════════════════════════ -->
+<div class="page" id="opt3">
+<div class="compare-wrap">
+
+  <div class="option-header">
+    <div class="option-label">Option 3 — 추천</div>
+    <div class="option-title">Flagship + Supporting — "EdTech Together가 주인공"</div>
+    <p class="option-desc">
+      EdTech Together를 메인 이니셔티브로 부각하고,
+      나머지 이니셔티브는 작은 카드 1줄에 함께 정리.
+      지금 코드에서 가장 빠르게 적용 가능한 방식.
+    </p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <h3>현재 (14 섹션)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦸</span><span class="sec-name">Hero</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners Ticker</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📊</span><span class="sec-name">Stats</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📰</span><span class="sec-name">News (3 기사)</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-remove"><span class="sec-icon">💬</span><span class="sec-name">LinkedIn Voices (3 카드)</span><span class="sec-tag">삭제</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📅</span><span class="sec-name">Events (EdTech Together 중심)</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🤝</span><span class="sec-name">Community (긴 설명)</span><span class="sec-tag">축소</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🌐</span><span class="sec-name">Partnership</span><span class="sec-tag">통합</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🎓</span><span class="sec-name">Programme</span><span class="sec-tag">통합</span></div>
+        <div class="sec-block sec-merge"><span class="sec-icon">🗺️</span><span class="sec-name">GEM</span><span class="sec-tag">통합</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📧</span><span class="sec-name">Contact</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <h3>Option 3 — 홈페이지 (9 섹션)</h3>
+      <div class="section-list">
+        <div class="sec-block sec-keep"><span class="sec-icon">🧭</span><span class="sec-name">Nav</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦸</span><span class="sec-name">Hero → EdTech Together 메인 CTA</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🏷️</span><span class="sec-name">Partners</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📊</span><span class="sec-name">Stats</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📰</span><span class="sec-name">News</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📅</span><span class="sec-name">Events (EdTech Together + 이벤트 카드)</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-new"><span class="sec-icon">🗂️</span><span class="sec-name">Our Initiatives — 4 미니 카드 (1줄)</span><span class="sec-tag">신규</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">📬</span><span class="sec-name">Newsletter + Contact (통합)</span><span class="sec-tag">유지</span></div>
+        <div class="sec-block sec-keep"><span class="sec-icon">🦶</span><span class="sec-name">Footer</span><span class="sec-tag">유지</span></div>
+        <div style="height:8px;"></div>
+        <div style="padding:10px 14px;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.15);border-radius:8px;font-size:12px;color:rgba(255,255,255,.5);">
+          ✕ 삭제: LinkedIn Voices 섹션 (3 카드)<br>
+          ✕ 삭제: Community 긴 설명 2단락<br>
+          ✕ 삭제: Partnership 전체 섹션<br>
+          ✕ 삭제: Programme 상세 섹션<br>
+          ✕ 삭제: GEM 별도 섹션
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;">Visual Mockup</div>
+  </div>
+  <div class="mockup-wrap">
+    <!-- Mobile -->
+    <div>
+      <div class="mockup-label">📱 Mobile</div>
+      <div class="mockup-device">
+        <div class="mock-nav">
+          <div class="mock-logo"></div>
+          <div class="mock-hamburger"><span></span><span></span><span></span></div>
+        </div>
+        <div class="mock-hero">
+          <div class="mock-hero-h">Connecting<br>Startups,<br>Investors &<br><span>Educators</span></div>
+          <p class="mock-hero-p">The go-to platform for the global EdTech ecosystem.</p>
+          <div class="mock-btns">
+            <div class="mock-btn-p">Reserve a Spot</div>
+            <div class="mock-btn-o">Latest News</div>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat"><div class="mock-stat-n">500+</div><div class="mock-stat-l">Startups</div></div>
+            <div class="mock-stat"><div class="mock-stat-n">30+</div><div class="mock-stat-l">Countries</div></div>
+            <div class="mock-stat"><div class="mock-stat-n">6</div><div class="mock-stat-l">Partners</div></div>
+          </div>
+        </div>
+        <div class="mock-section">
+          <div class="mock-section-label">Latest News</div>
+          <div class="mock-news-card"><div class="mock-badge">Policy</div><div class="mock-news-title">Screen Time Concerns Lead to Backlash Against EdTech Vetting</div></div>
+          <div class="mock-news-card"><div class="mock-badge">AI & Learning</div><div class="mock-news-title">Accelerating Execution: Operating System of High-Performing Teams</div></div>
+        </div>
+        <div class="mock-section mock-section-bg-dark">
+          <div class="mock-section-label">Upcoming Events</div>
+          <div class="mock-event-featured">
+            <div class="mock-ev-badge"><div class="mock-ev-dot"></div>Registration Open</div>
+            <div class="mock-ev-title">EdTech Together — London</div>
+            <div class="mock-ev-sub">Monthly · London & Online</div>
+            <div class="mock-ev-list">
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Keynote speeches</div>
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Panel discussions</div>
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Startup showcase</div>
+            </div>
+            <div class="mock-btns" style="margin-top:10px;"><div class="mock-btn-p">Reserve a Spot</div></div>
+          </div>
+        </div>
+        <div class="mock-section">
+          <div class="mock-section-label">Our Initiatives</div>
+          <div class="mock-initiatives">
+            <div class="mock-init-card"><div class="mock-init-icon">🌐</div><div><div class="mock-init-title">Partnership</div><div class="mock-init-sub">Initiatives</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">🔗</div><div><div class="mock-init-title">Cross-Cohort</div><div class="mock-init-sub">Networking</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">🎓</div><div><div class="mock-init-title">Programme</div><div class="mock-init-sub">Startup support</div></div></div>
+            <div class="mock-init-card"><div class="mock-init-icon">🗺️</div><div><div class="mock-init-title">GEM</div><div class="mock-init-sub">Resource Map</div></div></div>
+          </div>
+        </div>
+        <div class="mock-nl">
+          <div class="mock-nl-title">Stay in the Loop</div>
+          <div class="mock-nl-row"><div class="mock-inp"></div><div class="mock-sub-btn">Subscribe</div></div>
+        </div>
+        <div class="mock-footer">
+          <div class="mock-footer-text">© 2026 DOHE Global</div>
+          <div class="mock-footer-text">Privacy · Terms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop -->
+    <div style="width:100%;max-width:860px;">
+      <div class="mockup-label">🖥️ Desktop</div>
+      <div class="mockup-device mockup-desktop">
+        <div class="mock-nav" style="padding:12px 24px;">
+          <div class="mock-logo"></div>
+          <div class="mock-nav-links">
+            <div class="mock-nav-dot"></div><div class="mock-nav-dot"></div>
+            <div class="mock-nav-dot"></div><div class="mock-nav-dot"></div>
+          </div>
+          <div class="mock-nav-btn"></div>
+        </div>
+        <div class="mock-hero" style="display:grid;grid-template-columns:1fr 380px;gap:24px;padding:28px 24px;align-items:center;">
+          <div>
+            <div class="mock-hero-h" style="font-size:20px;">Connecting Startups,<br>Investors & Educators<br><span>Shaping the Future</span></div>
+            <p class="mock-hero-p" style="max-width:100%;margin-bottom:12px;">The go-to platform for the global EdTech ecosystem.</p>
+            <div class="mock-btns" style="margin-bottom:14px;"><div class="mock-btn-p">Reserve a Spot</div><div class="mock-btn-o">Latest News</div></div>
+            <div class="mock-stats" style="padding-top:12px;border-top:1px solid rgba(116,187,180,.12);">
+              <div class="mock-stat"><div class="mock-stat-n">500+</div><div class="mock-stat-l">Startups</div></div>
+              <div class="mock-stat"><div class="mock-stat-n">30+</div><div class="mock-stat-l">Countries</div></div>
+              <div class="mock-stat"><div class="mock-stat-n">6</div><div class="mock-stat-l">Partners</div></div>
+            </div>
+          </div>
+          <div class="mock-event-featured">
+            <div class="mock-ev-badge"><div class="mock-ev-dot"></div>Registration Open</div>
+            <div class="mock-ev-title">EdTech Together</div>
+            <div class="mock-ev-sub">Monthly · London & Online</div>
+            <div class="mock-ev-list" style="margin-top:8px;">
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Keynote speeches</div>
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Panel discussions</div>
+              <div class="mock-ev-item"><span class="mock-ev-check">✓</span> Startup showcase & networking</div>
+            </div>
+            <div class="mock-btns" style="margin-top:10px;"><div class="mock-btn-p">Reserve a Spot →</div></div>
+          </div>
+        </div>
+        <div class="mock-section" style="padding:16px 24px;">
+          <div class="mock-section-label">Latest News</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div class="mock-news-card"><div class="mock-badge">Policy</div><div class="mock-news-title">Screen Time Concerns Lead to Backlash Against EdTech Vetting Process</div></div>
+            <div class="mock-news-card"><div class="mock-badge">AI & Learning</div><div class="mock-news-title">Accelerating Execution: The OS of High-Performing Early-Stage Teams</div></div>
+          </div>
+        </div>
+        <div class="mock-section mock-section-bg-dark" style="padding:16px 24px;">
+          <div class="mock-section-label">Upcoming Events</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div class="mock-card"><div class="mock-card-title">EdTech Together — London</div><div class="mock-card-text">Jun 12 · In-Person</div><a class="mock-card-link">Reserve →</a></div>
+            <div class="mock-card"><div class="mock-card-title">Accelerating Execution Webinar</div><div class="mock-card-text">Jul 8 · Online</div><a class="mock-card-link">Register →</a></div>
+            <div class="mock-card"><div class="mock-card-title">EdTech Together — London</div><div class="mock-card-text">Aug 20 · Special Edition</div><a class="mock-card-link">Reserve →</a></div>
+          </div>
+        </div>
+        <div class="mock-section" style="padding:16px 24px;">
+          <div class="mock-section-label">Our Initiatives</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;">
+            <div class="mock-init-card" style="flex-direction:column;align-items:flex-start;gap:4px;"><div style="font-size:18px;">🌐</div><div><div class="mock-init-title">Partnership Initiatives</div><div class="mock-init-sub">Strategic partnerships</div></div></div>
+            <div class="mock-init-card" style="flex-direction:column;align-items:flex-start;gap:4px;"><div style="font-size:18px;">🔗</div><div><div class="mock-init-title">Cross-Cohort Networking</div><div class="mock-init-sub">Build relationships</div></div></div>
+            <div class="mock-init-card" style="flex-direction:column;align-items:flex-start;gap:4px;"><div style="font-size:18px;">🎓</div><div><div class="mock-init-title">Programme</div><div class="mock-init-sub">Startup support</div></div></div>
+            <div class="mock-init-card" style="flex-direction:column;align-items:flex-start;gap:4px;"><div style="font-size:18px;">🗺️</div><div><div class="mock-init-title">GEM</div><div class="mock-init-sub">Global resource map</div></div></div>
+          </div>
+        </div>
+        <div class="mock-nl" style="padding:16px 24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;">
+            <div><div class="mock-nl-title">Stay in the Loop</div><div style="font-size:9px;color:rgba(255,255,255,.3);">Latest EdTech trends straight to your inbox.</div></div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              <div class="mock-inp" style="width:130px;height:28px;"></div>
+              <div class="mock-sub-btn" style="padding:0 14px;height:28px;">Subscribe</div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-footer" style="padding:10px 24px;">
+          <div class="mock-footer-text">© 2026 DOHE Global. All rights reserved.</div>
+          <div class="mock-footer-text">Privacy · Terms · Submissions</div>
+          <div class="mock-footer-text">↑ TOP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pros-cons-grid">
+    <div class="pros-cons-box pros">
+      <h4>장점</h4>
+      <ul>
+        <li>현재 코드 기반 — 대형 재구축 없이 바로 적용 가능</li>
+        <li>모든 이니셔티브가 홈에 보임 (카드 1줄로 정리)</li>
+        <li>EdTech Together가 명확한 메인 CTA로 부각됨</li>
+        <li>중복 콘텐츠 제거만으로 섹션 14개 → 9개</li>
+        <li>Django 전환 전에도 바로 개선 효과 체감</li>
+      </ul>
+    </div>
+    <div class="pros-cons-box cons">
+      <h4>단점</h4>
+      <ul>
+        <li>여전히 스크롤이 존재 (Option 1보다 긺)</li>
+        <li>세부 이니셔티브 설명이 카드 1줄에만 국한됨</li>
+        <li>나중에 서브 페이지로 확장 필요 (Option 1과 병행)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="effort-row">
+    <span class="effort-label">작업 난이도</span>
+    <div class="effort-dots">
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot filled"></div>
+      <div class="effort-dot empty"></div>
+      <div class="effort-dot empty"></div>
+      <div class="effort-dot empty"></div>
+    </div>
+    <span class="effort-desc">기존 코드 수정만으로 가능 — 하루 안에 적용 가능</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = {opt1:0,opt2:1,opt3:2}[id];
+    document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  }
+</script>
+</body>
+</html>
