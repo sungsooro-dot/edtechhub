@@ -346,6 +346,23 @@ function applyDateFilter(rows) {
   });
 }
 
+// ── DB: LinkedIn Voices (랜덤 N개) ───────────────────────
+app.get('/api/db/voices', async (req, res) => {
+  const limit = Math.min(12, parseInt(req.query.limit) || 3);
+  try {
+    const [rows] = await db.query(
+      `SELECT id, person_name, person_initials, avatar_color,
+              person_title, person_company, linkedin_profile_url,
+              topic_tag, topic_tag_style,
+              post_text, post_url, likes_count, comments_count, post_date
+       FROM linkedin_voices WHERE is_active=1 ORDER BY RAND() LIMIT ?`, [limit]);
+    res.json({ voices: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
 // ── DB: 이벤트 Top Picks ─────────────────────────────────
 app.get('/api/db/events/top', async (req, res) => {
   try {
