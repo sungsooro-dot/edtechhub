@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>EdTech HUB — Admin</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,sans-serif;background:#F1F5F9;color:#111827;font-size:14px;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    :root{--accent:#16A34A;--accent-h:#15803D;--border:#E5E7EB;--text-2:#6B7280;--text-3:#9CA3AF;--surface:#fff}
+
+    /* Layout */
+    .topbar{background:#111827;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:sticky;top:0;z-index:50}
+    .topbar-brand{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .topbar-brand span{color:var(--accent)}
+    .topbar-tag{font-size:11px;background:#1F2937;padding:3px 8px;border-radius:4px;color:#9CA3AF}
+    .container{max-width:1100px;margin:0 auto;padding:28px 20px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:24px}
+    .tab{padding:10px 20px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s}
+    .tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+    /* Cards */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px}
+    .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .card-hd h3{font-size:15px;font-weight:700}
+    .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .section-hd h2{font-size:17px;font-weight:700}
+
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:background .14s,opacity .14s;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-h)}
+    .btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border)}.btn-ghost:hover{color:#111827;border-color:#9CA3AF}
+    .btn-danger{background:#FEE2E2;color:#DC2626;border:none}.btn-danger:hover{background:#FECACA}
+    .btn-sm{padding:5px 11px;font-size:12px}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+
+    /* Form */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-grid.g3{grid-template-columns:1fr 1fr 1fr}
+    .form-full{grid-column:1/-1}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    label{font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px}
+    input,select,textarea{border:1px solid var(--border);border-radius:6px;padding:8px 11px;font-size:13px;font-family:inherit;color:#111827;background:#fff;transition:border-color .15s;outline:none;width:100%}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+    textarea{resize:vertical;min-height:90px}
+    .form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+
+    /* Avatar preview */
+    .av-preview{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+    .li-av-green{background:#DCFCE7;color:#15803D}
+    .li-av-dark{background:#1F2937;color:#fff}
+    .li-av-slate{background:#E2E8F0;color:#374151}
+    .li-av-blue{background:#DBEAFE;color:#1D4ED8}
+    .li-av-amber{background:#FEF3C7;color:#D97706}
+    .li-av-rose{background:#FFE4E6;color:#E11D48}
+
+    /* Profile list item */
+    .profile-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:8px;background:#fff;margin-bottom:8px;transition:border-color .15s}
+    .profile-item:hover{border-color:#CBD5E1}
+    .profile-info{flex:1;min-width:0}
+    .profile-name{font-size:14px;font-weight:700;color:#111827}
+    .profile-role{font-size:12px;color:var(--text-2);margin-top:1px}
+    .profile-url{font-size:11px;color:var(--accent);word-break:break-all;margin-top:4px}
+    .profile-count{font-size:11px;color:var(--text-3);margin-top:4px}
+    .profile-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+    .badge-inactive{font-size:10px;font-weight:700;background:#FEE2E2;color:#DC2626;padding:2px 7px;border-radius:3px}
+
+    /* Voice/post list item */
+    .voice-item{border:1px solid var(--border);border-radius:8px;background:#fff;margin-bottom:8px;overflow:hidden}
+    .voice-item-hd{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #F3F4F6;cursor:pointer;transition:background .12s}
+    .voice-item-hd:hover{background:#F8FAFC}
+    .voice-person{flex:1;min-width:0}
+    .voice-person strong{font-size:13px;font-weight:700;color:#111827}
+    .voice-person span{font-size:11px;color:var(--text-2);display:block;margin-top:1px}
+    .voice-item-body{padding:12px 14px;display:none}
+    .voice-item-body.open{display:block}
+    .voice-post-text{font-size:13px;color:#374151;line-height:1.6;margin-bottom:10px;background:#F8FAFC;padding:10px 12px;border-radius:6px}
+    .voice-meta{display:flex;gap:16px;font-size:11px;color:var(--text-3);margin-bottom:10px;flex-wrap:wrap}
+    .voice-actions{display:flex;gap:6px;flex-wrap:wrap}
+    .tag-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:.3px}
+
+    /* Modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+    .modal-overlay.open{display:flex}
+    .modal{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .modal-hd h3{font-size:16px;font-weight:700}
+    .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-3);line-height:1;padding:0 4px}
+    .modal-close:hover{color:#111827}
+
+    /* Toast */
+    .toast{position:fixed;bottom:24px;right:24px;background:#111827;color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:300;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{background:#16A34A}
+    .toast.error{background:#DC2626}
+
+    .loading{padding:40px;text-align:center;color:var(--text-3)}
+    .empty{padding:32px;text-align:center;color:var(--text-3)}
+    .divider{height:1px;background:var(--border);margin:20px 0}
+
+    @media(max-width:600px){.form-grid,.form-grid.g3{grid-template-columns:1fr}.profile-actions{flex-direction:column}}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <img src="logo.png" width="22" height="22" style="object-fit:contain"/>
+    EdTech<span>HUB</span>
+    <span class="topbar-tag">Admin</span>
+  </div>
+  <span style="font-size:12px;color:#6B7280;">LinkedIn Voices Manager</span>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <div class="tab on" data-tab="profiles" onclick="switchTab('profiles')">People</div>
+    <div class="tab" data-tab="posts" onclick="switchTab('posts')">Posts</div>
+  </div>
+
+  <!-- PROFILES TAB -->
+  <div id="tab-profiles">
+    <div class="section-hd">
+      <h2>LinkedIn Profiles</h2>
+      <button class="btn btn-primary" onclick="openProfileModal()">+ Add Person</button>
+    </div>
+    <div id="profiles-list"><div class="loading">Loading…</div></div>
+  </div>
+
+  <!-- POSTS TAB -->
+  <div id="tab-posts" style="display:none">
+    <div class="section-hd">
+      <h2>Posts / Voices</h2>
+      <button class="btn btn-primary" onclick="openPostModal()">+ Add Post</button>
+    </div>
+    <div id="voices-list"><div class="loading">Loading…</div></div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="profileModalTitle">Add Person</h3>
+      <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+    </div>
+    <form id="profileForm" onsubmit="submitProfile(event)">
+      <input type="hidden" id="pf-id"/>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Full Name *</label>
+          <input id="pf-name" placeholder="e.g. John Smith" required/>
+        </div>
+        <div class="form-group">
+          <label>Initials *</label>
+          <input id="pf-initials" placeholder="JS" maxlength="4" required style="text-transform:uppercase" oninput="updateAvPreview()"/>
+        </div>
+        <div class="form-group">
+          <label>Avatar Colour</label>
+          <select id="pf-color" onchange="updateAvPreview()">
+            <option value="li-av-green">Green</option>
+            <option value="li-av-dark">Dark</option>
+            <option value="li-av-blue">Blue</option>
+            <option value="li-av-slate">Slate</option>
+            <option value="li-av-amber">Amber</option>
+            <option value="li-av-rose">Rose</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Job Title</label>
+          <input id="pf-title" placeholder="e.g. Partner"/>
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input id="pf-company" placeholder="e.g. EdVentures Capital"/>
+        </div>
+        <div class="form-group form-full">
+          <label>LinkedIn Profile URL</label>
+          <input id="pf-url" type="url" placeholder="https://www.linkedin.com/in/..."/>
+        </div>
+        <div class="form-group form-full">
+          <label>Notes (internal)</label>
+          <textarea id="pf-notes" rows="2" placeholder="Why we're following this person…"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <div class="av-preview li-av-green" id="av-preview">JS</div>
+        <span style="font-size:12px;color:var(--text-2)">Avatar preview</span>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('profileModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="pf-submit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="postModalTitle">Add Post</h3>
+      <button class="modal-close" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <form id="postForm" onsubmit="submitPost(event)">
+      <input type="hidden" id="vf-id"/>
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label>Select Person (from profiles)</label>
+          <select id="vf-profile" onchange="prefillFromProfile()">
+            <option value="">— or fill manually below —</option>
+          </select>
+        </div>
+        <div class="divider form-full" style="margin:4px 0"></div>
+        <div class="form-group">
+          <label>Name *</label>
+          <input id="vf-name" placeholder="John Smith" required/>
+        </div>
+        <div class="form-group">
+          <label>Initials</label>
+          <input id="vf-initials" placeholder="JS" maxlength="4" style="text-transform:uppercase"/>
+        </div>
+        <div class="form-group">
+          <label>Job Title</label>
+          <input id="vf-title" placeholder="Partner"/>
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input id="vf-company" placeholder="EdVentures Capital"/>
+        </div>
+        <div class="form-group">
+          <label>Avatar Colour</label>
+          <select id="vf-color">
+            <option value="li-av-green">Green</option>
+            <option value="li-av-dark">Dark</option>
+            <option value="li-av-blue">Blue</option>
+            <option value="li-av-slate">Slate</option>
+            <option value="li-av-amber">Amber</option>
+            <option value="li-av-rose">Rose</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Topic Tag</label>
+          <input id="vf-tag" placeholder="AI & Learning, Investment…"/>
+        </div>
+        <div class="form-group form-full">
+          <label>Post Text *</label>
+          <textarea id="vf-text" rows="4" placeholder="Paste the LinkedIn post content here…" required></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>Post URL (link to LinkedIn post)</label>
+          <input id="vf-posturl" type="url" placeholder="https://www.linkedin.com/posts/..."/>
+        </div>
+        <div class="form-group form-full">
+          <label>Profile URL</label>
+          <input id="vf-profileurl" type="url" placeholder="https://www.linkedin.com/in/..."/>
+        </div>
+        <div class="form-group">
+          <label>Likes</label>
+          <input id="vf-likes" type="number" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label>Comments</label>
+          <input id="vf-comments" type="number" min="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label>Post Date</label>
+          <input id="vf-date" type="date"/>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('postModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="vf-submit">Save Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const KEY = new URLSearchParams(location.search).get('key') || '';
+  const H   = { 'x-admin-key': KEY, 'Content-Type': 'application/json' };
+
+  let profiles = [];
+
+  function escH(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function toast(msg, type='success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.className = `toast ${type} show`;
+    setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === tab));
+    document.getElementById('tab-profiles').style.display = tab==='profiles' ? '' : 'none';
+    document.getElementById('tab-posts').style.display    = tab==='posts'    ? '' : 'none';
+    if (tab === 'posts') loadVoices();
+  }
+
+  /* ── PROFILES ── */
+  async function loadProfiles() {
+    const r = await fetch('/api/admin/profiles', { headers: H });
+    const d = await r.json();
+    profiles = d.profiles || [];
+    const el = document.getElementById('profiles-list');
+    if (!profiles.length) { el.innerHTML = '<div class="empty">No profiles yet. Add the first person.</div>'; return; }
+    el.innerHTML = profiles.map(p => `
+      <div class="profile-item" id="prow-${p.id}">
+        <div class="av-preview ${escH(p.avatar_color)}">${escH(p.person_initials)}</div>
+        <div class="profile-info">
+          <div class="profile-name">${escH(p.person_name)} ${!p.is_active?'<span class="badge-inactive">Inactive</span>':''}</div>
+          <div class="profile-role">${escH([p.person_title,p.person_company].filter(Boolean).join(' · '))}</div>
+          ${p.linkedin_url ? `<div class="profile-url"><a href="${escH(p.linkedin_url)}" target="_blank">${escH(p.linkedin_url)}</a></div>` : ''}
+          <div class="profile-count">${p.post_count||0} active post${p.post_count!==1?'s':''}</div>
+          ${p.notes ? `<div style="font-size:11px;color:var(--text-3);margin-top:3px;font-style:italic">${escH(p.notes)}</div>` : ''}
+        </div>
+        <div class="profile-actions">
+          <button class="btn btn-ghost btn-sm" onclick="editProfile(${p.id})">Edit</button>
+          <button class="btn btn-ghost btn-sm" onclick="addPostForProfile(${p.id})">+ Post</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleProfile(${p.id},${p.is_active})">${p.is_active?'Deactivate':'Activate'}</button>
+        </div>
+      </div>`).join('');
+    refreshProfileSelect();
+  }
+
+  function refreshProfileSelect() {
+    const sel = document.getElementById('vf-profile');
+    sel.innerHTML = '<option value="">— or fill manually below —</option>'
+      + profiles.filter(p=>p.is_active).map(p =>
+        `<option value="${p.id}" data-name="${escH(p.person_name)}" data-initials="${escH(p.person_initials)}"
+         data-color="${escH(p.avatar_color)}" data-title="${escH(p.person_title||'')}"
+         data-company="${escH(p.person_company||'')}" data-url="${escH(p.linkedin_url||'')}">
+         ${escH(p.person_name)} — ${escH(p.person_company||'')}</option>`).join('');
+  }
+
+  function openProfileModal(data) {
+    document.getElementById('profileModalTitle').textContent = data ? 'Edit Person' : 'Add Person';
+    document.getElementById('pf-id').value        = data?.id || '';
+    document.getElementById('pf-name').value      = data?.person_name || '';
+    document.getElementById('pf-initials').value  = data?.person_initials || '';
+    document.getElementById('pf-color').value     = data?.avatar_color || 'li-av-green';
+    document.getElementById('pf-title').value     = data?.person_title || '';
+    document.getElementById('pf-company').value   = data?.person_company || '';
+    document.getElementById('pf-url').value       = data?.linkedin_url || '';
+    document.getElementById('pf-notes').value     = data?.notes || '';
+    updateAvPreview();
+    document.getElementById('profileModal').classList.add('open');
+    document.getElementById('pf-name').focus();
+  }
+
+  function editProfile(id) {
+    const p = profiles.find(x => x.id === id);
+    if (p) openProfileModal(p);
+  }
+
+  async function toggleProfile(id, current) {
+    await fetch(`/api/admin/profiles/${id}`, { method:'PUT', headers:H,
+      body: JSON.stringify({ ...profiles.find(p=>p.id===id), is_active: current ? 0 : 1 }) });
+    toast(current ? 'Deactivated' : 'Activated'); loadProfiles();
+  }
+
+  async function submitProfile(e) {
+    e.preventDefault();
+    const id = document.getElementById('pf-id').value;
+    const body = {
+      person_name:     document.getElementById('pf-name').value.trim(),
+      person_initials: document.getElementById('pf-initials').value.toUpperCase().trim(),
+      avatar_color:    document.getElementById('pf-color').value,
+      person_title:    document.getElementById('pf-title').value.trim(),
+      person_company:  document.getElementById('pf-company').value.trim(),
+      linkedin_url:    document.getElementById('pf-url').value.trim(),
+      notes:           document.getElementById('pf-notes').value.trim(),
+    };
+    const btn = document.getElementById('pf-submit');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    const url    = id ? `/api/admin/profiles/${id}` : '/api/admin/profiles';
+    const method = id ? 'PUT' : 'POST';
+    const r = await fetch(url, { method, headers:H, body: JSON.stringify(body) });
+    btn.disabled = false; btn.textContent = 'Save';
+    if (r.ok) { toast(id ? 'Updated!' : 'Added!'); closeModal('profileModal'); loadProfiles(); }
+    else toast('Error saving', 'error');
+  }
+
+  function updateAvPreview() {
+    const el = document.getElementById('av-preview');
+    el.textContent = document.getElementById('pf-initials').value.toUpperCase() || '?';
+    el.className = 'av-preview ' + document.getElementById('pf-color').value;
+  }
+
+  /* ── POSTS ── */
+  async function loadVoices() {
+    const r = await fetch('/api/admin/voices', { headers: H });
+    const d = await r.json();
+    const items = d.voices || [];
+    const el = document.getElementById('voices-list');
+    if (!items.length) { el.innerHTML = '<div class="empty">No posts yet.</div>'; return; }
+    el.innerHTML = items.map(v => {
+      const role = [v.person_title, v.person_company].filter(Boolean).join(' · ');
+      return `<div class="voice-item">
+        <div class="voice-item-hd" onclick="toggleVoiceBody(${v.id})">
+          <div class="av-preview ${escH(v.avatar_color||'li-av-green')}" style="width:34px;height:34px;font-size:11px">${escH(v.person_initials)}</div>
+          <div class="voice-person">
+            <strong>${escH(v.person_name)}</strong>
+            ${role ? `<span>${escH(role)}</span>` : ''}
+          </div>
+          ${v.topic_tag ? `<span class="tag-badge" style="${escH(v.topic_tag_style||'background:#e5e7eb;color:#374151')}">${escH(v.topic_tag)}</span>` : ''}
+          <span style="font-size:11px;color:var(--text-3);margin-left:8px">${v.is_active?'✓ Active':'✗ Hidden'}</span>
+          <span style="font-size:18px;color:var(--text-3);margin-left:8px;transition:transform .15s" id="chevron-${v.id}">▾</span>
+        </div>
+        <div class="voice-item-body" id="vbody-${v.id}">
+          <div class="voice-post-text">${escH(v.post_text)}</div>
+          <div class="voice-meta">
+            <span>👍 ${v.likes_count||0}</span>
+            <span>💬 ${v.comments_count||0}</span>
+            ${v.post_date ? `<span>📅 ${v.post_date.toString().slice(0,10)}</span>` : ''}
+            ${v.post_url ? `<span><a href="${escH(v.post_url)}" target="_blank" style="color:var(--accent)">View on LinkedIn ↗</a></span>` : ''}
+          </div>
+          <div class="voice-actions">
+            <button class="btn btn-ghost btn-sm" onclick="editPost(${v.id})">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleVoice(${v.id},${v.is_active})">${v.is_active?'Hide':'Show'}</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteVoice(${v.id})">Delete</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleVoiceBody(id) {
+    const body = document.getElementById(`vbody-${id}`);
+    const ch   = document.getElementById(`chevron-${id}`);
+    const open = body.classList.toggle('open');
+    if (ch) ch.style.transform = open ? 'rotate(180deg)' : '';
+  }
+
+  function openPostModal(data) {
+    document.getElementById('postModalTitle').textContent = data ? 'Edit Post' : 'Add Post';
+    document.getElementById('vf-id').value         = data?.id || '';
+    document.getElementById('vf-profile').value    = data?.profile_id || '';
+    document.getElementById('vf-name').value       = data?.person_name || '';
+    document.getElementById('vf-initials').value   = data?.person_initials || '';
+    document.getElementById('vf-color').value      = data?.avatar_color || 'li-av-green';
+    document.getElementById('vf-title').value      = data?.person_title || '';
+    document.getElementById('vf-company').value    = data?.person_company || '';
+    document.getElementById('vf-tag').value        = data?.topic_tag || '';
+    document.getElementById('vf-text').value       = data?.post_text || '';
+    document.getElementById('vf-posturl').value    = data?.post_url || '';
+    document.getElementById('vf-profileurl').value = data?.linkedin_profile_url || '';
+    document.getElementById('vf-likes').value      = data?.likes_count || 0;
+    document.getElementById('vf-comments').value   = data?.comments_count || 0;
+    document.getElementById('vf-date').value       = data?.post_date ? data.post_date.toString().slice(0,10) : '';
+    document.getElementById('postModal').classList.add('open');
+    document.getElementById('vf-text').focus();
+  }
+
+  function addPostForProfile(pid) {
+    const p = profiles.find(x => x.id === pid);
+    openPostModal(p ? { profile_id:p.id, person_name:p.person_name, person_initials:p.person_initials,
+      avatar_color:p.avatar_color, person_title:p.person_title, person_company:p.person_company,
+      linkedin_profile_url:p.linkedin_url } : null);
+    if (p) document.getElementById('vf-profile').value = pid;
+    switchTab('posts');
+  }
+
+  async function editPost(id) {
+    const r = await fetch('/api/admin/voices', { headers: H });
+    const d = await r.json();
+    const v = (d.voices||[]).find(x => x.id === id);
+    if (v) openPostModal(v);
+  }
+
+  function prefillFromProfile() {
+    const sel = document.getElementById('vf-profile');
+    const opt = sel.options[sel.selectedIndex];
+    if (!opt.value) return;
+    document.getElementById('vf-name').value       = opt.dataset.name || '';
+    document.getElementById('vf-initials').value   = opt.dataset.initials || '';
+    document.getElementById('vf-color').value      = opt.dataset.color || 'li-av-green';
+    document.getElementById('vf-title').value      = opt.dataset.title || '';
+    document.getElementById('vf-company').value    = opt.dataset.company || '';
+    document.getElementById('vf-profileurl').value = opt.dataset.url || '';
+  }
+
+  async function submitPost(e) {
+    e.preventDefault();
+    const id  = document.getElementById('vf-id').value;
+    const tag = document.getElementById('vf-tag').value.trim();
+    const tagStyles = {
+      'investment':'background:rgba(99,102,241,.12);color:#4338CA',
+      'funding':'background:rgba(37,99,235,.10);color:#1D4ED8',
+      'ai':'background:rgba(22,163,74,.12);color:#15803D',
+      'research':'background:rgba(124,58,237,.10);color:#7C3AED',
+      'policy':'background:rgba(234,88,12,.10);color:#C2410C',
+      'government':'background:rgba(234,88,12,.10);color:#C2410C',
+      'edtech':'background:rgba(22,163,74,.12);color:#15803D',
+      'corporate learning':'background:rgba(99,102,241,.12);color:#4338CA',
+    };
+    const autoStyle = tagStyles[tag.toLowerCase()] || 'background:#E5E7EB;color:#374151';
+    const body = {
+      profile_id:          document.getElementById('vf-profile').value || null,
+      person_name:         document.getElementById('vf-name').value.trim(),
+      person_initials:     document.getElementById('vf-initials').value.toUpperCase().trim(),
+      avatar_color:        document.getElementById('vf-color').value,
+      person_title:        document.getElementById('vf-title').value.trim(),
+      person_company:      document.getElementById('vf-company').value.trim(),
+      topic_tag:           tag,
+      topic_tag_style:     autoStyle,
+      post_text:           document.getElementById('vf-text').value.trim(),
+      post_url:            document.getElementById('vf-posturl').value.trim(),
+      linkedin_profile_url:document.getElementById('vf-profileurl').value.trim(),
+      likes_count:         parseInt(document.getElementById('vf-likes').value)||0,
+      comments_count:      parseInt(document.getElementById('vf-comments').value)||0,
+      post_date:           document.getElementById('vf-date').value || null,
+    };
+    const btn = document.getElementById('vf-submit');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    const url    = id ? `/api/admin/voices/${id}` : '/api/admin/voices';
+    const method = id ? 'PUT' : 'POST';
+    const r = await fetch(url, { method, headers:H, body: JSON.stringify(body) });
+    btn.disabled = false; btn.textContent = 'Save Post';
+    if (r.ok) { toast(id ? 'Post updated!' : 'Post added!'); closeModal('postModal'); loadVoices(); }
+    else toast('Error saving', 'error');
+  }
+
+  async function toggleVoice(id, current) {
+    await fetch(`/api/admin/voices/${id}`, { method:'PUT', headers:H,
+      body: JSON.stringify({ is_active: current ? 0 : 1,
+        topic_tag:'', topic_tag_style:'', post_text:'', post_url:'', likes_count:0, comments_count:0 }) });
+    toast(current ? 'Post hidden' : 'Post shown'); loadVoices();
+  }
+
+  async function deleteVoice(id) {
+    if (!confirm('Delete this post permanently?')) return;
+    await fetch(`/api/admin/voices/${id}`, { method:'DELETE', headers:H });
+    toast('Deleted', 'error'); loadVoices();
+  }
+
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  // Initial load
+  loadProfiles();
+</script>
+</body>
+</html>

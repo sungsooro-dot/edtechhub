@@ -607,4 +607,120 @@ app.get('/api/img', async (req, res) => {
   }
 });
 
+// ── Admin 인증 미들웨어 ──────────────────────────────────
+const ADMIN_KEY = 'edtech2024admin';
+function requireAdmin(req, res, next) {
+  if (req.query.key === ADMIN_KEY || req.headers['x-admin-key'] === ADMIN_KEY) return next();
+  res.status(401).json({ error: 'Unauthorized' });
+}
+
+// ── Admin: Profiles CRUD ─────────────────────────────────
+app.get('/api/admin/profiles', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT p.*, COUNT(v.id) AS post_count
+       FROM linkedin_profiles p
+       LEFT JOIN linkedin_voices v ON v.profile_id = p.id AND v.is_active = 1
+       GROUP BY p.id ORDER BY p.is_active DESC, p.person_name ASC`);
+    res.json({ profiles: rows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/profiles', requireAdmin, express.json(), async (req, res) => {
+  const { person_name, person_initials, avatar_color, person_title, person_company, linkedin_url, notes } = req.body;
+  if (!person_name || !person_initials) return res.status(400).json({ error: 'name + initials required' });
+  try {
+    const [r] = await db.query(
+      `INSERT INTO linkedin_profiles (person_name,person_initials,avatar_color,person_title,person_company,linkedin_url,notes)
+       VALUES (?,?,?,?,?,?,?)`,
+      [person_name, person_initials.toUpperCase().substring(0,4), avatar_color||'li-av-green',
+       person_title||null, person_company||null, linkedin_url||null, notes||null]);
+    res.json({ id: r.insertId });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.put('/api/admin/profiles/:id', requireAdmin, express.json(), async (req, res) => {
+  const { person_name, person_initials, avatar_color, person_title, person_company, linkedin_url, notes, is_active } = req.body;
+  try {
+    await db.query(
+      `UPDATE linkedin_profiles SET person_name=?,person_initials=?,avatar_color=?,person_title=?,
+       person_company=?,linkedin_url=?,notes=?,is_active=? WHERE id=?`,
+      [person_name, person_initials?.toUpperCase().substring(0,4), avatar_color,
+       person_title||null, person_company||null, linkedin_url||null, notes||null,
+       is_active??1, req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: Voices (Posts) CRUD ───────────────────────────
+app.get('/api/admin/voices', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT v.*, p.person_name AS p_name, p.linkedin_url AS p_url
+       FROM linkedin_voices v
+       LEFT JOIN linkedin_profiles p ON p.id = v.profile_id
+       ORDER BY v.is_active DESC, v.id DESC`);
+    res.json({ voices: rows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/voices', requireAdmin, express.json(), async (req, res) => {
+  const { profile_id, person_name, person_initials, avatar_color, person_title, person_company,
+          linkedin_profile_url, topic_tag, topic_tag_style, post_text, post_url,
+          likes_count, comments_count, post_date } = req.body;
+  if (!person_name || !post_text) return res.status(400).json({ error: 'person_name + post_text required' });
+
+  // profile_id 없으면 자동 생성 (이름 기준)
+  let pid = profile_id || null;
+  if (!pid && person_name) {
+    const [ex] = await db.query(`SELECT id FROM linkedin_profiles WHERE person_name=? LIMIT 1`, [person_name]);
+    if (ex.length) { pid = ex[0].id; }
+    else {
+      const [nr] = await db.query(
+        `INSERT INTO linkedin_profiles (person_name,person_initials,avatar_color,person_title,person_company,linkedin_url)
+         VALUES (?,?,?,?,?,?)`,
+        [person_name, (person_initials||'').toUpperCase().substring(0,4)||'??',
+         avatar_color||'li-av-green', person_title||null, person_company||null, linkedin_profile_url||null]);
+      pid = nr.insertId;
+    }
+  }
+  try {
+    const [r] = await db.query(
+      `INSERT INTO linkedin_voices
+       (profile_id,person_name,person_initials,avatar_color,person_title,person_company,
+        linkedin_profile_url,topic_tag,topic_tag_style,post_text,post_url,likes_count,comments_count,post_date)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [pid, person_name, (person_initials||'').toUpperCase().substring(0,4),
+       avatar_color||'li-av-green', person_title||null, person_company||null,
+       linkedin_profile_url||null, topic_tag||null, topic_tag_style||null,
+       post_text, post_url||null, likes_count||0, comments_count||0, post_date||null]);
+    res.json({ id: r.insertId, profile_id: pid });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.put('/api/admin/voices/:id', requireAdmin, express.json(), async (req, res) => {
+  const { topic_tag, topic_tag_style, post_text, post_url, likes_count, comments_count, post_date, is_active } = req.body;
+  try {
+    await db.query(
+      `UPDATE linkedin_voices SET topic_tag=?,topic_tag_style=?,post_text=?,post_url=?,
+       likes_count=?,comments_count=?,post_date=?,is_active=? WHERE id=?`,
+      [topic_tag||null, topic_tag_style||null, post_text, post_url||null,
+       likes_count||0, comments_count||0, post_date||null, is_active??1, req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.delete('/api/admin/voices/:id', requireAdmin, async (req, res) => {
+  try {
+    await db.query(`DELETE FROM linkedin_voices WHERE id=?`, [req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// Admin 페이지 서빙
+app.get('/admin', (req, res) => {
+  if (req.query.key !== ADMIN_KEY) return res.send(`<!DOCTYPE html><html><body style="font-family:sans-serif;padding:60px;text-align:center"><h2>Access Denied</h2><p>Add <code>?key=YOUR_KEY</code> to the URL.</p></body></html>`);
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 app.listen(PORT, () => console.log(`EdTech HUB running on port ${PORT}`));
