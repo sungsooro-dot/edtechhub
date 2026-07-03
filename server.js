@@ -1,4 +1,81 @@
 const express      = require('express');
+
+function toEmbedSrc(input) {
+  if (!input) return '';
+  input = input.trim();
+  // Full iframe HTML -> extract src
+  const m = input.match(/src=["']([^"']+)["']/);
+  if (m && m[1].includes('linkedin')) return m[1];
+  // Already embed URL
+  if (input.includes('linkedin.com/embed/')) return input;
+  // Regular post URL
+  const act = input.match(/[-_]activity[-_](\d{15,})/);
+  if (act) return 'https://www.linkedin.com/embed/feed/update/urn:li:activity:' + act[1] + '?collapsed=1';
+  const ugc = input.match(/ugcPost[:\-](\d{15,})/);
+  if (ugc) return 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:' + ugc[1] + '?collapsed=1';
+  return input;
+}
+// Fetch Open Graph data from a LinkedIn post URL (Slack-style unfurl, follows redirects)
+const https = require('https');
+function parseOG(data, fallbackUrl) {
+  const get = (prop) => {
+    const m = data.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`))
+           || data.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`));
+    return m ? m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'") : '';
+  };
+  const ogTitle    = get('og:title');
+  const ogImage    = get('og:image');
+  const ogUrl      = get('og:url') || fallbackUrl;
+  const parts      = ogTitle.split(' | ');
+  const authorName = parts.length > 1 ? parts[1] : parts[0];
+  return { post_url: ogUrl, og_title: ogTitle, og_image: ogImage, author_name: authorName };
+}
+
+function fetchWithRedirect(url, maxRedirects = 5) {
+  return new Promise((resolve) => {
+    const req = https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Slackbot 1.0; +https://api.slack.com/robots)',
+        'Accept': 'text/html,application/xhtml+xml'
+      }
+    }, (res) => {
+      // Follow redirects
+      if ([301,302,303,307,308].includes(res.statusCode) && res.headers.location && maxRedirects > 0) {
+        res.resume();
+        const next = res.headers.location.startsWith('http')
+          ? res.headers.location
+          : 'https://www.linkedin.com' + res.headers.location;
+        resolve(fetchWithRedirect(next, maxRedirects - 1));
+        return;
+      }
+      if (res.statusCode === 429) { res.resume(); resolve({ post_url: url, _status: 429 }); return; }
+      if (res.statusCode >= 400)  { res.resume(); resolve({ post_url: url, _status: res.statusCode }); return; }
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve(parseOG(data, url)));
+    });
+    req.on('error', () => resolve({ post_url: url }));
+    req.setTimeout(10000, () => { req.destroy(); resolve({ post_url: url }); });
+  });
+}
+
+function fetchLinkedInOG(input) {
+  input = input.trim();
+  // iframe HTML → extract src
+  const iframeSrc = input.match(/src=["']([^"']*linkedin[^"']*)["']/);
+  if (iframeSrc) input = iframeSrc[1];
+  // Post URL (contains /posts/ or /feed/) → use directly (strip UTM)
+  if (input.includes('linkedin.com/posts/') || input.includes('linkedin.com/feed/update/')) {
+    const clean = input.replace(/[?#].*$/, '/');
+    return fetchWithRedirect(clean);
+  }
+  // Embed URL → convert to feed URL for OG fetch
+  const postUrl = input
+    .replace('/embed/feed/update/', '/feed/update/')
+    .replace(/[?#].*$/, '/');
+  return fetchWithRedirect(postUrl);
+}
+
 const path         = require('path');
 const { parse }    = require('node-html-parser');
 const mysql        = require('mysql2/promise');
@@ -221,8 +298,13 @@ app.get('/api/db/news/top', async (req, res) => {
 });
 
 const NEWS_IMG_CASE = `CASE
-  WHEN n.thumbnail_img_path LIKE 'http%' THEN n.thumbnail_img_path
+  WHEN n.thumbnail_img_path LIKE 'http%'
+    AND n.thumbnail_img_path NOT LIKE '%px.ads.linkedin.com%'
+    AND n.thumbnail_img_path NOT LIKE '%linkedin.com/collect%'
+    AND n.thumbnail_img_path NOT LIKE '%fmt=gif%'
+    THEN n.thumbnail_img_path
   WHEN n.thumbnail_img_path IS NOT NULL AND n.thumbnail_img_path != ''
+    AND n.thumbnail_img_path NOT LIKE 'http%'
     THEN CONCAT('https://edtechhub.com', n.thumbnail_img_path)
   ELSE NULL END AS image`;
 
@@ -347,6 +429,22 @@ function applyDateFilter(rows) {
 }
 
 // ── DB: LinkedIn Voices (랜덤 N개) ───────────────────────
+app.get('/api/db/voices/pinned', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT * FROM linkedin_voices WHERE is_active=1 AND is_pinned=1 ORDER BY id ASC LIMIT 3`);
+    if (rows.length < 3) {
+      const ids = rows.map(r => r.id);
+      const need = 3 - rows.length;
+      const [extra] = ids.length
+        ? await db.query(`SELECT * FROM linkedin_voices WHERE is_active=1 AND id NOT IN (?) ORDER BY id ASC LIMIT ?`, [ids, need])
+        : await db.query(`SELECT * FROM linkedin_voices WHERE is_active=1 ORDER BY id ASC LIMIT ?`, [need]);
+      rows.push(...extra);
+    }
+    res.json({ voices: rows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
 app.get('/api/db/voices', async (req, res) => {
   const limit = Math.min(12, parseInt(req.query.limit) || 3);
   try {
@@ -608,9 +706,21 @@ app.get('/api/img', async (req, res) => {
 });
 
 // ── Admin 인증 미들웨어 ──────────────────────────────────
+const ADMIN_USERS = [
+  { email: 'sungsoo@dohegroup.com', password: '1234' },
+];
 const ADMIN_KEY = 'edtech2024admin';
+
 function requireAdmin(req, res, next) {
-  if (req.query.key === ADMIN_KEY || req.headers['x-admin-key'] === ADMIN_KEY) return next();
+  const key = req.query.key || req.headers['x-admin-key'] || '';
+  if (key === ADMIN_KEY) return next();
+  // email:password base64 token
+  try {
+    const decoded = Buffer.from(key, 'base64').toString('utf8');
+    const [email, ...rest] = decoded.split(':');
+    const password = rest.join(':');
+    if (ADMIN_USERS.some(u => u.email === email && u.password === password)) return next();
+  } catch (_) {}
   res.status(401).json({ error: 'Unauthorized' });
 }
 
@@ -699,13 +809,17 @@ app.post('/api/admin/voices', requireAdmin, express.json(), async (req, res) => 
 });
 
 app.put('/api/admin/voices/:id', requireAdmin, express.json(), async (req, res) => {
-  const { topic_tag, topic_tag_style, post_text, post_url, likes_count, comments_count, post_date, is_active } = req.body;
+  const { topic_tag, topic_tag_style, post_text, post_url, likes_count, comments_count, post_date, is_active, is_pinned } = req.body;
   try {
+    if (is_pinned === true || is_pinned === 1) {
+      const [[cnt]] = await db.query(`SELECT COUNT(*) AS n FROM linkedin_voices WHERE is_pinned=1 AND id != ?`, [req.params.id]);
+      if (cnt.n >= 3) return res.status(400).json({ error: '최대 3개까지만 고정할 수 있습니다.' });
+    }
     await db.query(
       `UPDATE linkedin_voices SET topic_tag=?,topic_tag_style=?,post_text=?,post_url=?,
-       likes_count=?,comments_count=?,post_date=?,is_active=? WHERE id=?`,
+       likes_count=?,comments_count=?,post_date=?,is_active=?,is_pinned=? WHERE id=?`,
       [topic_tag||null, topic_tag_style||null, post_text, post_url||null,
-       likes_count||0, comments_count||0, post_date||null, is_active??1, req.params.id]);
+       likes_count||0, comments_count||0, post_date||null, is_active??1, is_pinned??0, req.params.id]);
     res.json({ ok: true });
   } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
 });
@@ -717,9 +831,209 @@ app.delete('/api/admin/voices/:id', requireAdmin, async (req, res) => {
   } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
 });
 
-// Admin 페이지 서빙
+
+// ── LinkedIn Embeds (public) ──────────────────────────────
+app.get('/api/db/embeds', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT id, embed_src, post_url, og_title, og_image, excerpt, author_name, display_order FROM linkedin_embeds WHERE is_active=1 ORDER BY display_order ASC`
+    );
+    res.json({ embeds: rows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: LinkedIn Embeds CRUD ──────────────────────────
+app.get('/api/admin/embeds', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT id, embed_src, post_url, og_title, og_image, excerpt, author_name, display_order, is_active FROM linkedin_embeds ORDER BY display_order ASC`
+    );
+    res.json({ embeds: rows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/fetch-og', requireAdmin, express.json(), async (req, res) => {
+  try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: 'url required' });
+    const og = await fetchLinkedInOG(url);
+    if (og._status === 429) return res.status(429).json({ error: 'rate_limited' });
+    if (!og.og_title)       return res.status(422).json({ error: 'Could not fetch OG data' });
+    res.json(og);
+  } catch(e) { res.status(500).json({ error: 'fetch failed' }); }
+});
+
+app.post('/api/admin/embeds', requireAdmin, express.json(), async (req, res) => {
+  try {
+    const { embed_src, display_order = 0, og_title, og_image, author_name, excerpt, post_url } = req.body;
+    if (!embed_src) return res.status(400).json({ error: 'embed_src required' });
+    const src = toEmbedSrc(embed_src);
+    const [r] = await db.query(
+      `INSERT INTO linkedin_embeds (embed_src, post_url, og_title, og_image, author_name, excerpt, display_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+      [src, post_url||null, og_title||null, og_image||null, author_name||null, excerpt||null, display_order]
+    );
+    // If OG wasn't provided, auto-fetch in background
+    if (!og_title) {
+      fetchLinkedInOG(src).then(og => {
+        if (og.og_title) {
+          db.query(
+            `UPDATE linkedin_embeds SET post_url=?, og_title=?, og_image=?, author_name=? WHERE id=?`,
+            [og.post_url, og.og_title, og.og_image, og.author_name, r.insertId]
+          ).catch(console.error);
+        }
+      }).catch(console.error);
+    }
+    res.json({ id: r.insertId });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.put('/api/admin/embeds/:id', requireAdmin, express.json(), async (req, res) => {
+  try {
+    const { embed_src, display_order, is_active, og_title, og_image, author_name, post_url, excerpt } = req.body;
+    const fields = [];
+    const vals = [];
+    if (embed_src    !== undefined) { fields.push('embed_src=?');    vals.push(embed_src.trim()); }
+    if (display_order!== undefined) { fields.push('display_order=?');vals.push(display_order); }
+    if (is_active    !== undefined) { fields.push('is_active=?');    vals.push(is_active); }
+    if (og_title     !== undefined) { fields.push('og_title=?');     vals.push(og_title||null); }
+    if (og_image     !== undefined) { fields.push('og_image=?');     vals.push(og_image||null); }
+    if (author_name  !== undefined) { fields.push('author_name=?');  vals.push(author_name||null); }
+    if (post_url     !== undefined) { fields.push('post_url=?');     vals.push(post_url||null); }
+    if (excerpt      !== undefined) { fields.push('excerpt=?');      vals.push(excerpt||null); }
+    if (!fields.length) return res.status(400).json({ error: 'nothing to update' });
+    vals.push(req.params.id);
+    await db.query(`UPDATE linkedin_embeds SET ${fields.join(',')} WHERE id=?`, vals);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.delete('/api/admin/embeds/:id', requireAdmin, async (req, res) => {
+  try {
+    await db.query(`DELETE FROM linkedin_embeds WHERE id=?`, [req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: Events CRUD ──────────────────────────────────
+app.get('/api/admin/events', requireAdmin, async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT e.id, e.title, e.url, e.event_start_dt, e.event_end_dt,
+             e.city_name AS city, ec.country_name AS country, e.country_id,
+             e.latitude, e.longitude, e.price
+      FROM event e
+      LEFT JOIN event_country ec ON ec.id = e.country_id
+      WHERE e.del_flag = 'N'
+      ORDER BY e.event_start_dt IS NULL ASC, e.event_start_dt ASC, e.id DESC
+    `);
+    const [countries] = await db.query(`SELECT id, country_name FROM event_country ORDER BY country_name`);
+    res.json({ events: rows, countries });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/events', requireAdmin, express.json(), async (req, res) => {
+  const { title, url, event_start_dt, event_end_dt, city, country_id, price, is_online } = req.body;
+  if (!title) return res.status(400).json({ error: 'title required' });
+  try {
+    const cityVal = is_online ? 'Online' : (city || null);
+    const cid     = is_online ? null : (country_id || null);
+    const lat     = (!is_online && !city) ? null : null;
+    const [r] = await db.query(
+      `INSERT INTO event (title, url, event_start_dt, event_end_dt, city_name, country_id, price, event_type, del_flag)
+       VALUES (?, ?, ?, ?, ?, ?, ?, '1', 'N')`,
+      [title, url || null, event_start_dt || null, event_end_dt || null, cityVal, cid, price || null]
+    );
+    res.json({ ok: true, id: r.insertId });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.put('/api/admin/events/:id', requireAdmin, express.json(), async (req, res) => {
+  const { title, url, event_start_dt, event_end_dt, city, country_id, price, is_online } = req.body;
+  try {
+    const cityVal = is_online ? 'Online' : (city || null);
+    const cid     = is_online ? null : (country_id || null);
+    await db.query(
+      `UPDATE event SET title=?, url=?, event_start_dt=?, event_end_dt=?,
+       city_name=?, country_id=?, price=? WHERE id=?`,
+      [title || null, url || null, event_start_dt || null, event_end_dt || null,
+       cityVal, cid, price || null, req.params.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.delete('/api/admin/events/:id', requireAdmin, async (req, res) => {
+  try {
+    await db.query(`UPDATE event SET del_flag='Y' WHERE id=?`, [req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: News CRUD ─────────────────────────────────────
+app.get('/api/admin/news', requireAdmin, async (req, res) => {
+  const page  = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(50, parseInt(req.query.limit) || 20);
+  const q     = (req.query.q || '').trim();
+  const offset = (page - 1) * limit;
+  try {
+    const conds  = ['del_flag = "N"'];
+    const params = [];
+    if (q) { conds.push('(title LIKE ? OR publisher LIKE ?)'); params.push(`%${q}%`, `%${q}%`); }
+    const where = conds.join(' AND ');
+    const [rows] = await db.query(
+      `SELECT id, title, publisher, url, category_id, thumbnail_img_path AS image, publish_dt
+       FROM news WHERE ${where} ORDER BY publish_dt DESC LIMIT ? OFFSET ?`,
+      [...params, limit, offset]);
+    const [[cnt]] = await db.query(`SELECT COUNT(*) AS total FROM news WHERE ${where}`, params);
+    res.json({ news: rows, total: cnt.total, page, limit, pages: Math.ceil(cnt.total / limit) });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/news', requireAdmin, express.json(), async (req, res) => {
+  const { title, publisher, url, category_id, image, publish_dt } = req.body;
+  if (!title || !url) return res.status(400).json({ error: 'title + url required' });
+  try {
+    const [r] = await db.query(
+      `INSERT INTO news (title, publisher, url, category_id, thumbnail_img_path, publish_dt, del_flag)
+       VALUES (?, ?, ?, ?, ?, ?, 'N')`,
+      [title, publisher || null, url, category_id || null, image || null,
+       publish_dt || new Date().toISOString().slice(0,19).replace('T',' ')]
+    );
+    res.json({ ok: true, id: r.insertId });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.put('/api/admin/news/:id', requireAdmin, express.json(), async (req, res) => {
+  const { title, publisher, url, category_id, image, publish_dt } = req.body;
+  try {
+    await db.query(
+      `UPDATE news SET title=?, publisher=?, url=?, category_id=?, thumbnail_img_path=?, publish_dt=? WHERE id=?`,
+      [title, publisher || null, url, category_id || null, image || null, publish_dt || null, req.params.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.delete('/api/admin/news/:id', requireAdmin, async (req, res) => {
+  try {
+    await db.query(`UPDATE news SET del_flag='Y' WHERE id=?`, [req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.get('/admin/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin-login.html'));
+});
+
+app.get('/admin/logout', (req, res) => {
+  res.send(`<!DOCTYPE html><html><head><script>sessionStorage.removeItem('adminKey');location.href='/admin/login';<\/script></head></html>`);
+});
+
+app.get('/admin/content', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin-content.html'));
+});
+
 app.get('/admin', (req, res) => {
-  if (req.query.key !== ADMIN_KEY) return res.send(`<!DOCTYPE html><html><body style="font-family:sans-serif;padding:60px;text-align:center"><h2>Access Denied</h2><p>Add <code>?key=YOUR_KEY</code> to the URL.</p></body></html>`);
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 

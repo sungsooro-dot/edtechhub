@@ -113,6 +113,11 @@
     <span class="topbar-tag">Admin</span>
   </div>
   <span style="font-size:12px;color:#6B7280;">LinkedIn Voices Manager</span>
+  <div style="display:flex;align-items:center;gap:12px;margin-left:auto">
+    <a href="/admin/content" style="font-size:12px;color:#6B7280;text-decoration:none;font-weight:500" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">📋 News &amp; Events</a>
+    <a href="/" target="_blank" style="font-size:12px;color:#6B7280;text-decoration:none;font-weight:500" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6B7280'">🌐 View Website ↗</a>
+    <a href="/admin/logout" style="font-size:12px;color:#6B7280;text-decoration:none;font-weight:500" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#6B7280'">🔓 Logout</a>
+  </div>
 </div>
 
 <div class="container">
@@ -283,7 +288,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const KEY = new URLSearchParams(location.search).get('key') || '';
+  const KEY = sessionStorage.getItem('adminKey') || new URLSearchParams(location.search).get('key') || '';
+  if (!KEY) { location.href = '/admin/login'; }
   const H   = { 'x-admin-key': KEY, 'Content-Type': 'application/json' };
 
   let profiles = [];
@@ -398,6 +404,7 @@
     const r = await fetch('/api/admin/voices', { headers: H });
     const d = await r.json();
     const items = d.voices || [];
+    window._voices = items;
     const el = document.getElementById('voices-list');
     if (!items.length) { el.innerHTML = '<div class="empty">No posts yet.</div>'; return; }
     el.innerHTML = items.map(v => {
@@ -411,6 +418,7 @@
           </div>
           ${v.topic_tag ? `<span class="tag-badge" style="${escH(v.topic_tag_style||'background:#e5e7eb;color:#374151')}">${escH(v.topic_tag)}</span>` : ''}
           <span style="font-size:11px;color:var(--text-3);margin-left:8px">${v.is_active?'✓ Active':'✗ Hidden'}</span>
+          ${v.is_pinned ? `<span style="font-size:11px;font-weight:700;color:#D97706;margin-left:6px;background:#FEF3C7;padding:2px 7px;border-radius:4px">📌 홈 고정</span>` : ''}
           <span style="font-size:18px;color:var(--text-3);margin-left:8px;transition:transform .15s" id="chevron-${v.id}">▾</span>
         </div>
         <div class="voice-item-body" id="vbody-${v.id}">
@@ -424,6 +432,9 @@
           <div class="voice-actions">
             <button class="btn btn-ghost btn-sm" onclick="editPost(${v.id})">Edit</button>
             <button class="btn btn-ghost btn-sm" onclick="toggleVoice(${v.id},${v.is_active})">${v.is_active?'Hide':'Show'}</button>
+            <button class="btn ${v.is_pinned?'btn-warning':'btn-ghost'} btn-sm" onclick="togglePin(${v.id},${v.is_pinned||0})" style="${v.is_pinned?'background:#FEF3C7;color:#D97706;border:1px solid #FDE68A':''}">
+              ${v.is_pinned?'📌 고정 해제':'📌 홈 고정'}
+            </button>
             <button class="btn btn-danger btn-sm" onclick="deleteVoice(${v.id})">Delete</button>
           </div>
         </div>
@@ -528,10 +539,22 @@
   }
 
   async function toggleVoice(id, current) {
+    const v = (window._voices||[]).find(x=>x.id===id) || {};
     await fetch(`/api/admin/voices/${id}`, { method:'PUT', headers:H,
-      body: JSON.stringify({ is_active: current ? 0 : 1,
-        topic_tag:'', topic_tag_style:'', post_text:'', post_url:'', likes_count:0, comments_count:0 }) });
+      body: JSON.stringify({ is_active: current ? 0 : 1, is_pinned: v.is_pinned||0,
+        topic_tag: v.topic_tag||'', topic_tag_style: v.topic_tag_style||'',
+        post_text: v.post_text||' ', post_url: v.post_url||'', likes_count: v.likes_count||0, comments_count: v.comments_count||0 }) });
     toast(current ? 'Post hidden' : 'Post shown'); loadVoices();
+  }
+
+  async function togglePin(id, current) {
+    const r = await fetch(`/api/admin/voices/${id}`, { method:'PUT', headers:H,
+      body: JSON.stringify({ is_pinned: current ? 0 : 1,
+        topic_tag:'', topic_tag_style:'', post_text:' ', post_url:'', likes_count:0, comments_count:0 }) });
+    const d = await r.json();
+    if (d.error) { toast(d.error, 'error'); return; }
+    toast(current ? '고정 해제됐습니다' : '홈페이지에 고정됐습니다 📌');
+    loadVoices();
   }
 
   async function deleteVoice(id) {

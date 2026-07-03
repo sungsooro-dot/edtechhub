@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Content Admin — EdTech HUB</title>
+<style>
+  :root {
+    --accent:#16A34A; --accent-h:#15803D; --accent-muted:#F0FDF4;
+    --text-1:#111827; --text-2:#6B7280; --text-3:#9CA3AF;
+    --border:#E5E7EB; --bg:#F8FAFC; --card:#fff;
+    --danger:#EF4444; --warn:#F59E0B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-1);font-size:14px}
+
+  .layout{display:flex;min-height:100vh}
+  .sidebar{width:220px;background:#111827;flex-shrink:0;display:flex;flex-direction:column;padding:24px 0;justify-content:space-between}
+  .sidebar-logo{padding:0 20px 24px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:10px}
+  .sidebar-logo img{height:30px}
+  .sidebar-logo span{color:#fff;font-weight:700;font-size:15px}
+  .sidebar-nav{padding:16px 0}
+  .sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#9CA3AF;text-decoration:none;font-size:13px;font-weight:500;transition:background .15s,color .15s}
+  .sidebar-nav a:hover{background:#1F2937;color:#fff}
+  .sidebar-nav a.active{background:#1F2937;color:#fff;border-left:3px solid var(--accent);padding-left:17px}
+  .sidebar-section{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#4B5563;letter-spacing:1px;text-transform:uppercase}
+
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .topbar h1{font-size:16px;font-weight:700}
+  .content{padding:24px 28px;flex:1}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0}
+  .tab{padding:10px 20px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s}
+  .tab:hover{color:var(--text-1)}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  /* Stats */
+  .stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  .stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;min-width:120px}
+  .stat-card .n{font-size:22px;font-weight:800}
+  .stat-card .l{font-size:11px;color:var(--text-2);margin-top:2px}
+
+  /* Toolbar */
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:340px}
+  .search-box input{border:none;outline:none;font-size:13px;background:transparent;width:100%;color:var(--text-1)}
+  .btn{border:none;border-radius:7px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-h)}
+  .btn-sm{padding:5px 10px;font-size:12px;border-radius:5px}
+  .btn-danger{background:#FEE2E2;color:var(--danger)}
+  .btn-danger:hover{background:#FECACA}
+  .btn-ghost{background:#F3F4F6;color:var(--text-1)}
+  .btn-ghost:hover{background:var(--border)}
+
+  /* Table */
+  .table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  thead th{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;padding:11px 14px;text-align:left;background:#F9FAFB;border-bottom:1px solid var(--border);white-space:nowrap}
+  tbody tr{border-bottom:1px solid #F3F4F6;transition:background .1s}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:#FAFAFA}
+  td{padding:10px 14px;vertical-align:middle}
+  .col-title{max-width:300px}
+  .col-title .t{font-size:13px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .col-title a.ext{color:var(--accent);font-size:11px;text-decoration:none;display:inline-block;margin-top:3px}
+  .col-title a.ext:hover{text-decoration:underline}
+  .id-chip{font-size:10px;font-weight:700;color:var(--text-3);background:#F3F4F6;border-radius:4px;padding:1px 5px;margin-right:4px}
+
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+  .badge-online{background:#EFF6FF;color:#3B82F6}
+  .badge-inperson{background:#F0FDF4;color:var(--accent)}
+  .badge-nodate{background:#FEF3C7;color:#D97706}
+  .badge-innovation{background:#F0FDF4;color:#16A34A}
+  .badge-funding{background:#FFF7ED;color:#EA580C}
+  .badge-research{background:#EFF6FF;color:#2563EB}
+  .badge-government{background:#F5F3FF;color:#7C3AED}
+  .badge-business{background:#FFF1F2;color:#BE123C}
+
+  .thumb{width:48px;height:36px;object-fit:cover;border-radius:4px;background:#F3F4F6;display:block}
+  .thumb-placeholder{width:48px;height:36px;border-radius:4px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:18px}
+
+  /* Pagination */
+  .pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px}
+  .pag-btn{background:#fff;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:13px;cursor:pointer;font-family:inherit;transition:background .15s}
+  .pag-btn:hover:not(:disabled){background:#F3F4F6}
+  .pag-btn:disabled{opacity:.4;cursor:not-allowed}
+  .pag-info{font-size:13px;color:var(--text-2)}
+
+  /* Modal */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:center;justify-content:center}
+  .modal-bg.open{display:flex}
+  .modal{background:#fff;border-radius:14px;width:560px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal-head{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:#fff;z-index:1;border-bottom:1px solid var(--border);padding-bottom:14px}
+  .modal-head h2{font-size:16px;font-weight:700}
+  .modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-2);line-height:1}
+  .modal-body{padding:20px 24px}
+  .modal-foot{padding:14px 24px 20px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);position:sticky;bottom:0;background:#fff}
+
+  .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+  .form-group label{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px}
+  .form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;font-family:inherit;color:var(--text-1);outline:none;transition:border-color .15s;width:100%}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+  .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-full{grid-column:1/-1}
+
+  .online-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#EFF6FF;border-radius:8px;margin-bottom:14px}
+  .online-row label{font-size:13px;font-weight:600;color:#1D4ED8;cursor:pointer;flex:1}
+  .toggle{position:relative;width:36px;height:20px;cursor:pointer;flex-shrink:0}
+  .toggle input{opacity:0;width:0;height:0;position:absolute}
+  .toggle-track{position:absolute;inset:0;background:#D1D5DB;border-radius:20px;transition:background .2s}
+  .toggle input:checked + .toggle-track{background:var(--accent)}
+  .toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
+  .toggle input:checked ~ .toggle-thumb{transform:translateX(16px)}
+
+  .toast{position:fixed;bottom:24px;right:24px;background:#111827;color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .empty-state{text-align:center;padding:48px 24px;color:var(--text-3);font-size:13px}
+
+  @media(max-width:860px){
+    .sidebar{display:none}
+    .content{padding:16px}
+    .topbar{padding:0 16px}
+    .form-grid-2{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/logo.png" alt="logo" onerror="this.style.display='none'"/>
+      <span>Admin</span>
+    </div>
+    <div style="padding:10px 12px;border-bottom:1px solid #374151">
+      <a href="/" target="_blank" style="display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:12px;font-weight:500;padding:7px 8px;border-radius:6px;transition:background .15s,color .15s" onmouseover="this.style.background='#1F2937';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='#9CA3AF'">
+        🌐 <span>View Website</span> <span style="font-size:10px;opacity:.6;margin-left:auto">↗</span>
+      </a>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Content</div>
+      <a href="/admin/content" class="active">📋 News &amp; Events</a>
+      <div class="sidebar-section">Community</div>
+      <a href="/admin">🗣 Voices</a>
+    </nav>
+    <div style="padding:12px 20px;border-top:1px solid #374151">
+      <a href="/admin/logout" style="display:flex;align-items:center;gap:8px;color:#6B7280;text-decoration:none;font-size:12px;font-weight:500" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#6B7280'">
+        🔓 Logout
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">News &amp; Events</h1>
+      <div>
+        <button class="btn btn-primary btn-sm" id="add-btn" onclick="openAddModal()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('events')">📅 Events</div>
+        <div class="tab" onclick="switchTab('news')">📰 News</div>
+        <div class="tab" onclick="switchTab('embeds')">🔗 LinkedIn Embeds</div>
+      </div>
+
+      <!-- ───── EVENTS TAB ───── -->
+      <div class="tab-panel active" id="panel-events">
+        <div class="stats" id="ev-stats">
+          <div class="stat-card"><div class="n" id="ev-s-total">—</div><div class="l">Total</div></div>
+          <div class="stat-card"><div class="n" id="ev-s-nodate" style="color:var(--warn)">—</div><div class="l">Missing Date</div></div>
+          <div class="stat-card"><div class="n" id="ev-s-online" style="color:#3B82F6">—</div><div class="l">Online</div></div>
+          <div class="stat-card"><div class="n" id="ev-s-inperson" style="color:var(--accent)">—</div><div class="l">In-Person</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="ev-search" type="text" placeholder="Search events…" oninput="renderEvents()"/>
+          </div>
+          <select id="ev-filter" class="btn btn-ghost" style="font-weight:500" onchange="renderEvents()">
+            <option value="">All Types</option>
+            <option value="online">Online</option>
+            <option value="inperson">In-Person</option>
+            <option value="nodate">Missing Date</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Event</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th style="width:80px"></th>
+            </tr></thead>
+            <tbody id="ev-tbody"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ───── NEWS TAB ───── -->
+      <div class="tab-panel" id="panel-news">
+        <div class="stats" id="nw-stats">
+          <div class="stat-card"><div class="n" id="nw-s-total">—</div><div class="l">Total Articles</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="nw-search" type="text" placeholder="Search news, publisher…" oninput="nwSearchDelay()"/>
+          </div>
+          <select id="nw-cat" class="btn btn-ghost" style="font-weight:500" onchange="loadNews(1)">
+            <option value="">All Categories</option>
+            <option value="9">Innovation</option>
+            <option value="3">Funding</option>
+            <option value="4">Research</option>
+            <option value="10">Government</option>
+            <option value="2">Business</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:52px">Img</th>
+              <th>Article</th>
+              <th>Publisher</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th style="width:80px"></th>
+            </tr></thead>
+            <tbody id="nw-tbody"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
+          </table>
+          <div class="pagination" id="nw-pagination" style="display:none">
+            <button class="pag-btn" id="nw-prev" onclick="loadNews(nwPage-1)">← Prev</button>
+            <span class="pag-info" id="nw-pag-info"></span>
+            <button class="pag-btn" id="nw-next" onclick="loadNews(nwPage+1)">Next →</button>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- ───── LINKEDIN EMBEDS TAB ───── -->
+      <div class="tab-panel" id="panel-embeds">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:60px">Order</th>
+              <th>LinkedIn Embed URL</th>
+              <th style="width:80px">Active</th>
+              <th style="width:100px">Actions</th>
+            </tr></thead>
+            <tbody id="embeds-tbody"><tr><td colspan="4" style="padding:20px;text-align:center;color:#9CA3AF">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── EVENT MODAL ───── -->
+<div class="modal-bg" id="ev-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="ev-modal-title">Add Event</h2>
+      <button class="modal-close" onclick="closeEvModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ev-m-id"/>
+      <div class="online-row">
+        <label for="ev-m-online">🌐 Online / Virtual Event</label>
+        <label class="toggle">
+          <input type="checkbox" id="ev-m-online" onchange="evToggleOnline()"/>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>Title *</label>
+        <textarea id="ev-m-title" rows="2" style="resize:vertical"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Event URL</label>
+        <input type="url" id="ev-m-url" placeholder="https://…"/>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Start Date &amp; Time</label>
+          <input type="datetime-local" id="ev-m-start"/>
+        </div>
+        <div class="form-group">
+          <label>End Date &amp; Time</label>
+          <input type="datetime-local" id="ev-m-end"/>
+        </div>
+        <div class="form-group" id="ev-city-grp">
+          <label>City</label>
+          <input type="text" id="ev-m-city" placeholder="e.g. London"/>
+        </div>
+        <div class="form-group" id="ev-country-grp">
+          <label>Country</label>
+          <select id="ev-m-country">
+            <option value="">— Select —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <input type="text" id="ev-m-price" placeholder="Free / £25 / TBD"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeEvModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───── NEWS MODAL ───── -->
+<div class="modal-bg" id="nw-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="nw-modal-title">Add News Article</h2>
+      <button class="modal-close" onclick="closeNwModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="nw-m-id"/>
+      <div class="form-group">
+        <label>Title *</label>
+        <textarea id="nw-m-title" rows="2" style="resize:vertical"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Article URL *</label>
+        <input type="url" id="nw-m-url" placeholder="https://…"/>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label>Publisher</label>
+          <input type="text" id="nw-m-publisher" placeholder="e.g. BBC, TechCrunch"/>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="nw-m-cat">
+            <option value="">— Select —</option>
+            <option value="9">Innovation</option>
+            <option value="3">Funding</option>
+            <option value="4">Research</option>
+            <option value="10">Government</option>
+            <option value="2">Business</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Publish Date</label>
+          <input type="date" id="nw-m-date"/>
+        </div>
+        <div class="form-group form-full">
+          <label>Thumbnail Image URL</label>
+          <input type="url" id="nw-m-img" placeholder="https://…" oninput="previewImg()"/>
+          <img id="nw-img-preview" src="" style="display:none;margin-top:8px;max-height:80px;border-radius:6px;object-fit:cover"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeNwModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNews()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Embed Modal -->
+<div class="modal-bg" id="embedModal" onclick="if(event.target===this)closeEmbedModal()">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-head">
+      <h3 id="embed-modal-title">LinkedIn 포스트 추가</h3>
+      <button class="modal-close" onclick="closeEmbedModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="emb-post-url">
+      <!-- URL Input -->
+      <div class="form-row">
+        <label class="form-label" style="margin-bottom:8px">LINKEDIN POST URL</label>
+        <textarea id="emb-src" rows="2" style="width:100%;padding:12px;border:1px solid #D1D5DB;border-radius:8px;font-size:14px;resize:none;box-sizing:border-box;font-family:inherit" placeholder="https://www.linkedin.com/posts/..."></textarea>
+      </div>
+      <button class="btn btn-ghost" id="emb-fetch-btn" style="width:100%;margin-top:10px;padding:10px" onclick="fetchEmbedOG()">
+        자동으로 정보 가져오기
+      </button>
+      <!-- Status message -->
+      <div id="emb-status" style="display:none;margin-top:8px;padding:10px 14px;border-radius:8px;font-size:13px"></div>
+      <!-- Info fields (manual fallback) -->
+      <div id="emb-fields" style="display:none;margin-top:16px;border-top:1px solid #F3F4F6;padding-top:16px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#9CA3AF;margin-bottom:14px">포스트 정보 (자동 입력 / 수동 수정 가능)</div>
+        <div class="form-row" style="margin-bottom:12px">
+          <label class="form-label" style="margin-bottom:6px">저자명</label>
+          <input id="emb-author" type="text" class="form-inp" placeholder="예: Sungsoo Ro">
+        </div>
+        <div class="form-row" style="margin-bottom:12px">
+          <label class="form-label" style="margin-bottom:6px">이미지 URL</label>
+          <input id="emb-image" type="text" class="form-inp" placeholder="https://media.licdn.com/...">
+          <div id="emb-img-preview" style="margin-top:8px;display:none">
+            <img id="emb-img-thumb" src="" style="max-height:120px;border-radius:8px;border:1px solid #E5E7EB;max-width:100%;object-fit:cover" onerror="this.style.display='none'">
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:12px">
+          <label class="form-label" style="margin-bottom:6px">태그 / 요약</label>
+          <input id="emb-title" type="text" class="form-inp" placeholder="예: #edtech #london #innovation">
+        </div>
+        <div class="form-row">
+          <label class="form-label" style="margin-bottom:6px">포스트 본문 (첫 1-2 문장)</label>
+          <textarea id="emb-excerpt" rows="3" style="width:100%;padding:12px;border:1px solid #D1D5DB;border-radius:8px;font-size:14px;resize:vertical;box-sizing:border-box;font-family:inherit" placeholder="예: Great to see familiar and new faces at our second EdTech Together Singapore..."></textarea>
+          <div style="font-size:11px;color:#9CA3AF;margin-top:4px">LinkedIn 포스트 본문 첫 줄 붙여넣기 — 카드에 표시됩니다</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeEmbedModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveEmbed()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY = sessionStorage.getItem('adminKey') || new URLSearchParams(location.search).get('key') || '';
+if (!KEY) { location.href = '/admin/login'; }
+const CAT_LABELS = {9:'Innovation',3:'Funding',4:'Research',10:'Government',2:'Business'};
+const CAT_CLS    = {9:'badge-innovation',3:'badge-funding',4:'badge-research',10:'badge-government',2:'badge-business'};
+
+let currentTab = 'events';
+let allEvents = [], evCountries = [];
+let nwPage = 1, nwTotal = 0, nwPages = 1;
+let nwSearchTimer = null;
+
+// ── Tabs ──────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', ['events','news','embeds'][i] === tab));
+  document.getElementById('panel-events').classList.toggle('active', tab === 'events');
+  document.getElementById('panel-news').classList.toggle('active', tab === 'news');
+  document.getElementById('panel-embeds').classList.toggle('active', tab === 'embeds');
+  document.getElementById('page-title').textContent = {'events':'Events','news':'News','embeds':'LinkedIn Embeds'}[tab] || tab;
+  if (tab === 'news' && nwTotal === 0) loadNews(1);
+  if (tab === 'embeds') loadEmbeds();
+}
+
+// ── EVENTS ────────────────────────────────────────────
+async function loadEvents() {
+  const r = await fetch(`/api/admin/events?key=${KEY}`);
+  if (r.status === 401) { document.body.innerHTML = '<div style="padding:60px;text-align:center"><h2>Access Denied</h2></div>'; return; }
+  const data = await r.json();
+  allEvents   = data.events  || [];
+  evCountries = data.countries || [];
+  const sel = document.getElementById('ev-m-country');
+  sel.innerHTML = '<option value="">— Select Country —</option>';
+  evCountries.forEach(c => sel.insertAdjacentHTML('beforeend', `<option value="${c.id}">${c.country_name}</option>`));
+  evUpdateStats();
+  renderEvents();
+}
+
+function evIsOnline(e) {
+  return /online|virtual|remote/i.test(e.city||'') || /online|virtual|remote/i.test(e.country||'');
+}
+
+function evUpdateStats() {
+  document.getElementById('ev-s-total').textContent   = allEvents.length;
+  document.getElementById('ev-s-nodate').textContent  = allEvents.filter(e=>!e.event_start_dt).length;
+  document.getElementById('ev-s-online').textContent  = allEvents.filter(evIsOnline).length;
+  document.getElementById('ev-s-inperson').textContent= allEvents.filter(e=>!evIsOnline(e)).length;
+}
+
+function renderEvents() {
+  const q  = document.getElementById('ev-search').value.toLowerCase();
+  const ft = document.getElementById('ev-filter').value;
+  const list = allEvents.filter(e => {
+    if (q && !`${e.title} ${e.city} ${e.country}`.toLowerCase().includes(q)) return false;
+    if (ft === 'online'   && !evIsOnline(e)) return false;
+    if (ft === 'inperson' &&  evIsOnline(e)) return false;
+    if (ft === 'nodate'   && e.event_start_dt) return false;
+    return true;
+  });
+  const tbody = document.getElementById('ev-tbody');
+  if (!list.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No events found</td></tr>`; return; }
+  tbody.innerHTML = list.map(e => {
+    const online = evIsOnline(e);
+    const dateStr = fmtDateUTC(e.event_start_dt);
+    const loc = online ? 'Online' : [e.city, e.country].filter(Boolean).join(', ') || '—';
+    return `<tr>
+      <td class="col-title">
+        <span class="id-chip">#${e.id}</span>
+        <span class="t">${esc(e.title||'')}</span>
+        ${e.url?`<a href="${esc(e.url)}" class="ext" target="_blank" rel="noopener">↗ View</a>`:''}
+      </td>
+      <td style="white-space:nowrap">${dateStr||'<span class="badge badge-nodate">No date</span>'}</td>
+      <td style="font-size:13px;color:var(--text-2)">${esc(loc)}</td>
+      <td>${online?'<span class="badge badge-online">🌐 Online</span>':'<span class="badge badge-inperson">📍 In-Person</span>'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm btn-ghost" onclick="openEvEdit(${e.id})">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteEvent(${e.id},this)">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function openAddModal() {
+  if (currentTab === 'embeds') { openEmbedModal(); return; }
+  if (currentTab === 'events') {
+    document.getElementById('ev-m-id').value=''; document.getElementById('ev-m-title').value='';
+    document.getElementById('ev-m-url').value=''; document.getElementById('ev-m-start').value='';
+    document.getElementById('ev-m-end').value=''; document.getElementById('ev-m-price').value='';
+    document.getElementById('ev-m-online').checked=false; document.getElementById('ev-m-city').value='';
+    document.getElementById('ev-m-country').value='';
+    document.getElementById('ev-modal-title').textContent='Add Event';
+    evToggleOnline();
+    document.getElementById('ev-modal').classList.add('open');
+  } else {
+    document.getElementById('nw-m-id').value=''; document.getElementById('nw-m-title').value='';
+    document.getElementById('nw-m-url').value=''; document.getElementById('nw-m-publisher').value='';
+    document.getElementById('nw-m-cat').value=''; document.getElementById('nw-m-img').value='';
+    document.getElementById('nw-m-date').value=new Date().toISOString().slice(0,10);
+    document.getElementById('nw-img-preview').style.display='none';
+    document.getElementById('nw-modal-title').textContent='Add News Article';
+    document.getElementById('nw-modal').classList.add('open');
+  }
+}
+
+function openEvEdit(id) {
+  const e = allEvents.find(x=>x.id===id); if (!e) return;
+  document.getElementById('ev-m-id').value=e.id;
+  document.getElementById('ev-m-title').value=e.title||'';
+  document.getElementById('ev-m-url').value=e.url||'';
+  document.getElementById('ev-m-price').value=e.price||'';
+  const online = evIsOnline(e);
+  document.getElementById('ev-m-online').checked=online;
+  document.getElementById('ev-m-city').value=online?'':(e.city||'');
+  document.getElementById('ev-m-country').value=e.country_id||'';
+  document.getElementById('ev-m-start').value=toLocalInput(e.event_start_dt);
+  document.getElementById('ev-m-end').value=toLocalInput(e.event_end_dt);
+  document.getElementById('ev-modal-title').textContent=`Edit Event #${e.id}`;
+  evToggleOnline();
+  document.getElementById('ev-modal').classList.add('open');
+}
+
+function evToggleOnline() {
+  const on = document.getElementById('ev-m-online').checked;
+  ['ev-city-grp','ev-country-grp'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.opacity = on ? '.4' : '1';
+    el.querySelector('input,select').disabled = on;
+  });
+}
+
+function closeEvModal(){ document.getElementById('ev-modal').classList.remove('open'); }
+
+async function saveEvent() {
+  const id = document.getElementById('ev-m-id').value;
+  const online = document.getElementById('ev-m-online').checked;
+  const body = {
+    title: document.getElementById('ev-m-title').value.trim(),
+    url:   document.getElementById('ev-m-url').value.trim(),
+    event_start_dt: document.getElementById('ev-m-start').value||null,
+    event_end_dt:   document.getElementById('ev-m-end').value||null,
+    city:       online?'Online':document.getElementById('ev-m-city').value.trim(),
+    country_id: online?null:(document.getElementById('ev-m-country').value||null),
+    price:      document.getElementById('ev-m-price').value.trim()||null,
+    is_online:  online,
+  };
+  if (!body.title) { toast('Title is required',true); return; }
+  const url = id ? `/api/admin/events/${id}?key=${KEY}` : `/api/admin/events?key=${KEY}`;
+  const r = await fetch(url,{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d = await r.json();
+  if (!d.ok && !d.id) { toast('Failed: '+(d.error||'unknown'),true); return; }
+  toast('Saved!'); closeEvModal(); loadEvents();
+}
+
+async function deleteEvent(id, btn) {
+  if (!confirm('Remove this event?')) return;
+  btn.disabled=true;
+  const r = await fetch(`/api/admin/events/${id}?key=${KEY}`,{method:'DELETE'});
+  const d = await r.json();
+  if (d.ok) { toast('Removed'); allEvents=allEvents.filter(e=>e.id!==id); evUpdateStats(); renderEvents(); }
+  else { toast('Failed',true); btn.disabled=false; }
+}
+
+// ── NEWS ──────────────────────────────────────────────
+async function loadNews(page=1) {
+  nwPage = page;
+  const q   = document.getElementById('nw-search').value.trim();
+  const cat = document.getElementById('nw-cat').value;
+  let url = `/api/admin/news?key=${KEY}&page=${page}&limit=20`;
+  if (q)   url += `&q=${encodeURIComponent(q)}`;
+  if (cat) url += `&category=${cat}`;
+  const r = await fetch(url);
+  const data = await r.json();
+  nwTotal = data.total || 0; nwPages = data.pages || 1;
+  document.getElementById('nw-s-total').textContent = nwTotal;
+  renderNews(data.news || []);
+  const pagEl = document.getElementById('nw-pagination');
+  pagEl.style.display = nwPages > 1 ? 'flex' : 'none';
+  document.getElementById('nw-pag-info').textContent = `Page ${nwPage} of ${nwPages}`;
+  document.getElementById('nw-prev').disabled = nwPage <= 1;
+  document.getElementById('nw-next').disabled = nwPage >= nwPages;
+}
+
+function nwSearchDelay() { clearTimeout(nwSearchTimer); nwSearchTimer=setTimeout(()=>loadNews(1),350); }
+
+function renderNews(list) {
+  const tbody = document.getElementById('nw-tbody');
+  if (!list.length) { tbody.innerHTML=`<tr><td colspan="6" class="empty-state">No articles found</td></tr>`; return; }
+  tbody.innerHTML = list.map(n => {
+    const cat = CAT_LABELS[n.category_id] || '—';
+    const cls = CAT_CLS[n.category_id] || '';
+    const dt  = n.publish_dt ? new Date(n.publish_dt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const img = n.image
+      ? `<img class="thumb" src="${esc(n.image)}" loading="lazy" onerror="this.style.display='none'"/>`
+      : `<div class="thumb-placeholder">📰</div>`;
+    return `<tr>
+      <td>${img}</td>
+      <td class="col-title">
+        <span class="t">${esc(n.title||'')}</span>
+        <a href="${esc(n.url||'#')}" class="ext" target="_blank" rel="noopener">↗ Read</a>
+      </td>
+      <td style="font-size:13px;white-space:nowrap">${esc(n.publisher||'—')}</td>
+      <td>${cls?`<span class="badge ${cls}">${cat}</span>`:cat}</td>
+      <td style="font-size:12px;color:var(--text-2);white-space:nowrap">${dt}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-sm btn-ghost" onclick="openNwEdit(${n.id})">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteNews(${n.id},this)">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+  window._nwCache = list;
+}
+
+function openNwEdit(id) {
+  const n = (window._nwCache||[]).find(x=>x.id===id); if (!n) return;
+  document.getElementById('nw-m-id').value=n.id;
+  document.getElementById('nw-m-title').value=n.title||'';
+  document.getElementById('nw-m-url').value=n.url||'';
+  document.getElementById('nw-m-publisher').value=n.publisher||'';
+  document.getElementById('nw-m-cat').value=n.category_id||'';
+  document.getElementById('nw-m-img').value=n.image||'';
+  document.getElementById('nw-m-date').value=n.publish_dt?n.publish_dt.slice(0,10):'';
+  previewImg();
+  document.getElementById('nw-modal-title').textContent=`Edit Article #${n.id}`;
+  document.getElementById('nw-modal').classList.add('open');
+}
+
+function closeNwModal(){ document.getElementById('nw-modal').classList.remove('open'); }
+
+function previewImg() {
+  const val = document.getElementById('nw-m-img').value.trim();
+  const el  = document.getElementById('nw-img-preview');
+  if (val) { el.src=val; el.style.display='block'; } else el.style.display='none';
+}
+
+async function saveNews() {
+  const id = document.getElementById('nw-m-id').value;
+  const body = {
+    title:      document.getElementById('nw-m-title').value.trim(),
+    url:        document.getElementById('nw-m-url').value.trim(),
+    publisher:  document.getElementById('nw-m-publisher').value.trim()||null,
+    category_id:document.getElementById('nw-m-cat').value||null,
+    image:      document.getElementById('nw-m-img').value.trim()||null,
+    publish_dt: document.getElementById('nw-m-date').value||null,
+  };
+  if (!body.title||!body.url) { toast('Title + URL are required',true); return; }
+  const url = id ? `/api/admin/news/${id}?key=${KEY}` : `/api/admin/news?key=${KEY}`;
+  const r = await fetch(url,{method:id?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d = await r.json();
+  if (!d.ok && !d.id) { toast('Failed: '+(d.error||'unknown'),true); return; }
+  toast('Saved!'); closeNwModal(); loadNews(nwPage);
+}
+
+async function deleteNews(id, btn) {
+  if (!confirm('Remove this article?')) return;
+  btn.disabled=true;
+  const r = await fetch(`/api/admin/news/${id}?key=${KEY}`,{method:'DELETE'});
+  const d = await r.json();
+  if (d.ok) { toast('Removed'); loadNews(nwPage); }
+  else { toast('Failed',true); btn.disabled=false; }
+}
+
+// ── Helpers ───────────────────────────────────────────
+function fmtDateUTC(dt) {
+  if (!dt) return null;
+  const d = new Date(dt);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+function toLocalInput(dt) {
+  if (!dt) return '';
+  const d = new Date(dt);
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getUTCFullYear()}-${p(d.getUTCMonth()+1)}-${p(d.getUTCDate())}T${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg,err){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.style.background=err?'#DC2626':'#111827';
+  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); }));
+
+loadEvents();
+
+// ── LinkedIn Embeds ───────────────────────────────────
+let allEmbeds = [];
+let editEmbedId = null;
+
+async function loadEmbeds() {
+  const r = await fetch(`/api/admin/embeds?key=${KEY}`);
+  const d = await r.json();
+  allEmbeds = d.embeds || [];
+  renderEmbeds();
+}
+
+function renderEmbeds() {
+  const tbody = document.getElementById('embeds-tbody');
+  if (!allEmbeds.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="padding:20px;text-align:center;color:#9CA3AF">No embeds yet. Add your first LinkedIn post.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allEmbeds.map(e => `
+    <tr>
+      <td style="text-align:center">${e.display_order}</td>
+      <td style="font-size:12px;word-break:break-all;max-width:400px">${escH(e.embed_src)}</td>
+      <td style="text-align:center"><span style="color:${e.is_active?'#10B981':'#9CA3AF'}">${e.is_active?'✅':'—'}</span></td>
+      <td>
+        <button class="btn btn-ghost" style="font-size:12px;padding:4px 10px" onclick="editEmbed(${e.id})">Edit</button>
+        <button class="btn btn-ghost" style="font-size:12px;padding:4px 10px;color:#EF4444" onclick="deleteEmbed(${e.id})">Del</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openEmbedModal(id) {
+  editEmbedId = id || null;
+  const e = id ? allEmbeds.find(x => x.id === id) : null;
+  document.getElementById('embed-modal-title').textContent = id ? 'LinkedIn 포스트 편집' : 'LinkedIn 포스트 추가';
+  document.getElementById('emb-src').value = e ? e.embed_src : '';
+  document.getElementById('emb-status').style.display = 'none';
+  // If editing, pre-fill fields
+  if (e && (e.og_title || e.author_name)) {
+    fillEmbedFields({ og_title: e.og_title, og_image: e.og_image, author_name: e.author_name, excerpt: e.excerpt, post_url: e.post_url });
+  } else {
+    document.getElementById('emb-fields').style.display = 'none';
+    document.getElementById('emb-author').value   = '';
+    document.getElementById('emb-image').value    = '';
+    document.getElementById('emb-title').value    = '';
+    document.getElementById('emb-excerpt').value  = '';
+    document.getElementById('emb-post-url').value = '';
+  }
+  document.getElementById('embedModal').classList.add('open');
+  setTimeout(() => { const el = document.getElementById('emb-src'); el.focus(); el.select(); }, 150);
+}
+
+function editEmbed(id) { openEmbedModal(id); }
+
+function closeEmbedModal() {
+  document.getElementById('embedModal').classList.remove('open');
+}
+
+function fillEmbedFields(og) {
+  document.getElementById('emb-author').value   = og.author_name || '';
+  document.getElementById('emb-title').value    = og.og_title   || '';
+  document.getElementById('emb-excerpt').value  = og.excerpt     || '';
+  document.getElementById('emb-post-url').value = og.post_url   || '';
+  const imgEl  = document.getElementById('emb-image');
+  const thumb  = document.getElementById('emb-img-thumb');
+  const thumbW = document.getElementById('emb-img-preview');
+  imgEl.value = og.og_image || '';
+  if (og.og_image) { thumb.src = og.og_image; thumbW.style.display = 'block'; }
+  else             { thumbW.style.display = 'none'; }
+  document.getElementById('emb-fields').style.display = 'block';
+}
+
+async function fetchEmbedOG() {
+  const url = document.getElementById('emb-src').value.trim();
+  if (!url) { showToast('URL을 먼저 입력하세요'); return; }
+  const btn = document.getElementById('emb-fetch-btn');
+  const status = document.getElementById('emb-status');
+  btn.disabled = true;
+  btn.textContent = '가져오는 중…';
+  status.style.display = 'none';
+  try {
+    const r = await fetch(`/api/admin/fetch-og?key=${KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+    if (r.ok) {
+      const og = await r.json();
+      fillEmbedFields(og);
+      status.style.cssText = 'display:block;background:#F0FDF4;color:#15803D;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:8px';
+      status.textContent = '✓ LinkedIn에서 정보를 성공적으로 가져왔습니다. 필요하면 수정 후 저장하세요.';
+    } else {
+      document.getElementById('emb-fields').style.display = 'block';
+      const isRateLimit = r.status === 429;
+      status.style.cssText = 'display:block;background:#FEF3C7;color:#92400E;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:8px';
+      status.textContent = isRateLimit
+        ? '⏱ LinkedIn이 요청을 일시 차단했습니다 (과호출). 1~2분 후 다시 시도하거나 아래 항목을 직접 입력해주세요.'
+        : '⚠ 자동 가져오기 실패 — 아래 항목을 직접 입력해주세요.';
+    }
+  } catch(err) {
+    document.getElementById('emb-fields').style.display = 'block';
+    status.style.cssText = 'display:block;background:#FEF3C7;color:#92400E;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:8px';
+    status.textContent = '⚠ 네트워크 오류 — 아래 항목을 직접 입력해주세요.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '자동으로 정보 가져오기';
+  }
+}
+
+// Watch image URL input for live preview
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('emb-image').addEventListener('input', function() {
+    const thumb = document.getElementById('emb-img-thumb');
+    const thumbW = document.getElementById('emb-img-preview');
+    if (this.value) { thumb.src = this.value; thumbW.style.display = 'block'; }
+    else { thumbW.style.display = 'none'; }
+  });
+});
+
+function toEmbedSrc(input) {
+  input = input.trim();
+  if (!input) return '';
+  // Full iframe HTML → extract src attribute
+  const iframeMatch = input.match(/src=["']([^"']+)["']/);
+  if (iframeMatch && iframeMatch[1].includes('linkedin')) return iframeMatch[1];
+  // Already an embed URL - use as-is
+  if (input.includes('linkedin.com/embed/')) return input;
+  // Regular post URL: extract activity ID
+  const actMatch = input.match(/[-_]activity[-_](\d{15,})/);
+  if (actMatch) return `https://www.linkedin.com/embed/feed/update/urn:li:activity:${actMatch[1]}?collapsed=1`;
+  // ugcPost in URL
+  const ugcMatch = input.match(/ugcPost[:\-](\d{15,})/);
+  if (ugcMatch) return `https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:${ugcMatch[1]}?collapsed=1`;
+  return input;
+}
+
+async function saveEmbed() {
+  const embed_src = toEmbedSrc(document.getElementById('emb-src').value);
+  if (!embed_src) { showToast('URL을 입력하세요'); return; }
+  const display_order = editEmbedId ? (allEmbeds.find(x=>x.id===editEmbedId)?.display_order||0) : allEmbeds.length + 1;
+  const author_name = document.getElementById('emb-author').value.trim() || null;
+  const og_image    = document.getElementById('emb-image').value.trim()  || null;
+  const og_title    = document.getElementById('emb-title').value.trim()  || null;
+  const excerpt     = document.getElementById('emb-excerpt').value.trim() || null;
+
+  const post_url = document.getElementById('emb-post-url').value.trim() || null;
+  const payload = { embed_src, display_order, is_active: 1 };
+  if (author_name !== null) payload.author_name = author_name;
+  if (og_image    !== null) payload.og_image    = og_image;
+  if (og_title    !== null) payload.og_title    = og_title;
+  if (excerpt     !== null) payload.excerpt     = excerpt;
+  if (post_url    !== null) payload.post_url    = post_url;
+
+  const method = editEmbedId ? 'PUT' : 'POST';
+  const url = editEmbedId ? `/api/admin/embeds/${editEmbedId}?key=${KEY}` : `/api/admin/embeds?key=${KEY}`;
+  const r = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+  if (r.ok) { closeEmbedModal(); loadEmbeds(); showToast('저장되었습니다!'); }
+  else showToast('저장 실패');
+}
+
+async function deleteEmbed(id) {
+  if (!confirm('Delete this embed?')) return;
+  const r = await fetch(`/api/admin/embeds/${id}?key=${KEY}`, { method: 'DELETE' });
+  if (r.ok) { loadEmbeds(); showToast('Deleted'); }
+}
+
+function escH(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin Login — EdTech HUB</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:#0F172A;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .card{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+  .logo-row{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+  .logo-row img{height:36px}
+  .logo-row span{color:#fff;font-size:18px;font-weight:700}
+  h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
+  .sub{font-size:13px;color:#94A3B8;margin-bottom:28px}
+  label{display:block;font-size:11px;font-weight:700;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+  .form-group{margin-bottom:16px}
+  .input-wrap{position:relative}
+  input[type=email],input[type=password],input[type=text]{width:100%;background:#0F172A;border:1px solid #334155;border-radius:8px;padding:11px 44px 11px 14px;font-size:14px;color:#fff;font-family:inherit;outline:none;transition:border-color .2s}
+  input[type=email]{padding-right:14px}
+  input:focus{border-color:#16A34A}
+  input::placeholder{color:#475569}
+  .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748B;font-size:16px;line-height:1;padding:2px}
+  .eye:hover{color:#94A3B8}
+  .btn{width:100%;background:#16A34A;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn:hover{background:#15803D}
+  .btn:active{transform:scale(.98)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:#FCA5A5;margin-bottom:16px;display:none}
+  .error.show{display:block}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+  .spinner.show{display:block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-row">
+    <img src="/logo.png" alt="logo" onerror="this.style.display='none'"/>
+    <span>EdTech HUB</span>
+  </div>
+  <h2>Admin Login</h2>
+  <p class="sub">관리자 계정으로 로그인하세요</p>
+
+  <div class="error" id="err">이메일 또는 비밀번호가 올바르지 않습니다.</div>
+
+  <form onsubmit="doLogin(event)">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="admin@example.com" autocomplete="email" autofocus required/>
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password</label>
+      <div class="input-wrap">
+        <input type="password" id="pwd" placeholder="••••••••" autocomplete="current-password" required/>
+        <button type="button" class="eye" onclick="togglePwd()">👁</button>
+      </div>
+    </div>
+    <button type="submit" class="btn" id="submit-btn">
+      <span id="btn-text">Login</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+  </form>
+</div>
+
+<script>
+function togglePwd() {
+  const inp = document.getElementById('pwd');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function doLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const pwd   = document.getElementById('pwd').value;
+  if (!email || !pwd) return;
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  document.getElementById('btn-text').textContent = 'Logging in…';
+  document.getElementById('spinner').classList.add('show');
+  document.getElementById('err').classList.remove('show');
+
+  const token = btoa(`${email}:${pwd}`);
+
+  try {
+    const r = await fetch(`/api/admin/events?key=${encodeURIComponent(token)}`);
+    if (r.ok) {
+      sessionStorage.setItem('adminKey', token);
+      const redirect = new URLSearchParams(location.search).get('redirect') || '/admin/content';
+      location.href = redirect;
+    } else {
+      document.getElementById('err').classList.add('show');
+      document.getElementById('pwd').value = '';
+      document.getElementById('pwd').focus();
+    }
+  } catch {
+    document.getElementById('err').textContent = '서버에 연결할 수 없습니다.';
+    document.getElementById('err').classList.add('show');
+  }
+
+  btn.disabled = false;
+  document.getElementById('btn-text').textContent = 'Login';
+  document.getElementById('spinner').classList.remove('show');
+}
+</script>
+</body>
+</html>
