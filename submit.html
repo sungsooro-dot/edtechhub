@@ -68,7 +68,7 @@
     .btn-ghost:hover { color: var(--text-1); }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
-    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; width: 44px; height: 44px; align-items: center; justify-content: center;}
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
     .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
     .nav-mobile.open { display: flex; }
@@ -227,7 +227,7 @@
       <span class="logo-text">EdTech<span>HUB</span></span>
     </a>
     <ul class="nav-links">
-      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item"><a href="index.html" class="nav-a">Home</a></li>
       <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
       <li class="nav-item">
         <a href="news.html" class="nav-a on">News & Events ▾</a>
@@ -265,7 +265,7 @@
 </header>
 
 <nav class="nav-mobile" id="nav-mobile">
-  <a href="option1-preview.html" class="nav-mobile-a" onclick="closeMenu()">Home</a>
+  <a href="index.html" class="nav-mobile-a" onclick="closeMenu()">Home</a>
   <a href="about.html"           class="nav-mobile-a" onclick="closeMenu()">About</a>
   <a href="news.html"            class="nav-mobile-a" onclick="closeMenu()">News</a>
   <a href="news.html#events"     class="nav-mobile-a" onclick="closeMenu()">Events</a>
@@ -457,20 +457,21 @@
         <div class="ft-col">
           <h5>Navigate</h5>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/news.html">News</a></li>
-            <li><a href="/events.html">Events</a></li>
-            <li><a href="/programme.html">Programme</a></li>
-            <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="news.html#events">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
         </div>
         <div class="ft-col">
           <h5>Community</h5>
           <ul>
-            <li><a href="/#community">EdTech Together</a></li>
-            <li><a href="/community-partnership.html">Partnership Events</a></li>
-            <li><a href="/community-forum.html">Learning Forum</a></li>
-            <li><a href="/submit.html">Submit News</a></li>
+            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Initiatives</a></li>
+            <li><a href="networking.html">Cross-Cohort Networking</a></li>
+            <li><a href="community-forum.html">Learning Forum</a></li>
           </ul>
         </div>
         <div class="ft-col">
@@ -479,6 +480,7 @@
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
             <li><span>EC2N 4BQ, UK</span></li>
+            <li><a href="mailto:info@edtechhub.com">Send a Message</a></li>
           </ul>
         </div>
       </div>

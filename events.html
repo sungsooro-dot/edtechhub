@@ -69,7 +69,7 @@
     .btn-ghost:hover { color: var(--text-1); }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
-    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; width: 44px; height: 44px; align-items: center; justify-content: center;}
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
     .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
     .nav-mobile.open { display: flex; }
@@ -202,8 +202,8 @@
     .ev-date .dy { display: block; font-size: 22px; font-weight: 700; color: #111827; line-height: 1.1; }
 
     .ev-info { flex: 1; min-width: 0; }
-    .ev-info h4 { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-info h4 { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px; line-height: 1.35;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ev-info-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .ev-country { font-size: 12px; color: var(--text-2); }
     .ev-price {
@@ -259,7 +259,7 @@
       <span class="logo-text">EdTech<span>HUB</span></span>
     </a>
     <ul class="nav-links">
-      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item"><a href="index.html" class="nav-a">Home</a></li>
       <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
       <li class="nav-item">
         <a href="news.html" class="nav-a on">News &amp; Events ▾</a>
@@ -390,17 +390,20 @@
         <div class="ft-col">
           <h5>Navigate</h5>
           <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
-            <li><a href="events.html">Events</a></li>
+            <li><a href="news.html#events">Events</a></li>
             <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
         </div>
         <div class="ft-col">
           <h5>Community</h5>
           <ul>
-            <li><a href="/#community">EdTech Together</a></li>
-            <li><a href="community-partnership.html">Partnership Events</a></li>
+            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="community-partnership.html">Partnership Initiatives</a></li>
+            <li><a href="networking.html">Cross-Cohort Networking</a></li>
             <li><a href="community-forum.html">Redefining Learning Forum</a></li>
           </ul>
         </div>
@@ -409,7 +412,8 @@
           <ul>
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
-            <li><span>EC2B 4BQ, UK</span></li>
+            <li><span>EC2N 4BQ, UK</span></li>
+            <li><a href="mailto:info@edtechhub.com">Send a Message</a></li>
           </ul>
         </div>
       </div>
@@ -463,6 +467,13 @@ const COUNTRY_COORDS = {
   'Zambia': [-13.13, 27.85], 'Zimbabwe': [-19.02, 29.15],
   'Online': [20, 0], 'Virtual': [20, 0], 'Remote': [20, 0],
 };
+
+function fmtDateUTC(dt) {
+  if (!dt) return null;
+  const d = new Date(dt);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
 
 function getCoords(country) {
   if (!country) return null;
@@ -528,10 +539,7 @@ function openPanel(country, evs) {
   panelCount.textContent   = `${evs.length} event${evs.length > 1 ? 's' : ''}`;
 
   panelList.innerHTML = evs.map(e => {
-    const start = e.event_start_dt ? new Date(e.event_start_dt) : null;
-    const dateStr = start
-      ? start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-      : '';
+    const dateStr = fmtDateUTC(e.event_start_dt) || '';
     const priceText = (e.price || '').trim();
     const isFree = /free|0|unspecified/i.test(priceText) || !priceText;
     const priceLabel = isFree ? 'Free' : priceText;
@@ -540,7 +548,8 @@ function openPanel(country, evs) {
     return `<div class="map-panel-ev">
       <div class="map-panel-ev-title">${escHtml(e.title || '')}</div>
       <div class="map-panel-ev-meta">
-        ${dateStr ? `<span>${dateStr}</span>` : ''}
+        ${dateStr ? `<span>${dateStr}</span>` : '<span style="color:#9CA3AF">Date TBD</span>'}
+        ${location ? `<span>📍 ${escHtml(location)}</span>` : ''}
         <span class="${priceClass}">${escHtml(priceLabel)}</span>
       </div>
       ${e.url ? `<a href="${escAttr(e.url)}" class="map-panel-btn" target="_blank" rel="noopener">Register →</a>` : ''}
@@ -661,11 +670,10 @@ function renderList() {
 
 function renderEventItem(e) {
   const start = e.event_start_dt ? new Date(e.event_start_dt) : null;
-  const mo  = start ? start.toLocaleString('en-US', { month: 'short' }).toUpperCase() : '';
-  const dy  = start ? start.getDate() : '';
-  const dateLabel = start
-    ? start.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-    : '';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const mo  = start ? months[start.getUTCMonth()].toUpperCase() : '';
+  const dy  = start ? start.getUTCDate() : '';
+  const dateLabel = fmtDateUTC(e.event_start_dt) || '';
   const priceText  = (e.price || '').trim();
   const isFree     = /free|0|unspecified/i.test(priceText) || !priceText;
   const priceLabel = isFree ? 'Free / TBC' : priceText;

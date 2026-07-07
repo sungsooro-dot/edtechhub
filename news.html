@@ -57,7 +57,7 @@
     .nav-drop-item:hover { background: #F0FDF4; color: var(--accent); }
     .nav-drop-div { height: 1px; background: var(--border); margin: 4px 0; }
     .nav-cta { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; margin-left: auto; cursor: pointer; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 0; margin-left: auto; cursor: pointer; width: 44px; height: 44px; align-items: center; justify-content: center;}
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; }
 
     /* About mega-dropdown */
@@ -219,7 +219,7 @@
     .ev-dt .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
     .ev-dt .dy { display: block; font-size: 20px; font-weight: 700; color: #111827; line-height: 1.1; }
     .ev-info { flex: 1; min-width: 0; }
-    .ev-info h4 { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-info h4 { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 3px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ev-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .ev-loc { font-size: 12px; color: var(--text-2); }
     .ev-price-tag { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--accent-muted); color: var(--accent); }
@@ -262,12 +262,12 @@
 <!-- ── NAV ── -->
 <header class="header">
   <nav class="nav wrap">
-    <a href="option1-preview.html" class="logo">
+    <a href="index.html" class="logo">
       <img src="logo.png" alt="EdTech HUB" width="34" height="34" style="object-fit:contain;"/>
       <span class="logo-text">EdTech<span>HUB</span></span>
     </a>
     <ul class="nav-links">
-      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item"><a href="index.html" class="nav-a">Home</a></li>
       <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
       <li class="nav-item">
         <a href="news.html" class="nav-a on">News & Events ▾</a>
@@ -305,7 +305,7 @@
 </header>
 
 <nav class="nav-mobile" id="mobileNav">
-  <a href="option1-preview.html" class="nav-mobile-a">Home</a>
+  <a href="index.html" class="nav-mobile-a">Home</a>
   <a href="#" class="nav-mobile-a">About</a>
   <a href="news.html" class="nav-mobile-a accent">News & Events</a>
   <a href="news.html#events" class="nav-mobile-a">EdTech Together</a>
@@ -446,11 +446,12 @@
         <div class="ft-col">
           <h5>Navigate</h5>
           <ul>
-            <li><a href="option1-preview.html">Home</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
             <li><a href="news.html#events">Events</a></li>
-            <li><a href="#">Programme</a></li>
-            <li><a href="#">GEM ↗</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
         </div>
         <div class="ft-col">
@@ -467,8 +468,8 @@
           <ul>
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
-            <li><span>EC2B 4BQ, UK</span></li>
-            <li><a href="#">Send a Message</a></li>
+            <li><span>EC2N 4BQ, UK</span></li>
+            <li><a href="mailto:info@edtechhub.com">Send a Message</a></li>
           </ul>
         </div>
       </div>
@@ -568,7 +569,7 @@
     const fetchAttr = (!hasImg && item.url) ? ` data-fetch-og="${escH(item.url)}"` : '';
     return `<a href="${escH(item.url||'#')}" class="n-card"${fetchAttr} target="_blank" rel="noopener">
       <div class="n-card-top"><span class="n-badge ${badge.cls}">${badge.label}</span></div>
-      <div class="n-img-placeholder"><img src="${escH(imgSrc)}" alt="${escH(cleanNewsTitle(item.title))}" loading="lazy" onerror="this.src='${fallback}'"/></div>
+      <div class="n-img-placeholder"><img src="${escH(imgSrc)}" alt="${escH(cleanNewsTitle(item.title))}" loading="lazy"${imgRefAttr(imgSrc)} onerror="this.src='${fallback}'"/></div>
       <div class="n-body">
         <span class="n-src">${escH(item.publisher||'')}</span>
         <h3 class="n-ttl">${escH(cleanNewsTitle(item.title))}</h3>
@@ -739,6 +740,15 @@
   }
 
   function escH(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // Some news sources (e.g. udualc.org) hotlink-block requests that carry a Referer header,
+  // while others (e.g. unesco.org) require a Referer to be present. Only opt into
+  // no-referrer for hosts confirmed to need it.
+  const IMG_NO_REFERRER_HOSTS = ['udualc.org'];
+  function imgRefAttr(url) {
+    try { return IMG_NO_REFERRER_HOSTS.some(h => new URL(url).hostname.endsWith(h)) ? ' referrerpolicy="no-referrer"' : ''; }
+    catch { return ''; }
+  }
 
   /* ── Init Leaflet map ── */
   function initEvMap() {

@@ -77,7 +77,7 @@
     .mega-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
     .mega-name { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: #111827; line-height: 1.3; }
     .mega-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 8px; margin-left: auto; cursor: pointer; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 0; margin-left: auto; cursor: pointer; width: 44px; height: 44px; align-items: center; justify-content: center;}
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; transition: transform .2s, opacity .2s; }
 
     /* Mobile nav */
@@ -151,7 +151,7 @@
     .partners-list { display: flex; flex: 1; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 32px; }
     .partner-item { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-3); white-space: nowrap; transition: color .2s; cursor: default; display:flex; align-items:center; gap:8px; }
     .partner-item:hover { color: var(--accent); }
-    .partner-logo { height:24px; width:auto; max-width:72px; object-fit:contain; display:block; filter:grayscale(40%) opacity(70%); transition:filter .2s; }
+    .partner-logo { height:24px; width:auto; max-width:72px; object-fit:contain; display:block; filter:grayscale(100%) opacity(60%); transition:filter .2s; }
     .partner-item:hover .partner-logo { filter:grayscale(0%) opacity(100%); }
     @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
@@ -370,6 +370,8 @@
       .ft-cols { grid-template-columns: 1fr 1fr; }
       .ft-btm { flex-direction: column; align-items: flex-start; }
       .n-submit { flex-direction: column; }
+      .partners-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .partners-list { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); justify-items: center; align-items: center; gap: 20px 12px; }
     }
     @media (max-width: 480px) {
       .init-grid { grid-template-columns: 1fr; }
@@ -377,6 +379,7 @@
       .hero-btns, .et-actions { flex-direction: column; }
       .nl-form { flex-direction: column; }
       .nl-inp, .nl-form .btn { width: 100%; }
+      .partners-list { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -414,13 +417,20 @@
         </div>
       </li>
       <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
-      <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
+      <li class="nav-item">
+        <a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a>
+        <div class="nav-dropdown" style="min-width:280px;padding:16px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#16A34A;margin-bottom:6px;">Global EdTech Resource Map</div>
+          <p style="font-size:12.5px;color:#374151;line-height:1.6;margin-bottom:12px;">The map is a global initiative that helps EdTech Startups around the world find the relevant resources they need to create sustainable solutions that redefine how people learn and work in a rapidly changing world.</p>
+          <a href="https://gem.edtechhub.com/" class="nav-drop-item" target="_blank" rel="noopener" style="background:#F0FDF4;border-radius:6px;font-weight:600;color:#16A34A;">Explore the Map →</a>
+        </div>
+      </li>
     </ul>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-cta">
-      <a href="#" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
+      <a href="mailto:info@edtechhub.com" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
     </div>
   </nav>
 </header>
@@ -441,7 +451,7 @@
   <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener">GEM ↗</a>
   <div class="nav-mobile-div"></div>
   <div class="nav-mobile-cta">
-    <a href="#" class="btn btn-primary">Contact Us</a>
+    <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
   </div>
 </nav>
 
@@ -458,10 +468,7 @@
           <a href="#news" class="btn btn-primary">Explore News & Events</a>
           <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="btn btn-secondary">Follow on LinkedIn</a>
         </div>
-        <div class="hero-stats">
-          <div><div class="hs-val">500<sup>+</sup></div><div class="hs-lbl">EdTech Startups</div></div>
-          <div><div class="hs-val">30<sup>+</sup></div><div class="hs-lbl">Countries</div></div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -501,6 +508,7 @@
 
     </div>
   </section>
+
   <!-- ④ NEWS & EVENTS -->
   <section class="news-section section" id="news">
     <div class="wrap">
@@ -573,11 +581,12 @@
         <div class="ft-col">
           <h5>Navigate</h5>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">News</a></li>
-            <li><a href="#">Events</a></li>
-            <li><a href="#">Programme</a></li>
-            <li><a href="#">GEM ↗</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="news.html#events">Events</a></li>
+            <li><a href="programme.html">Programme</a></li>
+            <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
         </div>
         <div class="ft-col">
@@ -594,8 +603,8 @@
           <ul>
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
-            <li><span>EC2B 4BQ, UK</span></li>
-            <li><a href="#">Send a Message</a></li>
+            <li><span>EC2N 4BQ, UK</span></li>
+            <li><a href="mailto:info@edtechhub.com">Send a Message</a></li>
           </ul>
         </div>
       </div>
@@ -642,6 +651,15 @@
 
   function escH(s){ return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+  // Some news sources (e.g. udualc.org) hotlink-block requests that carry a Referer header,
+  // while others (e.g. unesco.org) require a Referer to be present. Only opt into
+  // no-referrer for hosts confirmed to need it.
+  const IMG_NO_REFERRER_HOSTS = ['udualc.org'];
+  function imgRefAttr(url) {
+    try { return IMG_NO_REFERRER_HOSTS.some(h => new URL(url).hostname.endsWith(h)) ? ' referrerpolicy="no-referrer"' : ''; }
+    catch { return ''; }
+  }
+
 
   /* ── EdTech Together Events (Eventbrite) ── */
   async function loadEtEvents() {
@@ -655,7 +673,7 @@
       const d = await r.json();
       const events = d.events || [];
       if (!events.length) {
-        if (block) block.style.display = 'none';
+        if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#9CA3AF;text-align:center;">No upcoming EdTech Together events right now — check back soon.</div>';
         return;
       }
       if (badge) badge.style.display = '';
@@ -683,7 +701,7 @@
         </a>`;
       }).join('');
     } catch(err) {
-      if (block) block.style.display = 'none';
+      if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#9CA3AF;text-align:center;">Could not load events.</div>';
     }
   }
 
@@ -703,7 +721,7 @@
         const dt = n.publish_dt ? new Date(n.publish_dt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
         const thumb = n.image || '';
         return `<a class="nl-item" href="${escH(n.url||'#')}" target="_blank" rel="noopener">
-          ${thumb ? `<img class="nl-thumb" src="${escH(thumb)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+          ${thumb ? `<img class="nl-thumb" src="${escH(thumb)}" alt="" loading="lazy"${imgRefAttr(thumb)} onerror="this.style.display='none'">` : ''}
           <div class="nl-item-body">
             <span class="nl-badge" style="${st}">${b.label}</span>
             <div class="nl-item-ttl">${escH(title)}</div>
@@ -716,47 +734,8 @@
     }
   }
 
-  /* ── Home: External Events ── */
-  async function loadHomeExtEvents() {
-    try {
-      const r = await fetch('/api/db/events/top');
-      const d = await r.json();
-      const items = (d.events || []).slice(0, 5);
-      const el = document.getElementById('home-ext-events');
-      if (!items.length) { el.innerHTML = '<div class="ext-ev-empty">No upcoming events found.</div>'; return; }
-      el.innerHTML = items.map(e => {
-        const abbr  = countryAbbr(e.country, e.city);
-        const loc   = (() => {
-          const city = e.city || '', country = e.country || '';
-          if (/online|virtual|remote/i.test(country)) return 'Online / Virtual';
-          if (city && country && city.toLowerCase() !== country.toLowerCase()) return `${city}, ${country}`;
-          return city || country || '';
-        })();
-        const date  = e.event_start_dt ? (() => {
-          const d = new Date(e.event_start_dt);
-          const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          return `${days[d.getUTCDay()]}, ${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
-        })() : '';
-        const title = (e.title||'').trim().substring(0,60);
-        return `<a class="et-row" href="${escH(e.url||'#')}" target="_blank" rel="noopener">
-          <div class="et-flag">${escH(abbr)}</div>
-          <div class="et-row-info">
-            <span class="et-row-name">${escH(title)}</span>
-            ${loc ? `<span class="et-row-loc">${escH(loc)}</span>` : ''}
-            ${date ? `<span class="et-row-date">${date}</span>` : ''}
-          </div>
-          <span class="et-row-arrow">→</span>
-        </a>`;
-      }).join('');
-    } catch(e) {
-      document.getElementById('home-ext-events').innerHTML = '<div class="ext-ev-empty">Could not load events.</div>';
-    }
-  }
-
   loadEtEvents();
   loadHomeNews();
-  loadHomeExtEvents();
 
   /* ── LinkedIn Voices Carousel ── */
   (async function loadVoices() {
@@ -764,10 +743,19 @@
     const vp     = document.getElementById('liVP');
     const prevBtn = document.getElementById('liPrev');
     const nextBtn = document.getElementById('liNext');
-    const VISIBLE = 3, GAP = 20;
+    const GAP = 20;
     let sliding = false;
 
+    function getVisible() {
+      const w = vp.offsetWidth;
+      if (w < 480) return 1;
+      if (w < 760) return 2;
+      return 3;
+    }
+    let VISIBLE = getVisible();
+
     function cardWidth() {
+      VISIBLE = getVisible();
       return (vp.offsetWidth - GAP * (VISIBLE - 1)) / VISIBLE;
     }
     function applyWidths() {

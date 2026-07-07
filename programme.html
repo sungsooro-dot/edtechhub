@@ -68,7 +68,7 @@
     .btn-ghost:hover { color: var(--text-1); }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
-    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; }
+    .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; color: var(--text-1); flex-direction: column; gap: 5px; width: 44px; height: 44px; align-items: center; justify-content: center;}
     .nav-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
     .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
     .nav-mobile.open { display: flex; }
@@ -105,6 +105,7 @@
     .tab-bar { position: sticky; top: 60px; z-index: 90; background: #fff; border-bottom: 1px solid var(--border); }
     .tab-nav { display: flex; overflow-x: auto; padding: 0 24px; max-width: var(--max); margin: 0 auto; scrollbar-width: none; }
     .tab-nav::-webkit-scrollbar { display: none; }
+    .tab-bar::after { content: ''; position: absolute; top: 0; right: 0; bottom: 1px; width: 28px; background: linear-gradient(to right, rgba(255,255,255,0), #fff); pointer-events: none; }
     .tab-btn {
       padding: 14px 20px; font-size: 14px; font-weight: 500; color: var(--text-2);
       border: none; background: transparent; cursor: pointer; white-space: nowrap;
@@ -260,7 +261,7 @@
       <span class="logo-text">EdTech<span>HUB</span></span>
     </a>
     <ul class="nav-links">
-      <li class="nav-item"><a href="option1-preview.html" class="nav-a">Home</a></li>
+      <li class="nav-item"><a href="index.html" class="nav-a">Home</a></li>
       <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
       <li class="nav-item">
         <a href="news.html" class="nav-a">News &amp; Events ▾</a>
@@ -581,9 +582,10 @@
         <div class="ft-col">
           <h5>Navigate</h5>
           <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
-            <li><a href="/events.html">Events</a></li>
+            <li><a href="news.html#events">Events</a></li>
             <li><a href="programme.html">Programme</a></li>
             <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
           </ul>
@@ -593,7 +595,8 @@
           <ul>
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
-            <li><span>EC2B 4BQ, UK</span></li>
+            <li><span>EC2N 4BQ, UK</span></li>
+            <li><a href="mailto:info@edtechhub.com">Send a Message</a></li>
           </ul>
         </div>
       </div>
