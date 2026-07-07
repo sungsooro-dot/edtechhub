@@ -58,7 +58,6 @@
     .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
     .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
     .nav-a.on { color: var(--accent); }
-    .nav-a.gem { color: var(--accent); }
     .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
     .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
     .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
@@ -109,32 +108,14 @@
     .hs-val sup { font-size: 13px; color: var(--accent); }
     .hs-lbl { font-size: 12px; color: #6B7280; margin-top: 2px; }
 
-    /* ── HERO EVENT CARD ── */
-    .ev-card-hero { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
-    .ech-top { background: #F0FDF4; border-bottom: 1px solid #D1FAE5; padding: 18px 20px; }
-    .ech-live { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-muted); color: var(--accent); font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; }
-    .ech-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.4s infinite; }
-    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
-    .ech-title { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 3px; }
-    .ech-sub   { font-size: 11.5px; color: #6B7280; }
-    .ech-body  { padding: 8px 0; }
-    .ech-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 20px; border-bottom: 1px solid #F3F4F6;
-      text-decoration: none; transition: background .12s; cursor: pointer;
-    }
-    .ech-row:last-child { border-bottom: none; }
-    .ech-row:hover { background: #F9FAFB; }
-    .ech-row:hover .ech-city-name { color: var(--accent); }
-    .ech-row:hover .ech-arrow { color: var(--accent); transform: translateX(3px); }
-    .ech-flag { min-width: 44px; height: 32px; border-radius: 6px; padding: 0 6px; background: var(--accent-muted); color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .ech-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-    .ech-city-name { font-size: 13px; font-weight: 700; color: #111827; transition: color .12s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ech-city-sub  { font-size: 11px; color: #4B5563; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ech-city-date { font-size: 10.5px; color: #9CA3AF; margin-top: 2px; }
-    .ech-arrow { font-size: 14px; color: #D1D5DB; transition: color .12s, transform .12s; }
-    .ech-cta { display: block; margin: 0; background: var(--accent); color: #fff; text-align: center; padding: 13px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .15s; }
-    .ech-cta:hover { background: var(--accent-h); }
+    /* ── HERO STATS CARD ── */
+    .hero-stat-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+    .hsc-stat { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #F0FDF4; }
+    .hsc-stat:last-child { border-bottom: none; padding-bottom: 0; }
+    .hsc-stat:first-child { padding-top: 0; }
+    .hsc-num { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; min-width: 68px; }
+    .hsc-num sup { font-size: 14px; color: var(--accent); }
+    .hsc-lbl { font-size: 14px; color: #4B5563; line-height: 1.4; }
 
     /* ── SECTION COMMON ── */
     .section { padding: 64px 0; }
@@ -147,7 +128,7 @@
     /* ── PARTNERS ── */
     .partners-bar { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 18px 0; }
     .partners-inner { display: flex; align-items: center; gap: 40px; }
-    .partners-lbl { font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-3); white-space: nowrap; flex-shrink: 0; }
+    .partners-lbl { font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-2); white-space: nowrap; flex-shrink: 0; }
     .partners-list { display: flex; flex: 1; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 32px; }
     .partner-item { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-3); white-space: nowrap; transition: color .2s; cursor: default; display:flex; align-items:center; gap:8px; }
     .partner-item:hover { color: var(--accent); }
@@ -205,7 +186,7 @@
     .et-row-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
     .et-row-name  { font-size: 13px; font-weight: 700; color: #111827; transition: color .12s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .et-row-loc   { font-size: 11px; color: #4B5563; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .et-row-date  { font-size: 10.5px; color: #9CA3AF; margin-top: 2px; }
+    .et-row-date  { font-size: 10.5px; color: #6B7280; margin-top: 2px; }
     .et-row-arrow { font-size: 14px; color: #D1D5DB; transition: color .12s, transform .12s; }
     .et-view-all  { display: block; text-align: center; background: var(--accent); color: #fff; padding: 13px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .15s; }
     .et-view-all:hover { background: var(--accent-h); }
@@ -220,7 +201,7 @@
     .nl-item-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
     .nl-badge { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; align-self: flex-start; white-space: nowrap; }
     .nl-item-ttl { font-family: 'Sora', sans-serif; font-size: 13.5px; font-weight: 700; color: #111827; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color .12s; }
-    .nl-item-meta { font-size: 11px; color: var(--text-3); }
+    .nl-item-meta { font-size: 11px; color: var(--text-2); }
 
     /* External events block */
     .ext-ev-block { margin-top: 16px; background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
@@ -246,7 +227,7 @@
     .li-og-img { width:calc(100% - 20px); height:155px; object-fit:cover; display:block; background:#F3F4F6; flex-shrink:0; margin:10px 10px 0; border-radius:8px; }
     .li-og-body { padding:14px 16px 10px; flex:1; display:flex; flex-direction:column; gap:8px; }
     .li-og-excerpt { font-size:13px; color:#1F2937; line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-    .li-og-tags { font-size:11.5px; color:#9CA3AF; line-height:1.4; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; margin-top:auto; }
+    .li-og-tags { font-size:11.5px; color:#6B7280; line-height:1.4; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; margin-top:auto; }
     .li-og-author { display:flex; align-items:center; gap:10px; padding:10px 16px 12px; border-top:1px solid #F3F4F6; }
     .li-og-avatar { width:36px; height:36px; border-radius:50%; background:#0A66C2; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
     .li-og-author-info { flex:1; min-width:0; }
@@ -350,7 +331,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1080px) {
       .hero-inner { grid-template-columns: 1fr; }
-      .ev-card-hero { display: none; }
+      .hero-stat-card { display: none; }
       .et-inner { grid-template-columns: 1fr; }
       .ne-split { grid-template-columns: 1fr; }
       .ne-left  { padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 40px; }
@@ -448,7 +429,7 @@
   <a href="community-forum.html" class="nav-mobile-a" style="padding-left:28px">Redefining Learning Forum</a>
   <div class="nav-mobile-div"></div>
   <a href="programme.html" class="nav-mobile-a">Programme</a>
-  <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener">GEM ↗</a>
+  <a href="https://gem.edtechhub.com/" class="nav-mobile-a" target="_blank" rel="noopener">GEM ↗</a>
   <div class="nav-mobile-div"></div>
   <div class="nav-mobile-cta">
     <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
@@ -469,6 +450,24 @@
           <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank" class="btn btn-secondary">Follow on LinkedIn</a>
         </div>
 
+      </div>
+      <div class="hero-stat-card">
+        <div class="hsc-stat">
+          <span class="hsc-num">500<sup>+</sup></span>
+          <span class="hsc-lbl">EdTech startups connected through our platform</span>
+        </div>
+        <div class="hsc-stat">
+          <span class="hsc-num">30<sup>+</sup></span>
+          <span class="hsc-lbl">Countries represented in our global community</span>
+        </div>
+        <div class="hsc-stat">
+          <span class="hsc-num">6</span>
+          <span class="hsc-lbl">Global strategic partners</span>
+        </div>
+        <div class="hsc-stat">
+          <span class="hsc-num">5</span>
+          <span class="hsc-lbl">Active initiatives running globally</span>
+        </div>
       </div>
     </div>
   </section>
@@ -500,7 +499,7 @@
         <button class="li-carr-btn" id="liPrev" aria-label="Previous">&#8249;</button>
         <div class="li-carr-vp" id="liVP">
           <div class="li-carr-track" id="liTrack">
-            <div style="padding:40px;text-align:center;color:#9CA3AF;font-size:14px;width:100%">Loading voices…</div>
+            <div style="padding:40px;text-align:center;color:#6B7280;font-size:14px;width:100%">Loading voices…</div>
           </div>
         </div>
         <button class="li-carr-btn" id="liNext" aria-label="Next">&#8250;</button>
@@ -544,7 +543,7 @@
               <div class="et-sched-sub">Monthly · Global Events</div>
             </div>
             <div class="et-rows" id="et-schedule-rows">
-              <div style="padding:20px;font-size:13px;color:#9CA3AF;">Loading events…</div>
+              <div style="padding:20px;font-size:13px;color:#6B7280;">Loading events…</div>
             </div>
             <a href="news.html#events" id="et-view-all-link" class="et-view-all">View All Events →</a>
           </div>
@@ -571,9 +570,10 @@
         <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">Follow on LinkedIn ↗</a>
         <div style="margin-top:20px">
           <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Stay in the Loop</div>
-          <form onsubmit="return false" style="display:flex;flex-direction:column;gap:6px">
-            <input type="email" placeholder="Email address" style="padding:9px 12px;border-radius:6px;border:1px solid #374151;background:#1F2937;color:#fff;font-size:13px;outline:none;font-family:inherit" onfocus="this.style.borderColor='#16A34A'" onblur="this.style.borderColor='#374151'"/>
+          <form id="ft-nl-form" style="display:flex;flex-direction:column;gap:6px">
+            <input type="email" id="ft-nl-email" placeholder="Email address" required style="padding:9px 12px;border-radius:6px;border:1px solid #374151;background:#1F2937;color:#fff;font-size:13px;outline:none;font-family:inherit" onfocus="this.style.borderColor='#16A34A'" onblur="this.style.borderColor='#374151'"/>
             <button type="submit" class="btn btn-primary" style="font-size:13px;padding:9px 14px;width:100%">Subscribe</button>
+            <div id="ft-nl-status" style="font-size:12px;min-height:14px;"></div>
           </form>
         </div>
       </div>
@@ -673,7 +673,7 @@
       const d = await r.json();
       const events = d.events || [];
       if (!events.length) {
-        if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#9CA3AF;text-align:center;">No upcoming EdTech Together events right now — check back soon.</div>';
+        if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#6B7280;text-align:center;">No upcoming EdTech Together events right now — check back soon.</div>';
         return;
       }
       if (badge) badge.style.display = '';
@@ -701,7 +701,7 @@
         </a>`;
       }).join('');
     } catch(err) {
-      if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#9CA3AF;text-align:center;">Could not load events.</div>';
+      if (rowsEl) rowsEl.innerHTML = '<div style="padding:24px 20px;font-size:13px;color:#6B7280;text-align:center;">Could not load events.</div>';
     }
   }
 
@@ -712,7 +712,7 @@
       const d = await r.json();
       const items = d.news || [];
       const el = document.getElementById('home-news-list');
-      if (!items.length) { el.innerHTML = '<div style="padding:16px 0;font-size:13px;color:#9CA3AF;">No news available.</div>'; return; }
+      if (!items.length) { el.innerHTML = '<div style="padding:16px 0;font-size:13px;color:#6B7280;">No news available.</div>'; return; }
       el.innerHTML = items.map(n => {
         const b = HOME_CAT_BADGE[n.category_id] || HOME_CAT_BADGE[9];
         const st = HOME_CAT_STYLE[b.cls] || '';
@@ -730,12 +730,41 @@
         </a>`;
       }).join('');
     } catch(e) {
-      document.getElementById('home-news-list').innerHTML = '<div style="padding:16px 0;font-size:13px;color:#9CA3AF;">Could not load news.</div>';
+      document.getElementById('home-news-list').innerHTML = '<div style="padding:16px 0;font-size:13px;color:#6B7280;">Could not load news.</div>';
     }
   }
 
   loadEtEvents();
   loadHomeNews();
+
+  /* ── Footer newsletter subscribe ── */
+  document.getElementById('ft-nl-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInp = document.getElementById('ft-nl-email');
+    const statusEl = document.getElementById('ft-nl-status');
+    const email = emailInp.value.trim();
+    statusEl.style.color = '';
+    statusEl.textContent = 'Submitting…';
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source_page: location.pathname }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok) {
+        statusEl.style.color = '#4ADE80';
+        statusEl.textContent = "Thanks — you're subscribed!";
+        emailInp.value = '';
+      } else {
+        statusEl.style.color = '#F87171';
+        statusEl.textContent = d.error || 'Something went wrong, please try again.';
+      }
+    } catch {
+      statusEl.style.color = '#F87171';
+      statusEl.textContent = 'Network error, please try again.';
+    }
+  });
 
   /* ── LinkedIn Voices Carousel ── */
   (async function loadVoices() {
@@ -781,7 +810,7 @@
           <div class="li-og-avatar">${initials}</div>
           <div class="li-og-author-info">
             <div class="li-og-name">${e.author_name||'LinkedIn'}</div>
-            <div class="li-og-cta">LinkedIn에서 전체 포스트 보기 →</div>
+            <div class="li-og-cta">View full post on LinkedIn →</div>
           </div>
         </div>`;
       return el;
@@ -792,7 +821,7 @@
       const d = await r.json();
       const embeds = d.embeds || [];
       if (!embeds.length) {
-        track.innerHTML = '<div style="padding:40px;text-align:center;color:#9CA3AF;width:100%">No voices available.</div>';
+        track.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7280;width:100%">No voices available.</div>';
         prevBtn.style.display = nextBtn.style.display = 'none';
         return;
       }
@@ -854,7 +883,7 @@
       });
 
     } catch(err) {
-      track.innerHTML = '<div style="padding:40px;text-align:center;color:#9CA3AF;width:100%">Could not load voices.</div>';
+      track.innerHTML = '<div style="padding:40px;text-align:center;color:#6B7280;width:100%">Could not load voices.</div>';
     }
   })();
   const hamburger  = document.getElementById('hamburger');

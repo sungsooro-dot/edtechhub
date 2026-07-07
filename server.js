@@ -267,6 +267,34 @@ app.post('/api/submit', async (req, res) => {
   }
 });
 
+// ── 뉴스레터 구독 ─────────────────────────
+app.post('/api/subscribe', async (req, res) => {
+  const email = (req.body.email || '').trim();
+  const name  = (req.body.name || '').trim();
+  const source_page = (req.body.source_page || '').trim().slice(0, 100);
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address' });
+  }
+
+  try {
+    await db.query(
+      'INSERT INTO subscribers (email, name, source_page) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name)',
+      [email, name || null, source_page || null]
+    );
+    mailer.sendMail({
+      from   : '"EdTech HUB" <sungsoo@dohegroup.com>',
+      to     : 'sungsoo@dohegroup.com',
+      subject: `[EdTech HUB] New newsletter subscriber — ${email}`,
+      html   : `<p>New subscriber: <strong>${email}</strong>${name ? ` (${name})` : ''}</p><p>Source page: ${source_page || '-'}</p>`,
+    }).catch(err => console.error('Subscribe notification mail error:', err));
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Subscribe error:', err);
+    res.status(500).json({ error: 'Something went wrong, please try again' });
+  }
+});
+
 app.get('/api/events', (req, res) => {
   if (cache.events) return res.json(cache.events);
   res.status(503).json({ error: 'Cache not ready, try again shortly' });
