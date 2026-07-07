@@ -219,7 +219,7 @@
     .li-carr-wrap { display:flex; align-items:center; gap:14px; }
     .li-carr-vp { flex:1; overflow:hidden; }
     .li-carr-track { display:flex; gap:20px; will-change:transform; }
-    .li-carr-btn { flex-shrink:0; width:42px; height:42px; border-radius:50%; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-size:22px; color:#374151; box-shadow:0 2px 8px rgba(0,0,0,.07); transition:all .2s; display:flex; align-items:center; justify-content:center; line-height:1; }
+    .li-carr-btn { flex-shrink:0; width:44px; height:44px; border-radius:50%; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-size:22px; color:#374151; box-shadow:0 2px 8px rgba(0,0,0,.07); transition:all .2s; display:flex; align-items:center; justify-content:center; line-height:1; }
     .li-carr-btn:hover { background:#F0FDF4; border-color:var(--accent); color:var(--accent); }
     /* OG Card */
     .li-og-card { flex-shrink:0; border-radius:14px; overflow:hidden; border:1px solid var(--border); background:#fff; box-shadow:0 2px 12px rgba(0,0,0,.07); text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:box-shadow .2s, transform .2s; }
@@ -300,14 +300,7 @@
     .ic-teal .init-link:hover { background: #0F766E; }
 
     /* ── NEWSLETTER ── */
-    .nl-section { background: #F0FDF4; border-top: 1px solid #D1FAE5; padding: 64px 0; }
-    .nl-inner { max-width: 560px; margin: 0 auto; text-align: center; }
-    .nl-inner h2 { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 10px; }
-    .nl-inner p  { font-size: 15px; color: #4B5563; margin-bottom: 28px; line-height: 1.65; }
-    .nl-form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-    .nl-inp  { flex: 1; min-width: 180px; padding: 10px 14px; border-radius: 7px; border: 1px solid #D1D5DB; background: #fff; color: #111827; font-size: 14px; outline: none; font-family: 'Inter', sans-serif; transition: border-color .15s; }
-    .nl-inp:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
-    .nl-inp::placeholder { color: #9CA3AF; }
+    .ft-nl-inp:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(22,163,74,.25); }
 
     /* ── FOOTER ── */
     .footer { background: #111827; border-top: 1px solid var(--border); padding: 48px 0 28px; }
@@ -317,7 +310,7 @@
     .ft-brand a { font-size: 12.5px; color: #9CA3AF; transition: color .15s; }
     .ft-brand a:hover { color: #F9FAFB; }
     .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
-    .ft-col h5 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col h3 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
     .ft-col ul { display: flex; flex-direction: column; gap: 9px; }
     .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
     .ft-col a:hover { color: #F9FAFB; }
@@ -358,8 +351,6 @@
       .init-grid { grid-template-columns: 1fr; }
       .ft-cols { grid-template-columns: 1fr; }
       .hero-btns, .et-actions { flex-direction: column; }
-      .nl-form { flex-direction: column; }
-      .nl-inp, .nl-form .btn { width: 100%; }
       .partners-list { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
@@ -486,12 +477,12 @@
         <div class="partners-inner" style="padding:0">
           <span class="partners-lbl">Our Partners</span>
           <div class="partners-list">
-            <span class="partner-item"><img src="images/partners/01_gesawards.png" alt="GES Awards" class="partner-logo"></span>
-            <span class="partner-item"><img src="images/partners/02_mindcet.png" alt="MindCET" class="partner-logo"></span>
-            <span class="partner-item"><img src="images/partners/03_edtechimpact.png" alt="EdTech Impact" class="partner-logo"></span>
-            <span class="partner-item"><img src="images/partners/04_globaledtech.png" alt="Global EdTech" class="partner-logo"></span>
-            <span class="partner-item"><img src="images/partners/05_learningspark.png" alt="Learning Spark" class="partner-logo"></span>
-            <span class="partner-item"><img src="images/partners/06_icfei.png" alt="ICF.EI" class="partner-logo"></span>
+            <span class="partner-item"><img src="images/partners/01_gesawards.png" alt="GES Awards" class="partner-logo" loading="lazy"></span>
+            <span class="partner-item"><img src="images/partners/02_mindcet.png" alt="MindCET" class="partner-logo" loading="lazy"></span>
+            <span class="partner-item"><img src="images/partners/03_edtechimpact.png" alt="EdTech Impact" class="partner-logo" loading="lazy"></span>
+            <span class="partner-item"><img src="images/partners/04_globaledtech.png" alt="Global EdTech" class="partner-logo" loading="lazy"></span>
+            <span class="partner-item"><img src="images/partners/05_learningspark.png" alt="Learning Spark" class="partner-logo" loading="lazy"></span>
+            <span class="partner-item"><img src="images/partners/06_icfei.png" alt="ICF.EI" class="partner-logo" loading="lazy"></span>
           </div>
         </div>
       </div>
@@ -563,7 +554,7 @@
     <div class="ft-top">
       <div class="ft-brand">
         <div class="ft-brand-logo">
-          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
+          <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;" loading="lazy"/>
           <span style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;">EdTech<span style="color:#16A34A;">HUB</span></span>
         </div>
         <p>Connecting the global EdTech ecosystem.</p>
@@ -571,15 +562,15 @@
         <div style="margin-top:20px">
           <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Stay in the Loop</div>
           <form id="ft-nl-form" style="display:flex;flex-direction:column;gap:6px">
-            <input type="email" id="ft-nl-email" placeholder="Email address" required style="padding:9px 12px;border-radius:6px;border:1px solid #374151;background:#1F2937;color:#fff;font-size:13px;outline:none;font-family:inherit" onfocus="this.style.borderColor='#16A34A'" onblur="this.style.borderColor='#374151'"/>
-            <button type="submit" class="btn btn-primary" style="font-size:13px;padding:9px 14px;width:100%">Subscribe</button>
+            <input type="email" id="ft-nl-email" class="ft-nl-inp" placeholder="Email address" aria-label="Email address" required style="padding:9px 12px;border-radius:6px;border:1px solid #374151;background:#1F2937;color:#fff;font-size:13px;outline:none;font-family:inherit"/>
+            <button type="submit" class="btn btn-primary" style="font-size:13px;padding:12px 14px;width:100%">Subscribe</button>
             <div id="ft-nl-status" style="font-size:12px;min-height:14px;"></div>
           </form>
         </div>
       </div>
       <div class="ft-cols">
         <div class="ft-col">
-          <h5>Navigate</h5>
+          <h3>Navigate</h3>
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
@@ -590,7 +581,7 @@
           </ul>
         </div>
         <div class="ft-col">
-          <h5>Community</h5>
+          <h3>Community</h3>
           <ul>
             <li><a href="news.html#events">EdTech Together</a></li>
             <li><a href="community-partnership.html">Partnership Initiatives</a></li>
@@ -599,7 +590,7 @@
           </ul>
         </div>
         <div class="ft-col">
-          <h5>Contact</h5>
+          <h3>Contact</h3>
           <ul>
             <li><a href="mailto:info@edtechhub.com">info@edtechhub.com</a></li>
             <li><span>22 Bishopsgate, London</span></li>
