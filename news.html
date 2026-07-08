@@ -419,9 +419,12 @@
           <div class="sb-nl">
             <h4>Stay in the Loop</h4>
             <p>Weekly EdTech news & events to your inbox.</p>
-            <input class="sb-inp" type="email" placeholder="Email address"/>
-            <input class="sb-inp" type="text"  placeholder="Full name"/>
-            <button class="sb-submit">Subscribe</button>
+            <form id="sb-nl-form">
+              <input class="sb-inp" type="email" id="sb-nl-email" placeholder="Email address" aria-label="Email address" required/>
+              <input class="sb-inp" type="text" id="sb-nl-name" placeholder="Full name" aria-label="Full name"/>
+              <button type="submit" class="sb-submit">Subscribe</button>
+              <div id="sb-nl-status" style="font-size:12px;margin-top:8px;min-height:14px;"></div>
+            </form>
           </div>
         </aside>
       </div>
@@ -980,6 +983,35 @@
   }
   activateFromHash();
   window.addEventListener('hashchange', activateFromHash);
+
+  document.getElementById('sb-nl-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInp = document.getElementById('sb-nl-email');
+    const nameInp  = document.getElementById('sb-nl-name');
+    const statusEl = document.getElementById('sb-nl-status');
+    statusEl.style.color = '';
+    statusEl.textContent = 'Submitting…';
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInp.value.trim(), name: nameInp.value.trim(), source_page: location.pathname }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok) {
+        statusEl.style.color = '#4ADE80';
+        statusEl.textContent = "Thanks — you're subscribed!";
+        emailInp.value = '';
+        nameInp.value = '';
+      } else {
+        statusEl.style.color = '#F87171';
+        statusEl.textContent = d.error || 'Something went wrong, please try again.';
+      }
+    } catch {
+      statusEl.style.color = '#F87171';
+      statusEl.textContent = 'Network error, please try again.';
+    }
+  });
 </script>
 </body>
 </html>

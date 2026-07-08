@@ -424,11 +424,12 @@
     <div class="wrap nl-inner">
       <h2>Stay in the Loop</h2>
       <p>Latest trends, events, and opportunities in EdTech — straight to your inbox.</p>
-      <form class="nl-form" onsubmit="return false">
-        <input class="nl-inp" type="email" placeholder="Email address"/>
-        <input class="nl-inp" type="text"  placeholder="Full name"/>
-        <a href="#" class="btn btn-primary">Subscribe</a>
+      <form class="nl-form" id="nl-form">
+        <input class="nl-inp" type="email" id="nl-email" placeholder="Email address" aria-label="Email address" required/>
+        <input class="nl-inp" type="text" id="nl-name" placeholder="Full name" aria-label="Full name"/>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
       </form>
+      <div id="nl-status" style="font-size:13px;margin-top:10px;min-height:16px;"></div>
     </div>
   </section>
 
@@ -502,6 +503,35 @@
     document.body.style.overflow = '';
   }
   window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
+
+  document.getElementById('nl-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInp = document.getElementById('nl-email');
+    const nameInp  = document.getElementById('nl-name');
+    const statusEl = document.getElementById('nl-status');
+    statusEl.style.color = '';
+    statusEl.textContent = 'Submitting…';
+    try {
+      const r = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInp.value.trim(), name: nameInp.value.trim(), source_page: location.pathname }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok) {
+        statusEl.style.color = '#15803D';
+        statusEl.textContent = "Thanks — you're subscribed!";
+        emailInp.value = '';
+        nameInp.value = '';
+      } else {
+        statusEl.style.color = '#DC2626';
+        statusEl.textContent = d.error || 'Something went wrong, please try again.';
+      }
+    } catch {
+      statusEl.style.color = '#DC2626';
+      statusEl.textContent = 'Network error, please try again.';
+    }
+  });
 </script>
 </body>
 </html>
