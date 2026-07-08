@@ -57,7 +57,7 @@
     .nav-item { position: relative; }
     .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
     .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
-    .nav-a.on { color: var(--accent); }
+    .nav-a.on { color: var(--accent-h); }
     .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
     .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
     .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
@@ -97,7 +97,7 @@
     }
     .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 100% at 70% 50%, rgba(22,163,74,.06) 0%, transparent 70%); pointer-events: none; }
     .hero-inner { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: center; position: relative; z-index: 1; }
-    .hero-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 18px; }
     .hero-tag::before { content: ''; width: 16px; height: 2px; background: var(--accent); }
     .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; color: #111827; margin-bottom: 14px; }
     .hero h1 span { color: var(--accent); }
@@ -105,7 +105,7 @@
     .hero-btns { display: flex; gap: 12px; margin-bottom: 36px; flex-wrap: wrap; }
     .hero-stats { display: flex; gap: 32px; padding-top: 28px; border-top: 1px solid #D1FAE5; }
     .hs-val { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 700; color: #111827; }
-    .hs-val sup { font-size: 13px; color: var(--accent); }
+    .hs-val sup { font-size: 13px; color: var(--accent-h); }
     .hs-lbl { font-size: 12px; color: #6B7280; margin-top: 2px; }
 
     /* ── HERO STATS CARD ── */
@@ -114,13 +114,13 @@
     .hsc-stat:last-child { border-bottom: none; padding-bottom: 0; }
     .hsc-stat:first-child { padding-top: 0; }
     .hsc-num { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; min-width: 68px; }
-    .hsc-num sup { font-size: 14px; color: var(--accent); }
+    .hsc-num sup { font-size: 14px; color: var(--accent-h); }
     .hsc-lbl { font-size: 14px; color: #4B5563; line-height: 1.4; }
 
     /* ── SECTION COMMON ── */
     .section { padding: 64px 0; }
     .sec-hd { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; }
-    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 6px; }
     .sec-ttl { font-family: 'Sora', sans-serif; font-size: clamp(20px, 2.5vw, 26px); font-weight: 700; color: #111827; }
     .more-link { font-size: 14px; font-weight: 600; color: #6B7280; transition: color .15s; white-space: nowrap; }
     .more-link:hover { color: #111827; }
@@ -252,7 +252,7 @@
     .li-eng { display: flex; gap: 6px; }
     .li-eng-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: 9999px; background: none; font-size: 12px; color: var(--text-3); cursor: pointer; transition: all .15s; }
     .li-eng-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-muted); }
-    .li-view { font-size: 13px; font-weight: 600; color: var(--accent); transition: color .15s; }
+    .li-view { font-size: 13px; font-weight: 600; color: var(--accent-h); transition: color .15s; }
     .li-view:hover { color: var(--accent-h); }
     /* Carousel controls */
     .li-controls { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
@@ -324,7 +324,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1080px) {
       .hero-inner { grid-template-columns: 1fr; }
-      .hero-stat-card { display: none; }
+      .hero-stat-card { margin-top: 8px; }
       .et-inner { grid-template-columns: 1fr; }
       .ne-split { grid-template-columns: 1fr; }
       .ne-left  { padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 40px; }
@@ -410,11 +410,11 @@
 <nav class="nav-mobile" id="mobileNav">
   <a href="index.html" class="nav-mobile-a">Home</a>
   <a href="about.html" class="nav-mobile-a">About</a>
-  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;padding:12px 16px 4px">News & Events</div>
+  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6B7280;padding:12px 16px 4px">News & Events</div>
   <a href="news.html" class="nav-mobile-a" style="padding-left:28px">News</a>
   <a href="news.html#events" class="nav-mobile-a" style="padding-left:28px">Events</a>
   <a href="submit.html" class="nav-mobile-a" style="padding-left:28px">Submit</a>
-  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#9CA3AF;padding:12px 16px 4px">Community</div>
+  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6B7280;padding:12px 16px 4px">Community</div>
   <a href="community-partnership.html" class="nav-mobile-a" style="padding-left:28px">Partnership Initiatives</a>
   <a href="networking.html" class="nav-mobile-a" style="padding-left:28px">Cross-Cohort Networking</a>
   <a href="community-forum.html" class="nav-mobile-a" style="padding-left:28px">Redefining Learning Forum</a>
@@ -495,6 +495,7 @@
         </div>
         <button class="li-carr-btn" id="liNext" aria-label="Next">&#8250;</button>
       </div>
+      <div class="li-dots" id="liDots" style="justify-content:center;margin-top:16px;"></div>
 
     </div>
   </section>
@@ -563,7 +564,7 @@
           <div style="font-size:11px;font-weight:700;color:#6B7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Stay in the Loop</div>
           <form id="ft-nl-form" style="display:flex;flex-direction:column;gap:6px">
             <input type="email" id="ft-nl-email" class="ft-nl-inp" placeholder="Email address" aria-label="Email address" required style="padding:9px 12px;border-radius:6px;border:1px solid #374151;background:#1F2937;color:#fff;font-size:13px;outline:none;font-family:inherit"/>
-            <button type="submit" class="btn btn-primary" style="font-size:13px;padding:12px 14px;width:100%">Subscribe</button>
+            <button type="submit" class="btn btn-primary" style="font-size:13px;padding:14px 14px;width:100%">Subscribe</button>
             <div id="ft-nl-status" style="font-size:12px;min-height:14px;"></div>
           </form>
         </div>
@@ -821,6 +822,16 @@
       applyWidths();
       window.addEventListener('resize', applyWidths);
 
+      const dotsEl = document.getElementById('liDots');
+      let currentIndex = 0;
+      function renderDots() {
+        if (!dotsEl) return;
+        dotsEl.innerHTML = embeds.map((_, i) =>
+          `<span class="li-dot${i === currentIndex ? ' on' : ''}" style="cursor:default;"></span>`
+        ).join('');
+      }
+      renderDots();
+
       if (embeds.length <= VISIBLE) {
         prevBtn.style.display = nextBtn.style.display = 'none';
         return;
@@ -838,6 +849,8 @@
           applyWidths();
           sliding = false;
         }, 440);
+        currentIndex = (currentIndex + 1) % embeds.length;
+        renderDots();
       }
 
       function slidePrev() {
@@ -851,6 +864,8 @@
         track.style.transition = 'transform .42s cubic-bezier(.25,.46,.45,.94)';
         track.style.transform  = '';
         setTimeout(() => { sliding = false; }, 440);
+        currentIndex = (currentIndex - 1 + embeds.length) % embeds.length;
+        renderDots();
       }
 
       // Auto-play
