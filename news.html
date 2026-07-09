@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@9.2.4/ol.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -485,7 +485,7 @@
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" async id="leaflet-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ol@9.2.4/dist/ol.js" async id="ol-js"></script>
 <script>
   /* ── Tab switching ── */
   function switchTab(tab) {
@@ -693,10 +693,10 @@
 
   function initEventsTab() {
     if (!evDataReady) loadEventsData();
-    if (!evMapReady && typeof L !== 'undefined') {
+    if (!evMapReady && typeof ol !== 'undefined') {
       initEvMap();
     } else if (evMapReady && evMap) {
-      setTimeout(() => evMap.invalidateSize(), 100);
+      setTimeout(() => evMap.updateSize(), 100);
     }
   }
 
@@ -753,14 +753,16 @@
     catch { return ''; }
   }
 
-  /* ── Init Leaflet map ── */
+  /* ── Init OpenLayers map ── */
   function initEvMap() {
     if (evMapReady) return;
-    evMap = L.map('ev-map-news', { zoomControl: true, scrollWheelZoom: false }).setView([25, 15], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 18,
-    }).addTo(evMap);
+    evMap = new ol.Map({
+      target: 'ev-map-news',
+      layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+      view: new ol.View({ center: ol.proj.fromLonLat([15, 25]), zoom: 2 }),
+      controls: ol.control.defaults.defaults({ attribution: true, zoom: true }),
+      interactions: ol.interaction.defaults.defaults({ mouseWheelZoom: false }),
+    });
     evMap.on('click', closeEvPanel);
     evMapReady = true;
     if (evDataReady && evAllEvents.length) plotEvPins(evFiltered);
@@ -769,7 +771,7 @@
   /* ── Plot pins by country ── */
   function plotEvPins(events) {
     if (!evMap) return;
-    evMarkers.forEach(m => evMap.removeLayer(m));
+    evMarkers.forEach(m => evMap.removeOverlay(m));
     evMarkers = [];
 
     // 국가 기준으로 그룹핑 (온라인도 해당 국가에 포함)
@@ -807,17 +809,20 @@
       const onlineDot = someOnline && !allOnline
         ? `<div style="position:absolute;top:0;right:0;width:10px;height:10px;background:#6B7280;border:1.5px solid #fff;border-radius:50%;"></div>`
         : '';
-      const icon = L.divIcon({
-        className: '',
-        html: `<div style="position:relative;width:${size}px;height:${size}px;">
-          <div style="width:${size}px;height:${size}px;background:${bg};border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform=''">${cnt}</div>
-          ${onlineDot}
-        </div>`,
-        iconSize: [size, size], iconAnchor: [size/2, size/2],
+      const el = document.createElement('div');
+      el.style.cssText = `position:relative;width:${size}px;height:${size}px;`;
+      el.innerHTML = `<div style="width:${size}px;height:${size}px;background:${bg};border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${fs}px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.28);cursor:pointer;font-family:'Inter',sans-serif;">${cnt}</div>${onlineDot}`;
+      const dot = el.firstElementChild;
+      dot.addEventListener('mouseover', () => dot.style.transform = 'scale(1.15)');
+      dot.addEventListener('mouseout',  () => dot.style.transform = '');
+      el.addEventListener('click', (e) => { e.stopPropagation(); openEvPanel(country, evs); });
+
+      const marker = new ol.Overlay({
+        position: ol.proj.fromLonLat([coords[1], coords[0]]),
+        positioning: 'center-center',
+        element: el,
       });
-      const marker = L.marker(coords, { icon });
-      marker.on('click', () => openEvPanel(country, evs));
-      marker.addTo(evMap);
+      evMap.addOverlay(marker);
       evMarkers.push(marker);
     });
   }
@@ -958,16 +963,16 @@
     document.getElementById('sec-events').scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
-  /* ── Leaflet async init ── */
-  function waitForLeaflet() {
-    if (typeof L !== 'undefined') {
+  /* ── OpenLayers async init ── */
+  function waitForOL() {
+    if (typeof ol !== 'undefined') {
       if (document.getElementById('sec-events').classList.contains('on')) initEvMap();
     } else {
-      setTimeout(waitForLeaflet, 100);
+      setTimeout(waitForOL, 100);
     }
   }
-  document.getElementById('leaflet-js').addEventListener('load', waitForLeaflet);
-  document.getElementById('leaflet-js').addEventListener('error', () => {
+  document.getElementById('ol-js').addEventListener('load', waitForOL);
+  document.getElementById('ol-js').addEventListener('error', () => {
     document.querySelector('.ev-map-wrap').style.display = 'none';
   });
 
@@ -977,7 +982,7 @@
       switchTab('events');
       setTimeout(() => {
         document.getElementById('sec-events').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (evMapReady && evMap) evMap.invalidateSize();
+        if (evMapReady && evMap) evMap.updateSize();
       }, 150);
     }
   }
