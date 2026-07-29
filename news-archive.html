@@ -86,7 +86,7 @@
     .month-label { font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:12px; }
 
     /* ARCHIVE NEWS CARD */
-    .an-item { display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:background .15s,border-color .15s;color:inherit;text-decoration:none; }
+    .an-item { display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:8px;margin-bottom:8px;transition:background .15s,box-shadow .15s;color:inherit;text-decoration:none;box-shadow:0 0 0 1px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.04); }
     .an-item:hover { background:#F9FAFB;border-color:var(--border-h); }
     .an-thumb { width:64px;height:48px;border-radius:5px;overflow:hidden;flex-shrink:0;background:var(--bg-surface); }
     .an-thumb img { width:100%;height:100%;object-fit:cover;display:block; }
@@ -133,6 +133,9 @@
       .nav-links, .nav-cta { display:none; } .nav-hamburger { display:flex; }
       .ft-top { grid-template-columns:1fr;gap:28px; } .ft-cols { grid-template-columns:1fr 1fr; }
       .search-box { max-width:100%; }
+    }
+      @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
