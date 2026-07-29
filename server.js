@@ -88,7 +88,7 @@ const NEWS_BASE = 'https://edtechhub.com';
 const db = mysql.createPool({
   host    : 'localhost',
   user    : 'edtechhub',
-  password: 'edtech2024!',
+  password: process.env.DB_PASSWORD,
   database: 'edtechhub',
   waitForConnections: true,
   connectionLimit   : 10,
@@ -111,6 +111,13 @@ const TOKEN = process.env.EVENTBRITE_TOKEN;
 const ORG_ID= process.env.EVENTBRITE_ORG_ID;
 const PORT  = process.env.PORT || 3001;
 
+// 정적 서빙 범위 제한: DB 덤프/로그/백업/소스/설정 파일은 경로만으로 차단
+// (API 라우트(/api/*)는 확장자가 없어 allowlist 방식이면 같이 막히므로 denylist로 처리)
+const BLOCKED_STATIC_PATTERN = /\.(sql|log|bak|env|md)$|(^|\/)(server\.js|package\.json|package-lock\.json|\.git|node_modules|src|CLAUDE\.md)(\/|$)/i;
+app.use((req, res, next) => {
+  if (BLOCKED_STATIC_PATTERN.test(req.path)) return res.status(404).end();
+  next();
+});
 app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -735,9 +742,9 @@ app.get('/api/img', async (req, res) => {
 
 // ── Admin 인증 미들웨어 ──────────────────────────────────
 const ADMIN_USERS = [
-  { email: 'sungsoo@dohegroup.com', password: '1234' },
+  { email: 'sungsoo@dohegroup.com', password: process.env.ADMIN_PASSWORD },
 ];
-const ADMIN_KEY = 'edtech2024admin';
+const ADMIN_KEY = process.env.ADMIN_KEY;
 
 function requireAdmin(req, res, next) {
   const key = req.query.key || req.headers['x-admin-key'] || '';
