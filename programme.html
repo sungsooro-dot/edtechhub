@@ -159,8 +159,8 @@
     /* ── STEPS ── */
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     @media (max-width: 768px) { .steps { grid-template-columns: 1fr; } }
-    .step { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, box-shadow .2s; }
-    .step:hover { border-color: #A7F3D0; box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .step { border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .2s; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04), 0 4px 10px rgba(0,0,0,.06); }
+    .step:hover { box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.06), 0 8px 20px rgba(0,0,0,.08); }
     .step-top { padding: 20px 22px; display: flex; gap: 14px; align-items: center; }
     .step-top.c1 { background: linear-gradient(135deg,#F0FDF4,#DCFCE7); }
     .step-top.c2 { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); }
@@ -249,6 +249,14 @@
     .ft-btm { border-top: 1px solid #1F2937; padding-top: 20px; font-size: 12px; color: #4B5563; }
     .logo-text-ft { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 800; color: #fff; }
     .logo-text-ft span { color: var(--accent); }
+
+    /* ── SCROLL REVEAL (section titles only) ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -366,14 +374,14 @@
     <div class="ov-cols">
       <div>
         <div class="sec-lbl">Why It Exists</div>
-        <h2 class="sec-ttl">Coaches Change Everything</h2>
+        <h2 class="sec-ttl reveal">Coaches Change Everything</h2>
         <p>Coaches are <strong>fundamental to startup development</strong>. They are a pivotal part in guiding founders to reach their full potential.</p>
         <p>Unlike mentoring, coaching doesn't tell you what to do. Instead, it fosters <strong>independent thinking</strong> — and it's this mindset shift that drives transformative growth in founders.</p>
         <p>The GSCA was created to <strong>recognise and celebrate the work coaches do behind the scenes</strong>. Their efforts deserve a spotlight.</p>
       </div>
       <div>
         <div class="sec-lbl">The Mission</div>
-        <h2 class="sec-ttl">Transform Education Through Technology</h2>
+        <h2 class="sec-ttl reveal">Transform Education Through Technology</h2>
         <p>Whether transitioning from mentoring, or coming from a completely different background with transferable skills — the GSCA is for you.</p>
         <p>We look for coaches with <strong>versatile experience across sectors</strong>. The mission: use coaching to improve <strong>access, equity, and quality of education</strong> globally.</p>
         <p>Are you an impactful coach passionate about startup development? The GSCA is your stage.</p>
@@ -386,7 +394,7 @@
 <div class="tab-pane" id="tab-eligibility">
   <div class="wrap">
     <div class="sec-lbl">Who Qualifies</div>
-    <h2 class="sec-ttl">Who Should Apply?</h2>
+    <h2 class="sec-ttl reveal">Who Should Apply?</h2>
     <p class="sec-desc">The GSCA welcomes coaches from all backgrounds. If you are passionate about startup development and driving impact in EdTech, this programme is for you.</p>
     <div class="elig-grid">
       <div class="elig-card">
@@ -439,7 +447,7 @@
 <div class="tab-pane" id="tab-programme">
   <div class="wrap">
     <div class="sec-lbl">How It Works</div>
-    <h2 class="sec-ttl">24-Week Programme Structure</h2>
+    <h2 class="sec-ttl reveal">24-Week Programme Structure</h2>
     <p class="sec-desc">A structured journey from application to award ceremony — three phases designed to surface the world's most impactful startup coaches.</p>
     <div class="steps">
       <div class="step">
@@ -489,7 +497,7 @@
 <div class="tab-pane" id="tab-dates">
   <div class="wrap">
     <div class="sec-lbl">Schedule</div>
-    <h2 class="sec-ttl">2025 Programme Timeline</h2>
+    <h2 class="sec-ttl reveal">2025 Programme Timeline</h2>
     <p class="sec-desc">The 2025 edition ran June–January. Stay tuned — applications for the 2026 edition will be announced soon.</p>
     <div class="tl-wrap">
       <div class="timeline">
@@ -532,7 +540,7 @@
 <div class="tab-pane" id="tab-partners">
   <div class="wrap">
     <div class="sec-lbl">Partners</div>
-    <h2 class="sec-ttl">Key Partners</h2>
+    <h2 class="sec-ttl reveal">Key Partners</h2>
     <div class="partner-grid">
       <div class="partner-card">GES Awards</div>
       <div class="partner-card">MindCET</div>
@@ -541,7 +549,7 @@
     </div>
 
     <div class="sec-lbl">In the Press</div>
-    <h2 class="sec-ttl">Press Coverage</h2>
+    <h2 class="sec-ttl reveal">Press Coverage</h2>
     <div class="press-grid">
       <a href="https://sifted.eu/articles/coaching-founders-brnd" target="_blank" rel="noopener" class="press-card">
         <div class="press-src">Sifted</div>
@@ -630,6 +638,23 @@
     document.body.style.overflow = '';
   }
   window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
+
+  // Scroll fade-up reveal — section titles only, plays once, skipped for reduced-motion
+  (function() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    if (reduceMotion) { els.forEach(el => el.classList.add('in')); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(el => io.observe(el));
+  })();
 </script>
 </body>
 </html>

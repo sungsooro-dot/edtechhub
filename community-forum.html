@@ -157,11 +157,11 @@
     .event-item {
       display: flex; align-items: center; gap: 20px;
       background: #fff; padding: 20px 24px;
-      border: 1px solid var(--border);
       border-radius: 8px; transition: box-shadow .15s, background .15s;
       text-decoration: none; color: inherit;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04);
     }
-    .event-item:hover { background: #F0FDF4; box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+    .event-item:hover { background: #F0FDF4; box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.06), 0 8px 20px rgba(0,0,0,.08); }
     .event-date {
       text-align: center; min-width: 56px; flex-shrink: 0;
       background: #F0FDF4; border-radius: 8px; padding: 8px 10px;
@@ -236,6 +236,14 @@
       .ft-cols { grid-template-columns: 1fr; }
       .nl-form { flex-direction: column; }
       .nl-inp, .nl-form .btn { width: 100%; }
+    }
+
+    /* ── SCROLL REVEAL (section titles only) ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
     }
   </style>
 </head>
@@ -371,7 +379,7 @@
       <div class="sec-hd">
         <div>
           <div class="sec-lbl">Archive</div>
-          <div class="sec-ttl">Past Forum Sessions</div>
+          <div class="sec-ttl reveal">Past Forum Sessions</div>
         </div>
       </div>
       <div class="event-list">
@@ -532,6 +540,23 @@
       statusEl.textContent = 'Network error, please try again.';
     }
   });
+
+  // Scroll fade-up reveal — section titles only, plays once, skipped for reduced-motion
+  (function() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    if (reduceMotion) { els.forEach(el => el.classList.add('in')); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(el => io.observe(el));
+  })();
 </script>
 </body>
 </html>

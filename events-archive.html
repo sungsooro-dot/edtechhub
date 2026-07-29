@@ -95,7 +95,7 @@
     .year-label { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
 
     /* ── ARCHIVE EVENT CARD ── */
-    .ar-item { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 14px 18px; border: 1px solid var(--border); border-left: 3px solid #D1D5DB; border-radius: 6px; transition: background .15s, border-color .15s; color: inherit; text-decoration: none; margin-bottom: 8px; }
+    .ar-item { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 14px 18px; border-left: 3px solid #D1D5DB; border-radius: 6px; transition: background .15s, border-color .15s; color: inherit; text-decoration: none; margin-bottom: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04); }
     .ar-item:hover { background: #F9FAFB; border-left-color: var(--accent-h); }
     .ar-left { display: flex; gap: 14px; align-items: center; flex: 1; min-width: 0; }
     .ar-dt { text-align: center; min-width: 48px; flex-shrink: 0; background: #F3F4F6; border-radius: 6px; padding: 5px 8px; border: 1px solid var(--border); }
@@ -144,6 +144,9 @@
       .ft-cols { grid-template-columns: 1fr 1fr; }
       .toolbar-inner { gap: 8px; }
       .search-box { max-width: 100%; }
+    }
+      @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
