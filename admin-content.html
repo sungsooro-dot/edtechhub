@@ -5,96 +5,122 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Content Admin — EdTech HUB</title>
 <style>
+  /* "Structured Ledger" — php-site/admin/css/ledger.css 토큰과 통일 */
   :root {
-    --accent:#16A34A; --accent-h:#15803D; --accent-muted:#F0FDF4;
-    --text-1:#111827; --text-2:#6B7280; --text-3:#9CA3AF;
-    --border:#E5E7EB; --bg:#F8FAFC; --card:#fff;
-    --danger:#EF4444; --warn:#F59E0B;
+    --navy:#16243A; --teal:#256F68; --teal-h:#1D5A54;
+    --accent:var(--teal); --accent-h:var(--teal-h); --accent-muted:#EAF2F0;
+    --ok:#2F8F5B; --warn:#C08A1E; --mute:#9A9789; --line:#20241F;
+    --text-1:#20241F; --text-2:#6B7A6F; --text-3:var(--mute);
+    --border:#E7E4D9; --bg:#FCFCFA; --card:#fff; --zebra:#FAFAF6;
+    --danger:#B4432F;
+    --mono:'SFMono-Regular','JetBrains Mono',ui-monospace,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-1);font-size:14px}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-1);font-size:14px}
 
   .layout{display:flex;min-height:100vh}
-  .sidebar{width:220px;background:#111827;flex-shrink:0;display:flex;flex-direction:column;padding:24px 0;justify-content:space-between}
-  .sidebar-logo{padding:0 20px 24px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:10px}
+  .sidebar{width:220px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;padding:24px 0;justify-content:space-between}
+  .sidebar-logo{padding:0 20px 24px;border-bottom:1px solid #24344E;display:flex;align-items:center;gap:10px}
   .sidebar-logo img{height:30px}
   .sidebar-logo span{color:#fff;font-weight:700;font-size:15px}
   .sidebar-nav{padding:16px 0}
-  .sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#9CA3AF;text-decoration:none;font-size:13px;font-weight:500;transition:background .15s,color .15s}
-  .sidebar-nav a:hover{background:#1F2937;color:#fff}
-  .sidebar-nav a.active{background:#1F2937;color:#fff;border-left:3px solid var(--accent);padding-left:17px}
-  .sidebar-section{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#4B5563;letter-spacing:1px;text-transform:uppercase}
+  .sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#9FB0C7;text-decoration:none;font-size:13px;font-weight:500;transition:background .15s,color .15s}
+  .sidebar-nav a:hover{background:#1E3050;color:#fff}
+  .sidebar-nav a.active{background:#1E3050;color:#fff;border-left:3px solid var(--teal);padding-left:17px}
+  .sidebar-section{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#5A6C86;letter-spacing:1px;text-transform:uppercase}
 
   .main{flex:1;display:flex;flex-direction:column;min-width:0}
-  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-  .topbar h1{font-size:16px;font-weight:700}
+  .topbar{background:#fff;border-bottom:2px solid var(--line);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .topbar h1{font-size:16px;font-weight:800;letter-spacing:-.3px;color:var(--line)}
   .content{padding:24px 28px;flex:1}
 
   /* Tabs */
-  .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0}
-  .tab{padding:10px 20px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s}
+  .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:0;flex-wrap:wrap}
+  .tab{padding:10px 16px;font-size:13.5px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s;white-space:nowrap}
   .tab:hover{color:var(--text-1)}
-  .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+  .tab .tab-count{font-variant-numeric:tabular-nums;color:var(--teal);font-weight:800;margin-left:4px}
   .tab-panel{display:none}
   .tab-panel.active{display:block}
 
   /* Stats */
   .stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-  .stat-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;min-width:120px}
-  .stat-card .n{font-size:22px;font-weight:800}
+  .stat-card{background:#fff;border:1px solid var(--border);border-radius:2px;padding:14px 18px;min-width:120px}
+  .stat-card .n{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
   .stat-card .l{font-size:11px;color:var(--text-2);margin-top:2px}
 
   /* Toolbar */
   .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-  .search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:340px}
+  .search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:0;padding:7px 12px;flex:1;max-width:340px}
   .search-box input{border:none;outline:none;font-size:13px;background:transparent;width:100%;color:var(--text-1)}
-  .btn{border:none;border-radius:7px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
-  .btn-primary{background:var(--accent);color:#fff}
-  .btn-primary:hover{background:var(--accent-h)}
-  .btn-sm{padding:5px 10px;font-size:12px;border-radius:5px}
-  .btn-danger{background:#FEE2E2;color:var(--danger)}
-  .btn-danger:hover{background:#FECACA}
-  .btn-ghost{background:#F3F4F6;color:var(--text-1)}
-  .btn-ghost:hover{background:var(--border)}
+  .btn{border:none;border-radius:0;padding:8px 14px;font-size:12.5px;font-weight:700;letter-spacing:.2px;cursor:pointer;transition:background .15s,color .15s;font-family:inherit}
+  .btn-primary{background:var(--navy);color:#fff}
+  .btn-primary:hover{background:#0e1826}
+  .btn-sm{padding:5px 10px;font-size:12px;border-radius:0}
+  .btn-danger{background:#fff;border:1.5px solid var(--danger);color:var(--danger);padding:calc(8px - 1.5px) calc(14px - 1.5px)}
+  .btn-danger.btn-sm{padding:calc(5px - 1.5px) calc(10px - 1.5px)}
+  .btn-danger:hover{background:var(--danger);color:#fff}
+  .btn-ghost{background:#fff;border:1px solid var(--border);color:#4A4738;padding:calc(8px - 1px) calc(14px - 1px)}
+  .btn-ghost.btn-sm{padding:calc(5px - 1px) calc(10px - 1px)}
+  .btn-ghost:hover{background:#F0EFE4}
+  /* 행별 Publish = 틸 아웃라인, Top Pick = amber 아웃라인 (ledger.css와 동일) */
+  .btn-pub{background:#fff;border:1.5px solid var(--teal);color:var(--teal);border-radius:0;font-weight:700;font-size:11.5px;padding:4px 12px}
+  .btn-pub:hover{background:var(--teal);color:#fff}
+  .btn-star{background:#fff;border:1.5px solid var(--warn);color:var(--warn);border-radius:0;font-weight:700;font-size:11.5px;padding:4px 10px}
+  .btn-star:hover{background:var(--warn);color:#fff}
+  .btn-star.on{background:var(--warn);color:#fff}
+  select.btn{border:1px solid var(--border);background:#fff;font-weight:600;color:#4A4738}
+  input[type="checkbox"]{accent-color:var(--teal);width:15px;height:15px}
 
   /* Table */
-  .table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-  table{width:100%;border-collapse:collapse}
-  thead th{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.6px;padding:11px 14px;text-align:left;background:#F9FAFB;border-bottom:1px solid var(--border);white-space:nowrap}
-  tbody tr{border-bottom:1px solid #F3F4F6;transition:background .1s}
+  .table-wrap{background:#fff;border:1px solid var(--border);border-radius:0;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{font-size:10px;font-weight:700;color:#8A8777;text-transform:uppercase;letter-spacing:.5px;padding:9px 10px;text-align:left;background:#F6F5F0;border-bottom:2px solid var(--line);white-space:nowrap}
+  thead th.sortable{cursor:pointer;user-select:none}
+  thead th.sortable:hover{color:var(--text-1)}
+  thead th.sortable.sorted{color:var(--teal)}
+  .sort-arrow{display:inline-block;margin-left:3px;opacity:.6}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+  tbody tr:nth-child(even){background:var(--zebra)}
   tbody tr:last-child{border-bottom:none}
-  tbody tr:hover{background:#FAFAFA}
-  td{padding:10px 14px;vertical-align:middle}
+  tbody tr:hover{background:#F0EFE4}
+  td{padding:8px 10px;vertical-align:middle}
+  td.ledger-date{font-family:var(--mono);font-size:12px;color:#6B7A6F;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.ledger-id{font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+  .tier-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .tier-dot.t1{background:var(--ok)}
+  .tier-dot.t2{background:var(--warn)}
+  .tier-dot.t3,.tier-dot.tx{background:var(--mute)}
   .col-title{max-width:300px}
-  .col-title .t{font-size:13px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .col-title a.ext{color:var(--accent);font-size:11px;text-decoration:none;display:inline-block;margin-top:3px}
+  .col-title .t{font-size:13px;font-weight:600;line-height:1.4;color:var(--line);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .col-title a.ext{color:var(--teal);font-size:11px;font-weight:600;text-decoration:none;display:inline-block;margin-top:3px}
   .col-title a.ext:hover{text-decoration:underline}
-  .id-chip{font-size:10px;font-weight:700;color:var(--text-3);background:#F3F4F6;border-radius:4px;padding:1px 5px;margin-right:4px}
+  .id-chip{font-size:10px;font-weight:700;font-family:var(--mono);color:var(--mute);background:#F6F5F0;border-radius:2px;padding:1px 5px;margin-right:4px}
 
-  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-  .badge-online{background:#EFF6FF;color:#3B82F6}
-  .badge-inperson{background:#F0FDF4;color:var(--accent)}
-  .badge-nodate{background:#FEF3C7;color:#D97706}
-  .badge-innovation{background:#F0FDF4;color:#16A34A}
-  .badge-funding{background:#FFF7ED;color:#EA580C}
-  .badge-research{background:#EFF6FF;color:#2563EB}
-  .badge-government{background:#F5F3FF;color:#7C3AED}
-  .badge-business{background:#FFF1F2;color:#BE123C}
+  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:.2px}
+  .badge-online{background:#EAF2F0;color:var(--teal)}
+  .badge-inperson{background:#EDF3EE;color:var(--ok)}
+  .badge-nodate{background:#F8F1DF;color:var(--warn)}
+  .badge-innovation{background:#EDF3EE;color:var(--ok)}
+  .badge-funding{background:#F8F1DF;color:var(--warn)}
+  .badge-research{background:#EAF2F0;color:var(--teal)}
+  .badge-government{background:#EBEEF4;color:var(--navy)}
+  .badge-business{background:#F5E9E6;color:var(--danger)}
 
-  .thumb{width:48px;height:36px;object-fit:cover;border-radius:4px;background:#F3F4F6;display:block}
-  .thumb-placeholder{width:48px;height:36px;border-radius:4px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .thumb{width:48px;height:36px;object-fit:cover;border-radius:2px;background:#EFEDE4;display:block}
+  .thumb-placeholder{width:48px;height:36px;border-radius:2px;background:#EFEDE4;border:1px dashed #D8D4C6;display:flex;align-items:center;justify-content:center;font-size:18px}
 
   /* Pagination */
   .pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px}
-  .pag-btn{background:#fff;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:13px;cursor:pointer;font-family:inherit;transition:background .15s}
-  .pag-btn:hover:not(:disabled){background:#F3F4F6}
+  .pag-btn{background:#fff;border:1px solid var(--border);border-radius:0;padding:5px 12px;font-size:12.5px;color:var(--line);cursor:pointer;font-family:inherit;transition:background .15s;font-variant-numeric:tabular-nums}
+  .pag-btn:hover:not(:disabled){background:#F0EFE4}
   .pag-btn:disabled{opacity:.4;cursor:not-allowed}
-  .pag-info{font-size:13px;color:var(--text-2)}
+  .pag-info{font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums}
 
   /* Modal */
-  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:center;justify-content:center}
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(22,36,58,.5);z-index:400;align-items:center;justify-content:center}
   .modal-bg.open{display:flex}
-  .modal{background:#fff;border-radius:14px;width:560px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal{background:#fff;border-radius:2px;border-top:3px solid var(--navy);width:560px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(22,36,58,.3)}
   .modal-head{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;background:#fff;z-index:1;border-bottom:1px solid var(--border);padding-bottom:14px}
   .modal-head h2{font-size:16px;font-weight:700}
   .modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-2);line-height:1}
@@ -103,13 +129,13 @@
 
   .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
   .form-group label{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px}
-  .form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;font-family:inherit;color:var(--text-1);outline:none;transition:border-color .15s;width:100%}
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+  .form-group input,.form-group select,.form-group textarea{border:1px solid var(--border);border-radius:0;padding:8px 11px;font-size:13px;font-family:inherit;color:var(--text-1);outline:none;transition:border-color .15s;width:100%}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--teal)}
   .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .form-full{grid-column:1/-1}
 
-  .online-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#EFF6FF;border-radius:8px;margin-bottom:14px}
-  .online-row label{font-size:13px;font-weight:600;color:#1D4ED8;cursor:pointer;flex:1}
+  .online-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--accent-muted);border-radius:2px;margin-bottom:14px}
+  .online-row label{font-size:13px;font-weight:600;color:var(--teal);cursor:pointer;flex:1}
   .toggle{position:relative;width:36px;height:20px;cursor:pointer;flex-shrink:0}
   .toggle input{opacity:0;width:0;height:0;position:absolute}
   .toggle-track{position:absolute;inset:0;background:#D1D5DB;border-radius:20px;transition:background .2s}
@@ -117,7 +143,7 @@
   .toggle-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
   .toggle input:checked ~ .toggle-thumb{transform:translateX(16px)}
 
-  .toast{position:fixed;bottom:24px;right:24px;background:#111827;color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:11px 18px;border-radius:2px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
   .toast.show{opacity:1;transform:translateY(0)}
   .empty-state{text-align:center;padding:48px 24px;color:var(--text-3);font-size:13px}
 
@@ -137,8 +163,8 @@
       <img src="/logo.png" alt="logo" onerror="this.style.display='none'"/>
       <span>Admin</span>
     </div>
-    <div style="padding:10px 12px;border-bottom:1px solid #374151">
-      <a href="/" target="_blank" style="display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:12px;font-weight:500;padding:7px 8px;border-radius:6px;transition:background .15s,color .15s" onmouseover="this.style.background='#1F2937';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='#9CA3AF'">
+    <div style="padding:10px 12px;border-bottom:1px solid #24344E">
+      <a href="/" target="_blank" style="display:flex;align-items:center;gap:8px;color:#9FB0C7;text-decoration:none;font-size:12px;font-weight:500;padding:7px 8px;border-radius:2px;transition:background .15s,color .15s" onmouseover="this.style.background='#1E3050';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='#9FB0C7'">
         🌐 <span>View Website</span> <span style="font-size:10px;opacity:.6;margin-left:auto">↗</span>
       </a>
     </div>
@@ -148,8 +174,8 @@
       <div class="sidebar-section">Community</div>
       <a href="/admin">🗣 Voices</a>
     </nav>
-    <div style="padding:12px 20px;border-top:1px solid #374151">
-      <a href="/admin/logout" style="display:flex;align-items:center;gap:8px;color:#6B7280;text-decoration:none;font-size:12px;font-weight:500" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#6B7280'">
+    <div style="padding:12px 20px;border-top:1px solid #24344E">
+      <a href="/admin/logout" style="display:flex;align-items:center;gap:8px;color:#7A8CA6;text-decoration:none;font-size:12px;font-weight:500" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='#7A8CA6'">
         🔓 Logout
       </a>
     </div>
@@ -165,9 +191,11 @@
 
     <div class="content">
       <div class="tabs">
-        <div class="tab active" onclick="switchTab('events')">📅 Events</div>
-        <div class="tab" onclick="switchTab('news')">📰 News</div>
-        <div class="tab" onclick="switchTab('embeds')">🔗 LinkedIn Embeds</div>
+        <div class="tab active" data-tab="events" onclick="switchTab('events')">📅 Events</div>
+        <div class="tab" data-tab="news" onclick="switchTab('news')">📰 News</div>
+        <div class="tab" data-tab="queue-news" onclick="switchTab('queue-news')">⏳ Pipeline Queue (News)<span class="tab-count" id="tab-count-nq"></span></div>
+        <div class="tab" data-tab="queue-events" onclick="switchTab('queue-events')">⏳ Pipeline Queue (Events)<span class="tab-count" id="tab-count-eq"></span></div>
+        <div class="tab" data-tab="embeds" onclick="switchTab('embeds')">🔗 LinkedIn Embeds</div>
       </div>
 
       <!-- ───── EVENTS TAB ───── -->
@@ -193,11 +221,11 @@
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>Event</th>
-              <th>Date</th>
-              <th>Location</th>
-              <th>Type</th>
-              <th style="width:80px"></th>
+              <th class="sortable" onclick="evSortBy('title')" id="ev-th-title">Event <span class="sort-arrow" id="ev-arrow-title"></span></th>
+              <th class="sortable" onclick="evSortBy('date')" id="ev-th-date">Date <span class="sort-arrow" id="ev-arrow-date"></span></th>
+              <th class="sortable" onclick="evSortBy('location')" id="ev-th-location">Location <span class="sort-arrow" id="ev-arrow-location"></span></th>
+              <th class="sortable" onclick="evSortBy('type')" id="ev-th-type">Type <span class="sort-arrow" id="ev-arrow-type"></span></th>
+              <th style="width:150px"></th>
             </tr></thead>
             <tbody id="ev-tbody"><tr><td colspan="5" class="empty-state">Loading…</td></tr></tbody>
           </table>
@@ -231,7 +259,7 @@
               <th>Publisher</th>
               <th>Category</th>
               <th>Date</th>
-              <th style="width:80px"></th>
+              <th style="width:150px"></th>
             </tr></thead>
             <tbody id="nw-tbody"><tr><td colspan="6" class="empty-state">Loading…</td></tr></tbody>
           </table>
@@ -243,6 +271,102 @@
         </div>
 
 
+      </div>
+
+      <!-- ───── PIPELINE QUEUE (NEWS) TAB ───── -->
+      <div class="tab-panel" id="panel-queue-news">
+        <div class="stats">
+          <div class="stat-card"><div class="n" id="nq-s-total" style="color:var(--teal)">—</div><div class="l">Awaiting Review</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="nq-search" type="text" placeholder="Search id, title, publisher…" oninput="nqSearchDelay()"/>
+          </div>
+          <select id="nq-cat" class="btn" onchange="loadNewsQueue(1)">
+            <option value="">All Categories</option>
+          </select>
+          <select id="nq-sort" class="btn" onchange="loadNewsQueue(1)">
+            <option value="publish_dt">Sort: Pub date</option>
+            <option value="pipeline_run_date">Sort: Pipeline run date</option>
+            <option value="tier">Sort: Tier</option>
+            <option value="title">Sort: Title</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mute);cursor:pointer">
+            <input type="checkbox" id="nq-desc" checked onchange="loadNewsQueue(1)"/> Reverse order
+          </label>
+          <button class="btn btn-primary" onclick="publishCheckedQueue('news')">Publish checked</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:34px"><input type="checkbox" id="nq-check-all" onchange="queueCheckAll('nq')"/></th>
+              <th style="width:60px">Id</th>
+              <th>Category</th>
+              <th style="width:52px">Img</th>
+              <th>Title</th>
+              <th>Publisher</th>
+              <th>Tier</th>
+              <th>Source</th>
+              <th>Run date</th>
+              <th>Pub date</th>
+              <th style="width:190px">Publish</th>
+            </tr></thead>
+            <tbody id="nq-tbody"><tr><td colspan="11" class="empty-state">Loading…</td></tr></tbody>
+          </table>
+          <div class="pagination" id="nq-pagination" style="display:none">
+            <button class="pag-btn" id="nq-prev" onclick="loadNewsQueue(nqPage-1)">← Prev</button>
+            <span class="pag-info" id="nq-pag-info"></span>
+            <button class="pag-btn" id="nq-next" onclick="loadNewsQueue(nqPage+1)">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ───── PIPELINE QUEUE (EVENTS) TAB ───── -->
+      <div class="tab-panel" id="panel-queue-events">
+        <div class="stats">
+          <div class="stat-card"><div class="n" id="eq-s-total" style="color:var(--teal)">—</div><div class="l">Awaiting Review</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="eq-search" type="text" placeholder="Search id, title…" oninput="eqSearchDelay()"/>
+          </div>
+          <select id="eq-country" class="btn" onchange="loadEventQueue(1)">
+            <option value="">All Countries</option>
+          </select>
+          <select id="eq-sort" class="btn" onchange="loadEventQueue(1)">
+            <option value="event_start_dt">Sort: Event date</option>
+            <option value="pipeline_run_date">Sort: Pipeline run date</option>
+            <option value="create_dt">Sort: Reg date</option>
+            <option value="title">Sort: Title</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mute);cursor:pointer">
+            <input type="checkbox" id="eq-desc" onchange="loadEventQueue(1)"/> Reverse order
+          </label>
+          <button class="btn btn-primary" onclick="publishCheckedQueue('event')">Publish checked</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:34px"><input type="checkbox" id="eq-check-all" onchange="queueCheckAll('eq')"/></th>
+              <th style="width:60px">Id</th>
+              <th style="width:52px">Img</th>
+              <th>Title</th>
+              <th>Country</th>
+              <th>Event date</th>
+              <th>Source</th>
+              <th>Run date</th>
+              <th style="width:190px">Publish</th>
+            </tr></thead>
+            <tbody id="eq-tbody"><tr><td colspan="9" class="empty-state">Loading…</td></tr></tbody>
+          </table>
+          <div class="pagination" id="eq-pagination" style="display:none">
+            <button class="pag-btn" id="eq-prev" onclick="loadEventQueue(eqPage-1)">← Prev</button>
+            <span class="pag-info" id="eq-pag-info"></span>
+            <button class="pag-btn" id="eq-next" onclick="loadEventQueue(eqPage+1)">Next →</button>
+          </div>
+        </div>
       </div>
 
       <!-- ───── LINKEDIN EMBEDS TAB ───── -->
@@ -432,19 +556,27 @@ const CAT_CLS    = {9:'badge-innovation',3:'badge-funding',4:'badge-research',10
 
 let currentTab = 'events';
 let allEvents = [], evCountries = [];
+let evSortKey = null, evSortDir = 1;
 let nwPage = 1, nwTotal = 0, nwPages = 1;
 let nwSearchTimer = null;
 
 // ── Tabs ──────────────────────────────────────────────
+const TAB_TITLES = {
+  'events':'Events','news':'News','embeds':'LinkedIn Embeds',
+  'queue-news':'Pipeline Queue — News','queue-events':'Pipeline Queue — Events',
+};
 function switchTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', ['events','news','embeds'][i] === tab));
-  document.getElementById('panel-events').classList.toggle('active', tab === 'events');
-  document.getElementById('panel-news').classList.toggle('active', tab === 'news');
-  document.getElementById('panel-embeds').classList.toggle('active', tab === 'embeds');
-  document.getElementById('page-title').textContent = {'events':'Events','news':'News','embeds':'LinkedIn Embeds'}[tab] || tab;
+  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(el => el.classList.toggle('active', el.id === `panel-${tab}`));
+  document.getElementById('page-title').textContent = TAB_TITLES[tab] || tab;
+  // Pipeline Queue 탭에선 수동 Add 버튼 숨김 (파이프라인이 넣어주는 항목만 다룸)
+  document.getElementById('add-btn').style.display =
+    (tab === 'queue-news' || tab === 'queue-events') ? 'none' : '';
   if (tab === 'news' && nwTotal === 0) loadNews(1);
   if (tab === 'embeds') loadEmbeds();
+  if (tab === 'queue-news'   && !nqLoaded) loadNewsQueue(1);
+  if (tab === 'queue-events' && !eqLoaded) loadEventQueue(1);
 }
 
 // ── EVENTS ────────────────────────────────────────────
@@ -472,16 +604,53 @@ function evUpdateStats() {
   document.getElementById('ev-s-inperson').textContent= allEvents.filter(e=>!evIsOnline(e)).length;
 }
 
+function evSortBy(key) {
+  if (evSortKey === key) { evSortDir *= -1; } else { evSortKey = key; evSortDir = 1; }
+  renderEvents();
+}
+
+function evUpdateSortIndicators() {
+  ['title','date','location','type'].forEach(key => {
+    const th    = document.getElementById(`ev-th-${key}`);
+    const arrow = document.getElementById(`ev-arrow-${key}`);
+    const active = evSortKey === key;
+    th.classList.toggle('sorted', active);
+    arrow.textContent = active ? (evSortDir === 1 ? '▲' : '▼') : '';
+  });
+}
+
+function evSortValue(e, key) {
+  switch (key) {
+    case 'title':    return (e.title||'').toLowerCase();
+    case 'date':     return e.event_start_dt ? new Date(e.event_start_dt).getTime() : null;
+    case 'location': return evIsOnline(e) ? 'online' : [e.city, e.country].filter(Boolean).join(', ').toLowerCase();
+    case 'type':     return evIsOnline(e) ? 0 : 1;
+    default:         return null;
+  }
+}
+
 function renderEvents() {
   const q  = document.getElementById('ev-search').value.toLowerCase();
   const ft = document.getElementById('ev-filter').value;
-  const list = allEvents.filter(e => {
+  let list = allEvents.filter(e => {
     if (q && !`${e.title} ${e.city} ${e.country}`.toLowerCase().includes(q)) return false;
     if (ft === 'online'   && !evIsOnline(e)) return false;
     if (ft === 'inperson' &&  evIsOnline(e)) return false;
     if (ft === 'nodate'   && e.event_start_dt) return false;
     return true;
   });
+  if (evSortKey) {
+    list = list.slice().sort((a, b) => {
+      const va = evSortValue(a, evSortKey), vb = evSortValue(b, evSortKey);
+      if (va === null && vb === null) return 0;
+      if (va === null) return 1;  // missing values always sort last
+      if (vb === null) return -1;
+      if (va < vb) return -1 * evSortDir;
+      if (va > vb) return  1 * evSortDir;
+      return 0;
+    });
+  }
+  evUpdateSortIndicators();
   const tbody = document.getElementById('ev-tbody');
   if (!list.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No events found</td></tr>`; return; }
   tbody.innerHTML = list.map(e => {
@@ -498,6 +667,7 @@ function renderEvents() {
       <td style="font-size:13px;color:var(--text-2)">${esc(loc)}</td>
       <td>${online?'<span class="badge badge-online">🌐 Online</span>':'<span class="badge badge-inperson">📍 In-Person</span>'}</td>
       <td><div style="display:flex;gap:4px">
+        ${topPickBtn('event', e.id)}
         <button class="btn btn-sm btn-ghost" onclick="openEvEdit(${e.id})">✏️</button>
         <button class="btn btn-sm btn-danger" onclick="deleteEvent(${e.id},this)">🗑</button>
       </div></td>
@@ -627,6 +797,7 @@ function renderNews(list) {
       <td>${cls?`<span class="badge ${cls}">${cat}</span>`:cat}</td>
       <td style="font-size:12px;color:var(--text-2);white-space:nowrap">${dt}</td>
       <td><div style="display:flex;gap:4px">
+        ${topPickBtn('news', n.id)}
         <button class="btn btn-sm btn-ghost" onclick="openNwEdit(${n.id})">✏️</button>
         <button class="btn btn-sm btn-danger" onclick="deleteNews(${n.id},this)">🗑</button>
       </div></td>
@@ -704,10 +875,251 @@ function toast(msg,err){
   el.textContent=msg; el.style.background=err?'#DC2626':'#111827';
   el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2500);
 }
+const showToast = toast; // 임베드 탭 코드가 showToast 이름으로 호출 (기존 미정의 버그 수정)
 
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); }));
 
-loadEvents();
+// ── Top Picks (★) ─────────────────────────────────────
+const topPicks = { news: new Set(), events: new Set() };
+
+async function loadTopPicks() {
+  try {
+    const r = await fetch(`/api/admin/top-picks?key=${KEY}`);
+    if (!r.ok) return;
+    const d = await r.json();
+    topPicks.news   = new Set(d.news   || []);
+    topPicks.events = new Set(d.events || []);
+  } catch (_) {}
+}
+
+function topPickBtn(type, id) {
+  const on = (type === 'news' ? topPicks.news : topPicks.events).has(id);
+  return `<button class="btn-star${on ? ' on' : ''}" title="${on ? 'Top Pick — click to remove' : 'Add to Top Picks'}"
+    onclick="toggleTopPick('${type}', ${id}, this)">★</button>`;
+}
+
+async function toggleTopPick(type, id, btn) {
+  const set = type === 'news' ? topPicks.news : topPicks.events;
+  const on  = set.has(id);
+  const label = type === 'news' ? 'Top News Picks' : 'Top Event Picks';
+  if (on  && !confirm(`Remove this item from ${label}?`)) return;
+  if (!on && !confirm(`Add this item to ${label}?`)) return;
+  if (btn) btn.disabled = true;
+  const r = await fetch(`/api/admin/${type}-top-picks?key=${KEY}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids: [id], remove: on }),
+  });
+  if (btn) btn.disabled = false;
+  const d = await r.json().catch(() => ({}));
+  if (!d.ok) { toast('Failed: ' + (d.error || 'unknown'), true); return; }
+  if (on) set.delete(id); else set.add(id);
+  if (btn) { btn.classList.toggle('on', !on); btn.title = !on ? 'Top Pick — click to remove' : 'Add to Top Picks'; }
+  toast(on ? 'Removed from Top Picks' : 'Added to Top Picks');
+}
+
+// ── Pipeline Queue (News / Events) ────────────────────
+// php-site/admin/news|event/pipeline_queue/ 화면의 Node 버전
+let nqPage = 1, nqPages = 1, nqLoaded = false, nqSearchTimer = null;
+let eqPage = 1, eqPages = 1, eqLoaded = false, eqSearchTimer = null;
+let nqCatsFilled = false, eqCountriesFilled = false;
+
+function fmtLedger(dt) {
+  if (!dt) return '-';
+  const d = new Date(dt);
+  if (isNaN(d)) return '-';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[d.getUTCMonth()]} ${String(d.getUTCDate()).padStart(2,'0')}, ${d.getUTCFullYear()}`;
+}
+
+function tierCell(tier) {
+  if (!tier) return '-';
+  const cls = tier.includes('1') ? 't1' : (tier.includes('2') ? 't2' : 't3');
+  return `<span class="tier-dot ${cls}"></span>${esc(tier)}`;
+}
+
+function nqSearchDelay() { clearTimeout(nqSearchTimer); nqSearchTimer = setTimeout(() => loadNewsQueue(1), 350); }
+function eqSearchDelay() { clearTimeout(eqSearchTimer); eqSearchTimer = setTimeout(() => loadEventQueue(1), 350); }
+
+function queueCheckAll(prefix) {
+  const on = document.getElementById(`${prefix}-check-all`).checked;
+  document.querySelectorAll(`#${prefix}-tbody input[type="checkbox"][data-id]`).forEach(c => c.checked = on);
+}
+
+async function loadNewsQueue(page = 1) {
+  nqPage = page; nqLoaded = true;
+  const q    = document.getElementById('nq-search').value.trim();
+  const cat  = document.getElementById('nq-cat').value;
+  const sort = document.getElementById('nq-sort').value;
+  const desc = document.getElementById('nq-desc').checked;
+  let url = `/api/admin/news-queue?key=${KEY}&page=${page}&limit=30&sort=${sort}&order=${desc ? 'DESC' : 'ASC'}`;
+  if (q)   url += `&q=${encodeURIComponent(q)}`;
+  if (cat) url += `&category=${cat}`;
+  const r = await fetch(url);
+  if (!r.ok) { toast('Failed to load queue', true); return; }
+  const data = await r.json();
+  nqPages = data.pages || 1;
+  document.getElementById('nq-s-total').textContent = data.total;
+  document.getElementById('tab-count-nq').textContent = data.total || '';
+  if (!nqCatsFilled && data.categories) {
+    const sel = document.getElementById('nq-cat');
+    data.categories.forEach(c => sel.insertAdjacentHTML('beforeend', `<option value="${c.id}">${esc(c.category_name)}</option>`));
+    sel.insertAdjacentHTML('beforeend', `<option value="0">Other news</option>`);
+    nqCatsFilled = true;
+  }
+  const tbody = document.getElementById('nq-tbody');
+  document.getElementById('nq-check-all').checked = false;
+  const list = data.news || [];
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="11" class="empty-state">Queue is empty — nothing awaiting review 🎉</td></tr>`;
+  } else {
+    tbody.innerHTML = list.map(n => `<tr>
+      <td><input type="checkbox" data-id="${n.id}"/></td>
+      <td class="ledger-id">${n.id}</td>
+      <td style="font-size:12.5px;white-space:nowrap">${esc(n.category_name || 'Other News')}</td>
+      <td>${n.image ? `<img class="thumb" src="${esc(n.image)}" loading="lazy" onerror="this.style.display='none'"/>` : `<div class="thumb-placeholder"></div>`}</td>
+      <td class="col-title"><span class="t">${esc(n.title || '')}</span>
+        ${n.url ? `<a href="${esc(n.url)}" class="ext" target="_blank" rel="noopener">↗ Read</a>` : ''}</td>
+      <td style="font-size:12.5px;white-space:nowrap">${esc(n.publisher || '-')}</td>
+      <td style="white-space:nowrap">${tierCell(n.tier)}</td>
+      <td style="font-size:12.5px">${esc(n.pipeline_source || '-')}</td>
+      <td class="ledger-date">${fmtLedger(n.pipeline_run_date)}</td>
+      <td class="ledger-date">${fmtLedger(n.publish_dt)}</td>
+      <td style="white-space:nowrap"><div style="display:flex;gap:4px">
+        <button class="btn-pub" onclick="onQueuePublish('news', ${n.id})">Publish</button>
+        <button class="btn-star" onclick="onQueuePublishTopPick('news', ${n.id})">★ Top Pick</button>
+      </div></td>
+    </tr>`).join('');
+  }
+  const pagEl = document.getElementById('nq-pagination');
+  pagEl.style.display = nqPages > 1 ? 'flex' : 'none';
+  document.getElementById('nq-pag-info').textContent = `Page ${nqPage} of ${nqPages} — ${data.total} items`;
+  document.getElementById('nq-prev').disabled = nqPage <= 1;
+  document.getElementById('nq-next').disabled = nqPage >= nqPages;
+}
+
+async function loadEventQueue(page = 1) {
+  eqPage = page; eqLoaded = true;
+  const q       = document.getElementById('eq-search').value.trim();
+  const country = document.getElementById('eq-country').value;
+  const sort    = document.getElementById('eq-sort').value;
+  const desc    = document.getElementById('eq-desc').checked;
+  let url = `/api/admin/event-queue?key=${KEY}&page=${page}&limit=30&sort=${sort}&order=${desc ? 'DESC' : 'ASC'}`;
+  if (q)       url += `&q=${encodeURIComponent(q)}`;
+  if (country) url += `&country=${country}`;
+  const r = await fetch(url);
+  if (!r.ok) { toast('Failed to load queue', true); return; }
+  const data = await r.json();
+  eqPages = data.pages || 1;
+  document.getElementById('eq-s-total').textContent = data.total;
+  document.getElementById('tab-count-eq').textContent = data.total || '';
+  if (!eqCountriesFilled && data.countries) {
+    const sel = document.getElementById('eq-country');
+    data.countries.forEach(c => sel.insertAdjacentHTML('beforeend', `<option value="${c.id}">${esc(c.country_name)}</option>`));
+    eqCountriesFilled = true;
+  }
+  const tbody = document.getElementById('eq-tbody');
+  document.getElementById('eq-check-all').checked = false;
+  const list = data.events || [];
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-state">Queue is empty — nothing awaiting review 🎉</td></tr>`;
+  } else {
+    tbody.innerHTML = list.map(e => {
+      const country = e.event_type == 1 ? 'Online' : (e.country_name || e.country_etc || '-');
+      let dateStr = fmtLedger(e.event_start_dt);
+      const endStr = fmtLedger(e.event_end_dt);
+      if (endStr !== '-' && endStr !== dateStr) dateStr += ` ~ ${endStr}`;
+      return `<tr>
+      <td><input type="checkbox" data-id="${e.id}"/></td>
+      <td class="ledger-id">${e.id}</td>
+      <td>${e.image ? `<img class="thumb" src="${esc(e.image)}" loading="lazy" onerror="this.style.display='none'"/>` : `<div class="thumb-placeholder"></div>`}</td>
+      <td class="col-title"><span class="t">${esc(e.title || '')}</span>
+        ${e.url ? `<a href="${esc(e.url)}" class="ext" target="_blank" rel="noopener">↗ View</a>` : ''}</td>
+      <td style="font-size:12.5px;white-space:nowrap">${esc(country)}</td>
+      <td class="ledger-date">${dateStr}</td>
+      <td style="font-size:12.5px">${esc(e.pipeline_source || '-')}</td>
+      <td class="ledger-date">${fmtLedger(e.pipeline_run_date)}</td>
+      <td style="white-space:nowrap"><div style="display:flex;gap:4px">
+        <button class="btn-pub" onclick="onQueuePublish('event', ${e.id})">Publish</button>
+        <button class="btn-star" onclick="onQueuePublishTopPick('event', ${e.id})">★ Top Pick</button>
+      </div></td>
+    </tr>`;
+    }).join('');
+  }
+  const pagEl = document.getElementById('eq-pagination');
+  pagEl.style.display = eqPages > 1 ? 'flex' : 'none';
+  document.getElementById('eq-pag-info').textContent = `Page ${eqPage} of ${eqPages} — ${data.total} items`;
+  document.getElementById('eq-prev').disabled = eqPage <= 1;
+  document.getElementById('eq-next').disabled = eqPage >= eqPages;
+}
+
+async function requestQueuePublish(type, ids) {
+  const r = await fetch(`/api/admin/${type === 'news' ? 'news-queue' : 'event-queue'}/publish?key=${KEY}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids }),
+  });
+  const d = await r.json().catch(() => ({}));
+  return d.ok ? d : null;
+}
+
+function reloadQueue(type) {
+  if (type === 'news') loadNewsQueue(nqPage); else loadEventQueue(eqPage);
+}
+
+async function onQueuePublish(type, id) {
+  if (!confirm('Publish this item? It will become visible on the public site.')) return;
+  const d = await requestQueuePublish(type, [id]);
+  if (!d) { toast('Publish failed', true); return; }
+  toast('Published');
+  reloadQueue(type);
+}
+
+// PHP onPublishTopPickBtnClick 포팅: 발행 + Top Pick 등록을 한 번에
+async function onQueuePublishTopPick(type, id) {
+  const label = type === 'news' ? 'Top News Picks' : 'Top Event Picks';
+  if (!confirm(`Publish this item AND add it to ${label}?`)) return;
+  const d = await requestQueuePublish(type, [id]);
+  if (!d) { toast('Publish failed', true); return; }
+  const r = await fetch(`/api/admin/${type}-top-picks?key=${KEY}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ids: [id] }),
+  });
+  const pd = await r.json().catch(() => ({}));
+  if (pd.ok) {
+    (type === 'news' ? topPicks.news : topPicks.events).add(id);
+    toast(`Published and added to ${label}`);
+  } else {
+    toast(`Published, but adding to ${label} failed — use the ★ button on the main list.`, true);
+  }
+  reloadQueue(type);
+}
+
+async function publishCheckedQueue(type) {
+  const prefix = type === 'news' ? 'nq' : 'eq';
+  const ids = [...document.querySelectorAll(`#${prefix}-tbody input[type="checkbox"][data-id]:checked`)]
+    .map(c => parseInt(c.dataset.id, 10)).filter(Number.isInteger);
+  if (!ids.length) return;
+  if (!confirm(`Publish ${ids.length} checked item(s)? They will become visible on the public site.`)) return;
+  const d = await requestQueuePublish(type, ids);
+  if (!d) { toast('Publish failed', true); return; }
+  toast(`Published ${d.published} item(s)`);
+  reloadQueue(type);
+}
+
+// 탭 라벨의 대기 건수 뱃지 (앱 시작 시 1회)
+async function loadQueueCounts() {
+  try {
+    const [n, e] = await Promise.all([
+      fetch(`/api/admin/news-queue?key=${KEY}&limit=1`).then(r => r.ok ? r.json() : null),
+      fetch(`/api/admin/event-queue?key=${KEY}&limit=1`).then(r => r.ok ? r.json() : null),
+    ]);
+    if (n) document.getElementById('tab-count-nq').textContent = n.total || '';
+    if (e) document.getElementById('tab-count-eq').textContent = e.total || '';
+  } catch (_) {}
+}
+
+// ── Init ──────────────────────────────────────────────
+loadTopPicks().then(loadEvents);
+loadQueueCounts();
 
 // ── LinkedIn Embeds ───────────────────────────────────
 let allEmbeds = [];

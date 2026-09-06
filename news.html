@@ -4,115 +4,175 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>News & Events — EdTech HUB</title>
+  <meta name="description" content="Latest EdTech news, funding announcements, policy updates, and upcoming events from the global EdTech ecosystem, curated by EdTech HUB."/>
+  <link rel="canonical" href="https://edtechhub.com/news.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="EdTech HUB"/>
+  <meta property="og:title" content="News &amp; Events — EdTech HUB"/>
+  <meta property="og:description" content="Latest EdTech news, funding announcements, policy updates, and upcoming events from the global EdTech ecosystem, curated by EdTech HUB."/>
+  <meta property="og:url" content="https://edtechhub.com/news.html"/>
+  <meta property="og:image" content="https://edtechhub.com/logo.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="News &amp; Events — EdTech HUB"/>
+  <meta name="twitter:description" content="Latest EdTech news, funding announcements, policy updates, and upcoming events from the global EdTech ecosystem, curated by EdTech HUB."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@9.2.4/ol.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #111827; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
     ul { list-style: none; }
     button { cursor: pointer; font-family: 'Inter', sans-serif; }
 
     :root {
-      --accent:       #16A34A;
-      --accent-h:     #15803D;
-      --accent-muted: rgba(22,163,74,.10);
-      --text-1:       #111827;
-      --text-2:       #6B7280;
-      --text-3:       #9CA3AF;
-      --border:       #E5E7EB;
-      --border-h:     #CBD5E1;
-      --bg-surface:   #F8FAFC;
+      /* Navigator (DOHE sibling brand) palette, verified from startupnavigator.com */
+      --cream:        #F1F0E7;
+      --cream-2:      #E9EEE8;
+      --bg:           #FBFAF6;
+      --white:        #FFFFFF;
+      --teal:         #5ABEB5;
+      --teal-deep:    #3E9C94;
+      --teal-ink:     #256F68;
+      --teal-tint:    rgba(90,190,181,.12);
+      --navy:         #16243A;
+      --navy-2:       #1F3349;
+      --ink:          #16202B;
+      --ink-muted:    #55636F;
+      --ink-faint:    #8A97A0;
+      --border:       #E4E1D6;
+      --border-teal:  #D8E9E6;
+      /* legacy aliases kept so untouched selectors below still resolve */
+      --accent:       var(--teal);
+      --accent-h:     var(--teal-ink);
+      --accent-muted: var(--teal-tint);
+      --text-1:       var(--ink);
+      --text-2:       var(--ink-muted);
+      --text-3:       var(--ink-faint);
+      --border-h:     #C9D8D5;
+      --bg-surface:   var(--cream);
+      --bg-elevated:  var(--cream-2);
       --max:          1200px;
+      --ease-flow:    cubic-bezier(.22,1,.36,1);
     }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
     /* ── BUTTONS ── */
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 7px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, border-color .15s; font-family: 'Inter', sans-serif; white-space: nowrap; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-h); }
-    .btn-secondary { background: transparent; border: 1.5px solid var(--border-h); color: var(--text-1); padding: 10px 20px; }
-    .btn-secondary:hover { border-color: var(--accent-h); color: var(--accent-h); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 24px; border-radius: 8px;
+      font-size: 14px; font-weight: 600; letter-spacing: .01em;
+      cursor: pointer; border: none; transition: background .4s var(--ease-flow), border-color .4s var(--ease-flow), transform .4s var(--ease-flow), box-shadow .4s var(--ease-flow), color .4s var(--ease-flow);
+      font-family: 'Inter', sans-serif; white-space: nowrap;
+    }
+    .btn-primary   { background: var(--navy); color: #fff; }
+    .btn-primary:hover { background: var(--teal-deep); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(62,156,148,.35); }
+    .btn-secondary { background: transparent; border: 1.5px solid var(--border-h); color: var(--ink); padding: 10.5px 22px; }
+    .btn-secondary:hover { border-color: var(--teal); color: var(--teal-ink); transform: translateY(-2px); }
     .btn-ghost { background: transparent; color: var(--text-2); padding: 8px 14px; font-size: 13px; border: none; }
     .btn-ghost:hover { color: var(--text-1); }
 
     /* ── NAV ── */
-    .header { background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
-    .nav { display: flex; align-items: center; height: 64px; gap: 4px; }
+    .header { background: rgba(251,250,246,.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid transparent; transition: background .5s var(--ease-flow), border-color .5s var(--ease-flow), box-shadow .5s var(--ease-flow); }
+    .header.scrolled { background: rgba(255,255,255,.88); border-bottom-color: var(--border); box-shadow: 0 8px 24px rgba(22,36,58,.06); }
+    .nav { display: flex; align-items: center; height: 68px; gap: 4px; transition: height .4s var(--ease-flow); }
+    .header.scrolled .nav { height: 58px; }
     .logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; flex-shrink: 0; }
-    .logo-text { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-1); }
-    .logo-text span { color: var(--accent-h); }
+    .logo-text { font-family: 'DM Serif Display', serif; font-size: 19px; font-weight: 400; color: var(--navy); }
+    .logo-text span { color: var(--teal-ink); }
     .nav-links { display: flex; gap: 2px; list-style: none; flex: 1; }
     .nav-item { position: relative; }
-    .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
-    .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
-    .nav-a.on { color: var(--accent-h); }
-    .nav-a.gem { color: var(--accent-h); }
-    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
+    .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: var(--ink-muted); transition: color .2s, background .2s; white-space: nowrap; }
+    .nav-a:hover { color: var(--ink); background: var(--teal-tint); }
+    .nav-a.on { color: var(--teal-ink); }
+    .nav-a.gem { color: var(--teal-ink); }
+    .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 16px 32px rgba(22,36,58,.12); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .3s var(--ease-flow), transform .3s var(--ease-flow), visibility .3s; z-index: 200; }
     .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
     .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
-    .nav-drop-item:hover { background: #F0FDF4; color: var(--accent-h); }
+    .nav-drop-item:hover { background: var(--teal-tint); color: var(--teal-ink); }
     .nav-drop-div { height: 1px; background: var(--border); margin: 4px 0; }
     .nav-cta { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
     .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 0; margin-left: auto; cursor: pointer; width: 44px; height: 44px; align-items: center; justify-content: center;}
-    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; }
+    .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text-1); border-radius: 2px; transition: transform .2s, opacity .2s; }
 
     /* Mobile nav */
     .nav-mobile { display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; bottom: 0; background: #fff; z-index: 99; padding: 20px 24px; gap: 4px; overflow-y: auto; border-top: 1px solid var(--border); }
     .nav-mobile.open { display: flex; }
-    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); }
-    .nav-mobile-a.accent { color: var(--accent-h); }
+    .nav-mobile-a { display: block; padding: 13px 16px; border-radius: 8px; font-size: 16px; font-weight: 500; color: var(--text-1); transition: background .12s; }
+    .nav-mobile-a:hover { background: var(--bg-elevated); }
+    .nav-mobile-a.accent { color: var(--teal-ink); }
     .nav-mobile-div { height: 1px; background: var(--border); margin: 8px 0; }
     .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
     .nav-mobile-cta .btn { justify-content: center; }
 
     /* ── PAGE HEADER ── */
-    .page-hero { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #F0FDF4 100%); border-bottom: 1px solid var(--border); padding: 52px 0 44px; }
-    .page-hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-    .page-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 8px; }
-    .page-hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; color: #111827; line-height: 1.15; }
-    .page-hero p { font-size: 15px; color: #4B5563; margin-top: 8px; max-width: 480px; }
+    .page-hero {
+      background: linear-gradient(115deg, var(--cream) 0%, var(--cream-2) 35%, var(--teal) 100%);
+      border-bottom: 1px solid var(--border); padding: 52px 0 0; position: relative; overflow: hidden;
+    }
+    .page-hero-inner { padding-bottom: 44px; position: relative; z-index: 1; animation: page-hero-rise 1.1s var(--ease-flow) both; }
+    @keyframes page-hero-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .page-hero-inner { animation: none; } }
+    .page-hero-inner.wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .page-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal-ink); margin-bottom: 8px; }
+    .page-hero h1 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(28px, 4vw, 40px); color: var(--navy); line-height: 1.15; }
+    .page-hero p { font-size: 15px; color: var(--navy-2); opacity: .78; margin-top: 8px; max-width: 480px; }
+
+    /* Wave divider — page-hero meets the page body, redrawn as a slow-drifting waterline */
+    .hero-wave { position: relative; height: 48px; margin-top: -1px; overflow: hidden; }
+    .hero-wave svg { position: absolute; bottom: -1px; left: -10%; width: 120%; height: 100%; animation: wave-drift 18s ease-in-out infinite alternate; }
+    @keyframes wave-drift { from { transform: translateX(0) } to { transform: translateX(-2.5%) } }
+    @media (prefers-reduced-motion: reduce) { .hero-wave svg { animation: none; } }
 
     /* ── TABS ── */
     .page-tabs { background: #fff; border-bottom: 1px solid var(--border); }
     .tabs-inner { display: flex; }
-    .tab { padding: 14px 24px; font-size: 14px; font-weight: 600; color: var(--text-2); border-bottom: 2px solid transparent; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; transition: color .15s; }
+    .tab { display: inline-block; padding: 14px 24px; font-size: 14px; font-weight: 600; color: var(--text-2); border-bottom: 2px solid transparent; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; transition: color .3s var(--ease-flow), border-color .3s var(--ease-flow); }
     .tab:hover { color: var(--text-1); }
-    .tab.on { color: var(--accent-h); border-bottom-color: var(--accent-h); }
+    .tab.on { color: var(--teal-ink); border-bottom-color: var(--teal-ink); }
 
     /* ── LAYOUT ── */
     .news-main { padding: 40px 0 64px; }
-    .news-layout { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start; }
+    .news-layout { display: grid; grid-template-columns: 1fr; align-items: start; }
 
     /* ── FILTERS ── */
     .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
-    .fp { padding: 14px 18px; border-radius: 9999px; font-size: 13px; font-weight: 500; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; transition: all .14s; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+    .fp { padding: 14px 18px; border-radius: 9999px; font-size: 13px; font-weight: 500; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; transition: background .3s var(--ease-flow), border-color .3s var(--ease-flow), color .3s var(--ease-flow), box-shadow .3s var(--ease-flow); box-shadow: 0 1px 2px rgba(0,0,0,.03); }
     .fp:hover { border-color: var(--border-h); color: var(--text-1); box-shadow: 0 2px 6px rgba(0,0,0,.05); }
-    .fp.on { background: var(--accent); border-color: var(--accent-h); color: #fff; font-weight: 600; }
+    .fp.on { background: var(--teal); border-color: var(--teal-deep); color: #fff; font-weight: 600; }
+    .fp-count { font-size: 11px; color: var(--text-3); font-weight: 400; }
+    .fp.on .fp-count { color: rgba(255,255,255,.75); }
+    .sort-group { display: inline-flex; align-items: center; gap: 6px; }
+    .fp-sort.on { background: var(--navy); border-color: var(--navy); color: #fff; }
 
     /* ── NEWS CARDS ── */
-    .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-    .n-card { background: #fff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: box-shadow .2s; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04), 0 4px 10px rgba(0,0,0,.06); }
+    .news-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    .n-card { position: relative; background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: box-shadow .4s var(--ease-flow); box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04), 0 4px 10px rgba(0,0,0,.06); }
     .n-card:hover { box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.06), 0 8px 20px rgba(0,0,0,.08); }
-    .n-card-top { padding: 8px 12px; background: #fff; flex-shrink: 0; }
+    .n-card-top { padding: 8px 12px; background: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .n-top-pick { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; background: var(--navy); color: #fff; }
+    .n-body-row { display: flex; gap: 12px; align-items: flex-start; }
+    .n-date { text-align: center; min-width: 46px; flex-shrink: 0; background: var(--teal-tint); border-radius: 6px; padding: 5px 8px; border: 1px solid var(--border-teal); }
+    .n-date .mo { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--teal-ink); }
+    .n-date .dy { display: block; font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+    .n-body-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
     .n-img-placeholder { width: 100%; height: 195px; overflow: hidden; flex-shrink: 0; background: var(--bg-surface); }
-    .n-img-placeholder img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; display: block; background: var(--bg-surface); transition: transform .3s; }
+    .n-img-placeholder img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; background: var(--bg-surface); transition: transform .4s var(--ease-flow); }
     .n-card:hover .n-img-placeholder img { transform: scale(1.04); }
     .n-body { padding: 10px 12px; display: flex; flex-direction: column; flex: 1; gap: 6px; }
     .n-badge { display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
-    .badge-innovation { background: rgba(22,163,74,.15); color: #15803D; }
+    .badge-innovation { background: var(--teal-tint); color: var(--teal-ink); }
     .badge-funding    { background: rgba(37,99,235,.12);  color: #1D4ED8; }
     .badge-research   { background: rgba(124,58,237,.12); color: #7C3AED; }
     .badge-government { background: rgba(234,88,12,.12);  color: #C2410C; }
     .badge-business   { background: rgba(15,118,110,.12); color: #0F766E; }
     .n-src  { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 700; color: var(--text-1); display: inline-block; align-self: flex-start; }
-    .n-ttl  { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: #111827; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .n-ttl  { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #111827; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .n-excerpt { font-size: 12px; color: #4B5563; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .n-more { font-size: 12px; font-weight: 600; color: var(--accent-h); margin-top: auto; padding-top: 6px; border-top: 1px solid var(--border); transition: color .15s; }
-    .n-more:hover { color: var(--accent-h); }
+    .n-more { font-size: 12px; font-weight: 600; color: var(--teal-ink); margin-top: auto; padding-top: 6px; border-top: 1px solid var(--border); transition: color .3s var(--ease-flow); }
+    .n-more:hover { color: var(--teal-ink); }
     .load-more { display: flex; justify-content: center; }
 
     /* ── EVENTS GRID ── */
@@ -121,38 +181,40 @@
     .news-section-content.off { display: none; }
     /* ── SIDEBAR ── */
     .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    @media (min-width: 1081px) { .sidebar { position: sticky; top: 100px; } }
     .sb-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-    .sb-ttl { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 14px; }
-    .sb-nl { background: #111827; border-radius: 10px; padding: 20px; }
-    .sb-nl h4 { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .sb-ttl { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 14px; }
+    .sb-nl { background: var(--navy); border-radius: 10px; padding: 20px; }
+    .sb-nl h4 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .sb-nl p  { font-size: 12.5px; color: rgba(255,255,255,.55); margin-bottom: 14px; }
     .sb-inp { width: 100%; padding: 9px 12px; border-radius: 6px; border: 1px solid #374151; background: #1F2937; color: #fff; font-size: 13px; outline: none; font-family: 'Inter', sans-serif; margin-bottom: 8px; }
     .sb-inp::placeholder { color: #6B7280; }
-    .sb-inp:focus { border-color: var(--accent-h); }
-    .sb-submit { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; }
-    .sb-submit:hover { background: var(--accent-h); }
+    .sb-inp:focus { border-color: var(--teal) !important; box-shadow: 0 0 0 3px rgba(90,190,181,.25); }
+    .sb-submit { width: 100%; background: var(--teal); color: #fff; border: none; border-radius: 6px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .3s var(--ease-flow); }
+    .sb-submit:hover { background: var(--teal-deep); }
     .sb-tags { display: flex; flex-direction: column; gap: 6px; }
-    .sb-tag-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #fff; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text-1); font-weight: 500; cursor: pointer; transition: all .14s; }
-    .sb-tag-item:hover { border-color: var(--accent-h); color: var(--accent-h); background: var(--accent-muted); }
+    .sb-tag-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; background: #fff; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text-1); font-weight: 500; cursor: pointer; transition: border-color .3s var(--ease-flow), color .3s var(--ease-flow), background .3s var(--ease-flow); }
+    .sb-tag-item:hover { border-color: var(--teal-ink); color: var(--teal-ink); background: var(--teal-tint); }
     .sb-count { font-size: 12px; color: var(--text-3); font-weight: 400; }
 
     /* ── FOOTER ── */
-    .footer { background: #111827; border-top: 1px solid var(--border); padding: 48px 0 28px; }
+    .footer { background: var(--navy); border-top: 1px solid var(--navy-2); padding: 56px 0 28px; }
     .ft-top  { display: grid; grid-template-columns: 220px 1fr; gap: 48px; margin-bottom: 32px; }
     .ft-brand-logo { display: flex; align-items: center; gap: 10px; }
-    .ft-brand p { font-size: 13px; color: #9CA3AF; margin-top: 8px; margin-bottom: 14px; max-width: 180px; line-height: 1.65; }
-    .ft-brand a { font-size: 12.5px; color: #9CA3AF; }
-    .ft-brand a:hover { color: #F9FAFB; }
+    .ft-brand p { font-size: 13px; color: rgba(255,255,255,.55); margin-top: 8px; margin-bottom: 14px; max-width: 180px; line-height: 1.65; }
+    .ft-brand a { font-size: 12.5px; color: rgba(255,255,255,.55); transition: color .3s; }
+    .ft-brand a:hover { color: #fff; }
     .ft-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
-    .ft-col h3 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #6B7280; margin-bottom: 14px; }
+    .ft-col h3 { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 14px; }
     .ft-col ul { display: flex; flex-direction: column; gap: 9px; }
-    .ft-col a, .ft-col span { font-size: 13px; color: #9CA3AF; transition: color .15s; }
-    .ft-col a:hover { color: #F9FAFB; }
-    .ft-btm { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1F2937; padding-top: 22px; font-size: 12px; color: #6B7280; flex-wrap: wrap; gap: 10px; }
+    .ft-col a, .ft-col span { font-size: 13px; color: rgba(255,255,255,.55); transition: color .3s; }
+    .ft-col a:hover { color: #fff; }
+    .ft-btm { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--navy-2); padding-top: 22px; font-size: 12px; color: rgba(255,255,255,.4); flex-wrap: wrap; gap: 10px; }
     .ft-legal { display: flex; gap: 20px; }
-    .ft-legal a { color: #6B7280; }
-    .ft-legal a:hover { color: #F9FAFB; }
-    .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; padding: 14px 4px; }
+    .ft-legal a { color: rgba(255,255,255,.4); }
+    .ft-legal a:hover { color: #fff; }
+    .back-top { background: none; border: none; font-size: 12px; color: rgba(255,255,255,.4); cursor: pointer; letter-spacing: .08em; text-transform: uppercase; padding: 14px 4px; transition: color .3s; }
+    .back-top:hover { color: #fff; }
 
     /* ── EVENT MAP (Events tab) ── */
     .ev-map-wrap { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
@@ -198,17 +260,41 @@
 
     /* ── SEARCH BAR ── */
     .search-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 12px 0; }
-    .search-inner { display: flex; align-items: center; gap: 10px; }
+    .search-inner { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .search-box { flex: 1; max-width: 520px; display: flex; align-items: center; gap: 8px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; transition: border-color .15s; }
     .search-box:focus-within { border-color: var(--accent-h); }
     .search-box input { flex: 1; border: none; background: transparent; font-size: 14px; color: var(--text-1); font-family: 'Inter', sans-serif; outline: none; }
     .search-box input::placeholder { color: var(--text-3); }
     .search-icon { color: var(--text-3); font-size: 14px; flex-shrink: 0; }
+    .search-suggest {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 50;
+      background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.14); list-style: none; margin: 0; padding: 6px 0;
+      max-height: 280px; overflow-y: auto;
+    }
+    .search-suggest[hidden] { display: none; }
+    .search-suggest li {
+      padding: 9px 14px; font-size: 13.5px; color: var(--text-1); cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .search-suggest li .s-type { font-size: 10.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: .4px; flex-shrink: 0; }
+    .search-suggest li:hover, .search-suggest li.active { background: var(--accent-muted); color: var(--accent-h); }
     .clear-btn { padding: 7px 14px; background: transparent; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--text-2); cursor: pointer; transition: background .12s; white-space: nowrap; }
+    .date-range-box { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .date-range-box label:last-of-type { margin-left: 8px; }
+    .date-range-box label { font-size: 12px; color: var(--text-2); }
+    .date-range-box input[type="date"] { border: 1px solid var(--border); border-radius: 7px; padding: 7px 8px; font-size: 13px; font-family: 'Inter', sans-serif; color: var(--text-1); background: var(--bg-surface); outline: none; }
+    .date-range-box input[type="date"]:focus { border-color: var(--accent-h); }
+    .date-range-box select { border: 1px solid var(--border); border-radius: 7px; padding: 7px 8px; font-size: 13px; font-family: 'Inter', sans-serif; color: var(--text-1); background: var(--bg-surface); outline: none; cursor: pointer; }
+    .date-range-box select:focus { border-color: var(--accent-h); }
+    .date-custom-fields { display: inline-flex; align-items: center; gap: 10px; }
+    .date-custom-fields[hidden] { display: none; }
+    .icon-i { display: inline-flex; vertical-align: middle; }
     .clear-btn:hover { background: var(--bg-surface); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1080px) { .news-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .news-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
@@ -219,7 +305,42 @@
       @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
     }
+
+    /* ── Subscribe / Submit modals ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(22,32,43,.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+    .modal-overlay[hidden] { display: none; }
+    .modal-card { position: relative; width: 100%; max-width: 480px; max-height: calc(100vh - 40px); overflow-y: auto; background: #fff; color: var(--ink); border-radius: 14px; padding: 36px 36px 32px; box-shadow: 0 24px 60px rgba(0,0,0,.22); }
+    .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border: none; background: var(--bg-surface); color: var(--ink-muted); border-radius: 8px; font-size: 14px; cursor: pointer; transition: background .15s; }
+    .modal-close:hover { background: var(--border); }
+    .modal-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 22px; }
+    .modal-brand img { object-fit: contain; }
+    .modal-brand span { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); }
+    .modal-card h3 { font-family: 'DM Serif Display', serif; font-size: 23px; font-weight: 400; margin-bottom: 8px; line-height: 1.3; color: var(--ink); }
+    .modal-sub { font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 24px; }
+    .modal-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
+    .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--border); color: var(--ink); font-size: 14px; font-family: 'Inter', sans-serif; padding: 6px 2px 10px; margin-bottom: 20px; outline: none; transition: border-color .15s; }
+    .modal-input:focus { border-bottom-color: var(--teal-deep); }
+    .modal-input::placeholder { color: var(--ink-faint); }
+    .modal-select { appearance: none; -webkit-appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2355636F' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 4px center/12px no-repeat; cursor: pointer; }
+    .modal-select option { color: #111827; }
+    .modal-textarea { resize: vertical; min-height: 96px; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-family: 'Inter', sans-serif; }
+    .modal-textarea:focus { border-color: var(--teal-deep); }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .modal-hint { font-size: 11.5px; color: var(--ink-muted); margin: -14px 0 20px; }
+    .modal-error { font-size: 12.5px; color: #DC2626; margin-bottom: 14px; }
+    .modal-error[hidden] { display: none; }
+    .modal-submit { width: 100%; padding: 13px; border: none; background: var(--teal-deep); color: #fff; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .15s; }
+    .modal-submit:hover { background: var(--teal-ink); }
+    .modal-submit:disabled { opacity: .55; cursor: default; }
+    @media (max-width: 520px) { .modal-row { grid-template-columns: 1fr; } }
   </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M7QD4DVR8W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-M7QD4DVR8W');
+  </script>
 </head>
 <body>
 
@@ -238,15 +359,13 @@
         <div class="nav-dropdown">
           <a href="news.html" class="nav-drop-item">News</a>
           <div class="nav-drop-div"></div>
-          <a href="news.html#events" class="nav-drop-item">Events</a>
-          <div class="nav-drop-div"></div>
-          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+          <a href="events.html" class="nav-drop-item">Events</a>
         </div>
       </li>
       <li class="nav-item">
         <a href="#" class="nav-a">Community ▾</a>
         <div class="nav-dropdown" style="min-width:210px;">
-          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <a href="events.html" class="nav-drop-item">EdTech Together</a>
           <div class="nav-drop-div"></div>
           <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
           <div class="nav-drop-div"></div>
@@ -262,7 +381,7 @@
       <span></span><span></span><span></span>
     </button>
     <div class="nav-cta">
-      <a href="/#newsletter" class="btn-ghost btn">Subscribe</a>
+      <a href="#" class="btn-ghost btn" onclick="openModal('modal-subscribe');return false;">Subscribe</a>
       <a href="mailto:info@edtechhub.com" class="btn btn-primary" style="font-size:13px;padding:9px 18px;">Contact Us</a>
     </div>
   </nav>
@@ -272,12 +391,12 @@
   <a href="index.html" class="nav-mobile-a">Home</a>
   <a href="#" class="nav-mobile-a">About</a>
   <a href="news.html" class="nav-mobile-a accent">News & Events</a>
-  <a href="news.html#events" class="nav-mobile-a">EdTech Together</a>
+  <a href="events.html" class="nav-mobile-a">EdTech Together</a>
   <a href="programme.html" class="nav-mobile-a">Programme</a>
   <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank" rel="noopener">GEM ↗</a>
   <div class="nav-mobile-div"></div>
   <div class="nav-mobile-cta">
-    <a href="/#newsletter" class="btn btn-secondary">Subscribe</a>
+    <a href="#" class="btn btn-secondary" onclick="closeMobileNav();openModal('modal-subscribe');return false;">Subscribe</a>
     <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
   </div>
 </nav>
@@ -292,24 +411,44 @@
         <h1>News & Events</h1>
         <p>Latest insights, funding news, policy updates, and upcoming events from the global EdTech ecosystem.</p>
       </div>
-      <a href="submit.html" class="btn btn-primary">Submit News or Event</a>
+      <a href="#" class="btn btn-primary" onclick="openModal('modal-submit');return false;">Submit News or Event</a>
+    </div>
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 48" preserveAspectRatio="none"><path d="M0,24 C240,48 480,0 720,18 C960,36 1200,6 1440,24 L1440,48 L0,48 Z" fill="var(--bg)"/></svg>
     </div>
   </div>
 
   <!-- TABS -->
   <div class="page-tabs">
     <div class="wrap tabs-inner">
-      <button class="tab on" id="tab-news" onclick="switchTab('news')">📰 News</button>
-      <button class="tab" id="tab-events" onclick="switchTab('events')">📅 Events</button>
+      <button class="tab on" id="tab-news" onclick="switchTab('news')"><span class="icon-i" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="7" x2="17" y2="7"/><line x1="10" y1="11" x2="17" y2="11"/><line x1="10" y1="15" x2="14" y2="15"/></svg></span> News</button>
+      <a class="tab" href="events.html"><span class="icon-i" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> Events</a>
     </div>
   </div>
 
   <!-- SEARCH BAR -->
   <div class="search-bar">
     <div class="wrap search-inner">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" placeholder="Search news…" autocomplete="off"/>
+      <div class="search-box" style="position:relative;">
+        <span class="search-icon icon-i" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="search-input" placeholder="Search news…" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="search-suggest"/>
+        <ul class="search-suggest" id="search-suggest" role="listbox" hidden></ul>
+      </div>
+      <div class="date-range-box">
+        <span class="icon-i" style="color:var(--text-2);" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <select id="news-date-preset" aria-label="Filter by date" onchange="onNewsDatePresetChange()">
+          <option value="any" selected>Any time</option>
+          <option value="week">Past week</option>
+          <option value="month">Past month</option>
+          <option value="year">Past year</option>
+          <option value="custom">Custom range…</option>
+        </select>
+        <span class="date-custom-fields" id="news-date-custom" hidden>
+          <label for="news-date-from">From</label>
+          <input type="date" id="news-date-from" onchange="onNewsCustomDateChange()"/>
+          <label for="news-date-to">To</label>
+          <input type="date" id="news-date-to" onchange="onNewsCustomDateChange()"/>
+        </span>
       </div>
       <button class="clear-btn" id="clear-btn" onclick="clearSearch()" style="display:none;">✕ Clear</button>
     </div>
@@ -323,12 +462,16 @@
           <!-- NEWS -->
           <div class="news-section-content" id="sec-news">
             <div class="filters">
-              <button class="fp on" data-catkey="all"        onclick="filterNews(this,'all')">All</button>
-              <button class="fp"    data-catkey="innovation" onclick="filterNews(this,'innovation')">Innovation</button>
-              <button class="fp"    data-catkey="funding"    onclick="filterNews(this,'funding')">Funding</button>
-              <button class="fp"    data-catkey="research"   onclick="filterNews(this,'research')">Research</button>
-              <button class="fp"    data-catkey="government" onclick="filterNews(this,'government')">Government</button>
-              <button class="fp"    data-catkey="business"   onclick="filterNews(this,'business')">Business</button>
+              <button class="fp on" data-catkey="all"        aria-pressed="true"  onclick="filterNews(this,'all')">All</button>
+              <button class="fp"    data-catkey="innovation" aria-pressed="false" onclick="filterNews(this,'innovation')">Innovation <span class="fp-count">317</span></button>
+              <button class="fp"    data-catkey="funding"    aria-pressed="false" onclick="filterNews(this,'funding')">Funding <span class="fp-count">118</span></button>
+              <button class="fp"    data-catkey="research"   aria-pressed="false" onclick="filterNews(this,'research')">Research <span class="fp-count">88</span></button>
+              <button class="fp"    data-catkey="government" aria-pressed="false" onclick="filterNews(this,'government')">Government <span class="fp-count">58</span></button>
+              <button class="fp"    data-catkey="business"   aria-pressed="false" onclick="filterNews(this,'business')">Business <span class="fp-count">2</span></button>
+              <span class="sort-group">
+                <button class="fp fp-sort on" id="news-sort-date" aria-pressed="true" onclick="setNewsSort(false)"><span class="icon-i" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> Latest</button>
+                <button class="fp fp-sort" id="news-sort-top" aria-pressed="false" onclick="setNewsSort(true)"><span class="icon-i" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/></svg></span> Top Picks first</button>
+              </span>
             </div>
             <div class="news-grid" id="news-grid">
               <div style="grid-column:1/-1;padding:40px;text-align:center;color:#9CA3AF;font-size:14px;">Loading news…</div>
@@ -368,29 +511,6 @@
           </div>
         </div>
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-          <div class="sb-box" id="sb-topics">
-            <div class="sb-ttl">Browse by Topic</div>
-            <div class="sb-tags">
-              <div class="sb-tag-item" onclick="filterNews(null,'innovation')" style="cursor:pointer;">EdTech Innovation <span class="sb-count">317</span></div>
-              <div class="sb-tag-item" onclick="filterNews(null,'funding')"    style="cursor:pointer;">Funding &amp; Finance <span class="sb-count">118</span></div>
-              <div class="sb-tag-item" onclick="filterNews(null,'research')"   style="cursor:pointer;">Research &amp; Insights <span class="sb-count">88</span></div>
-              <div class="sb-tag-item" onclick="filterNews(null,'government')" style="cursor:pointer;">Government &amp; Policy <span class="sb-count">58</span></div>
-              <div class="sb-tag-item" onclick="filterNews(null,'business')"   style="cursor:pointer;">Business <span class="sb-count">2</span></div>
-            </div>
-          </div>
-          <div class="sb-nl">
-            <h4>Stay in the Loop</h4>
-            <p>Weekly EdTech news & events to your inbox.</p>
-            <form id="sb-nl-form">
-              <input class="sb-inp" type="email" id="sb-nl-email" placeholder="Email address" aria-label="Email address" required/>
-              <input class="sb-inp" type="text" id="sb-nl-name" placeholder="Full name" aria-label="Full name"/>
-              <button type="submit" class="sb-submit">Subscribe</button>
-              <div id="sb-nl-status" style="font-size:12px;margin-top:8px;min-height:14px;"></div>
-            </form>
-          </div>
-        </aside>
       </div>
     </div>
   </div>
@@ -404,7 +524,7 @@
       <div class="ft-brand">
         <div class="ft-brand-logo">
           <img src="logo.png" alt="EdTech HUB" width="28" height="28" style="object-fit:contain;"/>
-          <span style="font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:#fff;">EdTech<span style="color:#16A34A;">HUB</span></span>
+          <span style="font-family:'DM Serif Display',serif;font-size:15px;color:#fff;">EdTech <span style="color:var(--teal);">HUB</span></span>
         </div>
         <p>Connecting the global EdTech ecosystem.</p>
         <a href="https://www.linkedin.com/showcase/dohe-edtech-hub/" target="_blank">Follow on LinkedIn ↗</a>
@@ -416,7 +536,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
-            <li><a href="news.html#events">Events</a></li>
+            <li><a href="events.html">Events</a></li>
             <li><a href="programme.html">Programme</a></li>
             <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
@@ -424,7 +544,7 @@
         <div class="ft-col">
           <h3>Community</h3>
           <ul>
-            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="events.html">EdTech Together</a></li>
             <li><a href="community-partnership.html">Partnership Initiatives</a></li>
             <li><a href="networking.html">Cross-Cohort Networking</a></li>
             <li><a href="community-forum.html">Learning Forum</a></li>
@@ -443,11 +563,75 @@
     </div>
     <div class="ft-btm">
       <span>© 2026 DOHE Global. All rights reserved.</span>
-      <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Submissions</a></div>
+      <div class="ft-legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="#" onclick="openModal('modal-submit');return false;">Submissions</a></div>
       <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
     </div>
   </div>
 </footer>
+
+<!-- Subscribe modal — 실제 edtechhub.com 뉴스레터 구독 폼(Email/Full name/Role)과 동일한 필드·검증 규칙 -->
+<div class="modal-overlay" id="modal-subscribe" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-subscribe-ttl">
+    <button class="modal-close" onclick="closeModal('modal-subscribe')" aria-label="Close">✕</button>
+    <div class="modal-brand"><img src="logo.png" alt="" width="26" height="26"/><span>EdTech <b>Hub</b></span></div>
+    <h3 id="modal-subscribe-ttl">Subscribe to our newsletter!</h3>
+    <p class="modal-sub">Don't miss out on the latest trends, events, and activities in EdTech.</p>
+    <form id="subscribe-form">
+      <label class="modal-label" for="sub-email">Email*</label>
+      <input class="modal-input" type="text" id="sub-email" autocomplete="email"/>
+      <p class="modal-hint">Share a bit more about yourself and receive tailored articles.</p>
+      <div class="modal-row">
+        <div>
+          <label class="modal-label" for="sub-name">Full name</label>
+          <input class="modal-input" type="text" id="sub-name" maxlength="30" autocomplete="name"/>
+        </div>
+        <div>
+          <label class="modal-label" for="sub-role">Role</label>
+          <select class="modal-input modal-select" id="sub-role">
+            <option value="">Choose your role</option>
+            <option>Startup</option>
+            <option>Startup Coach</option>
+            <option>Expert</option>
+            <option>Investor</option>
+            <option>Service Provider</option>
+            <option>Accelerator</option>
+            <option>Educator</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-error" id="subscribe-error" hidden></div>
+      <button type="submit" class="modal-submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<!-- Submit News/Event modal — 실제 edtechhub.com Submission 폼(Full name/Email/Company/내용)과 동일한 필드·검증 규칙 -->
+<div class="modal-overlay" id="modal-submit" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-submit-ttl">
+    <button class="modal-close" onclick="closeModal('modal-submit')" aria-label="Close">✕</button>
+    <h3 id="modal-submit-ttl">News &amp; Events Submission</h3>
+    <p class="modal-sub">Submit your EdTech news or events directly to EdTech Hub for publication. Send us the details and we will get in touch with you.</p>
+    <form id="submit-form">
+      <label class="modal-label" for="sm-name">Full name*</label>
+      <input class="modal-input" type="text" id="sm-name" maxlength="30" autocomplete="name"/>
+      <div class="modal-row">
+        <div>
+          <label class="modal-label" for="sm-email">Email*</label>
+          <input class="modal-input" type="text" id="sm-email" autocomplete="email"/>
+        </div>
+        <div>
+          <label class="modal-label" for="sm-company">Company name</label>
+          <input class="modal-input" type="text" id="sm-company" maxlength="50"/>
+        </div>
+      </div>
+      <label class="modal-label" for="sm-content">Details*</label>
+      <textarea class="modal-input modal-textarea" id="sm-content" rows="5" placeholder="Tell us about the news or event you'd like to share…"></textarea>
+      <div class="modal-error" id="submit-error" hidden></div>
+      <button type="submit" class="modal-submit">Submit</button>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/ol@9.2.4/dist/ol.js" async id="ol-js"></script>
 <script>
@@ -492,6 +676,59 @@
 
   let newsCurCat = 'all', newsCurPage = 1, newsTotalPages = 1;
   let newsSearchQ = '', newsSearchTimer = null;
+  let newsSortTop = false;
+  let newsDateFrom = '', newsDateTo = '';
+
+  /* 프리셋 드롭다운 → 숨은 From/To input 값을 채우고 기존 onNewsDateChange() 재사용 */
+  function onNewsDatePresetChange() {
+    const preset   = document.getElementById('news-date-preset').value;
+    const fromEl   = document.getElementById('news-date-from');
+    const toEl     = document.getElementById('news-date-to');
+    const customEl = document.getElementById('news-date-custom');
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    if (preset === 'custom') {
+      customEl.hidden = false;
+      fromEl.value = ''; toEl.value = '';
+      return; // 사용자가 From/To 둘 다 채우기 전엔 로드하지 않음
+    }
+    customEl.hidden = true;
+    if (preset === 'any') {
+      fromEl.value = ''; toEl.value = '';
+    } else {
+      const days = preset === 'week' ? 7 : preset === 'month' ? 30 : 365;
+      const from = new Date();
+      from.setDate(from.getDate() - days);
+      fromEl.value = fmt(from);
+      toEl.value   = fmt(new Date());
+    }
+    onNewsDateChange();
+  }
+
+  /* Custom range: From/To 둘 다 채워졌을 때만 반영 */
+  function onNewsCustomDateChange() {
+    const from = document.getElementById('news-date-from').value;
+    const to   = document.getElementById('news-date-to').value;
+    if (from && to) onNewsDateChange();
+  }
+
+  function onNewsDateChange() {
+    newsDateFrom = document.getElementById('news-date-from').value;
+    newsDateTo   = document.getElementById('news-date-to').value;
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn && (newsDateFrom || newsDateTo)) clearBtn.style.display = '';
+    loadNewsGrid(true);
+  }
+
+  function setNewsSort(sortByTop) {
+    newsSortTop = sortByTop;
+    const dateBtn = document.getElementById('news-sort-date');
+    const topBtn  = document.getElementById('news-sort-top');
+    dateBtn.classList.toggle('on', !sortByTop);
+    dateBtn.setAttribute('aria-pressed', (!sortByTop).toString());
+    topBtn.classList.toggle('on', sortByTop);
+    topBtn.setAttribute('aria-pressed', sortByTop.toString());
+    loadNewsGrid(true);
+  }
   let newsReqSeq = 0; // monotonically increasing request id, used to discard stale/out-of-order fetch responses
 
   function cleanNewsTitle(raw) {
@@ -535,12 +772,26 @@
     const hasImg   = !!item.image;
     const imgSrc   = item.image || fallback;
     const fetchAttr = (!hasImg && item.url) ? ` data-fetch-og="${escH(item.url)}"` : '';
+    const topPickBadge = item.is_top_pick ? `<span class="n-top-pick"><span class="icon-i" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01z"/></svg></span> Top Pick</span>` : '';
+    let dateBadge = '';
+    if (item.publish_dt) {
+      const d = new Date(item.publish_dt);
+      if (!isNaN(d)) {
+        const mo = d.toLocaleDateString('en-US', { month: 'short' });
+        dateBadge = `<div class="n-date"><span class="mo">${mo}</span><span class="dy">${d.getDate()}</span></div>`;
+      }
+    }
     return `<a href="${escH(item.url||'#')}" class="n-card"${fetchAttr} target="_blank" rel="noopener">
-      <div class="n-card-top"><span class="n-badge ${badge.cls}">${badge.label}</span></div>
+      <div class="n-card-top"><span class="n-badge ${badge.cls}">${badge.label}</span>${topPickBadge}</div>
       <div class="n-img-placeholder"><img src="${escH(imgSrc)}" alt="${escH(cleanNewsTitle(item.title))}" loading="lazy"${imgRefAttr(imgSrc)} onerror="this.src='${fallback}'"/></div>
       <div class="n-body">
-        <span class="n-src">${escH(item.publisher||'')}</span>
-        <h3 class="n-ttl">${escH(cleanNewsTitle(item.title))}</h3>
+        <div class="n-body-row">
+          ${dateBadge}
+          <div class="n-body-text">
+            <span class="n-src">${escH(item.publisher||'')}</span>
+            <h3 class="n-ttl">${escH(cleanNewsTitle(item.title))}</h3>
+          </div>
+        </div>
         <span class="n-more">Read More →</span>
       </div>
     </a>`;
@@ -564,6 +815,9 @@
     const params = new URLSearchParams({ page, limit: 12 });
     if (catId) params.set('category', catId);
     if (newsSearchQ) params.set('q', newsSearchQ);
+    if (newsSortTop) params.set('sort', 'top');
+    if (newsDateFrom) params.set('date_from', newsDateFrom);
+    if (newsDateTo)   params.set('date_to', newsDateTo);
     const reqId = ++newsReqSeq; // tag this request; if a newer one starts before this resolves, we ignore this result
     try {
       const res  = await fetch('/api/db/news?' + params);
@@ -591,13 +845,14 @@
 
   /* ── News category filter ── */
   function filterNews(btn, catKey) {
-    document.querySelectorAll('#sec-news .fp').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('#sec-news .fp').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); });
     if (btn) {
       btn.classList.add('on');
+      btn.setAttribute('aria-pressed', 'true');
     } else {
       // called from sidebar tag — find matching pill
       const pill = document.querySelector(`#sec-news .fp[data-catkey="${catKey}"]`);
-      if (pill) pill.classList.add('on');
+      if (pill) { pill.classList.add('on'); pill.setAttribute('aria-pressed', 'true'); }
     }
     newsCurCat = catKey;
     loadNewsGrid(true);
@@ -610,7 +865,7 @@
     const q = this.value.trim();
     const clearBtn = document.getElementById('clear-btn');
     if (clearBtn) clearBtn.style.display = q ? '' : 'none';
-    const onEvents = document.getElementById('tab-events').classList.contains('on');
+    const onEvents = document.getElementById('tab-events')?.classList.contains('on');
     if (onEvents) {
       evFiltered = q
         ? evAllEvents.filter(e =>
@@ -625,6 +880,113 @@
       clearTimeout(newsSearchTimer);
       newsSearchTimer = setTimeout(() => loadNewsGrid(true), 350);
     }
+    updateSuggestions(q);
+  });
+
+  /* ── 자동완성: News 탭은 발행처+기사 제목(서버 검색 재사용), Events 탭은 도시/국가(location)+이벤트 제목 ── */
+  const suggestBox = document.getElementById('search-suggest');
+  let suggestActiveIdx = -1;
+  let suggestReqSeq = 0;
+
+  function hideSuggestions() {
+    suggestBox.hidden = true;
+    suggestBox.innerHTML = '';
+    document.getElementById('search-input').setAttribute('aria-expanded', 'false');
+    suggestActiveIdx = -1;
+  }
+
+  function renderSuggestions(items) {
+    if (!items.length) { hideSuggestions(); return; }
+    suggestBox.innerHTML = items.map((it, i) =>
+      `<li role="option" data-idx="${i}" data-value="${escH(it.value)}">
+         <span>${escH(it.label)}</span><span class="s-type">${it.type}</span>
+       </li>`
+    ).join('');
+    suggestBox.hidden = false;
+    document.getElementById('search-input').setAttribute('aria-expanded', 'true');
+  }
+
+  async function updateSuggestions(q) {
+    suggestActiveIdx = -1;
+    if (!q) { hideSuggestions(); return; }
+    const qLower = q.toLowerCase();
+    const onEvents = document.getElementById('tab-events')?.classList.contains('on');
+
+    if (onEvents) {
+      const seen = new Set();
+      const items = [];
+      evAllEvents.forEach(e => {
+        [['City/Country', e.city], ['City/Country', e.location]].forEach(([type, val]) => {
+          const v = (val || '').trim();
+          if (v && v.toLowerCase().includes(qLower) && !seen.has(v)) { seen.add(v); items.push({ type, label: v, value: v }); }
+        });
+      });
+      evAllEvents.forEach(e => {
+        const t = (e.title || '').trim();
+        if (t && t.toLowerCase().includes(qLower) && !seen.has(t) && items.filter(i=>i.type==='Event').length < 4) { seen.add(t); items.push({ type: 'Event', label: t, value: t }); }
+      });
+      renderSuggestions(items.slice(0, 8));
+    } else {
+      const reqId = ++suggestReqSeq;
+      try {
+        const res = await fetch('/api/db/news?limit=8&q=' + encodeURIComponent(q));
+        const data = await res.json();
+        if (reqId !== suggestReqSeq) return; // 더 최신 요청이 있으면 이 결과는 버림
+        const seenPub = new Set(), seenTitle = new Set();
+        const items = [];
+        (data.news || []).forEach(n => {
+          const pub = (n.publisher || '').trim();
+          if (pub && pub.toLowerCase().includes(qLower) && !seenPub.has(pub) && items.filter(i=>i.type==='Publisher').length < 4) {
+            seenPub.add(pub); items.push({ type: 'Publisher', label: pub, value: pub });
+          }
+        });
+        (data.news || []).forEach(n => {
+          const t = cleanNewsTitle(n.title || '');
+          if (t && !seenTitle.has(t) && items.filter(i=>i.type==='Article').length < 4) {
+            seenTitle.add(t); items.push({ type: 'Article', label: t, value: t });
+          }
+        });
+        renderSuggestions(items.slice(0, 8));
+      } catch { hideSuggestions(); }
+    }
+  }
+
+  function selectSuggestion(value) {
+    const inp = document.getElementById('search-input');
+    inp.value = value;
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+    hideSuggestions();
+  }
+
+  suggestBox.addEventListener('click', (e) => {
+    const li = e.target.closest('li[data-value]');
+    if (li) selectSuggestion(li.dataset.value);
+  });
+
+  document.getElementById('search-input').addEventListener('keydown', (e) => {
+    const items = Array.from(suggestBox.querySelectorAll('li'));
+    if (suggestBox.hidden || !items.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      suggestActiveIdx = (suggestActiveIdx + 1) % items.length;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      suggestActiveIdx = (suggestActiveIdx - 1 + items.length) % items.length;
+    } else if (e.key === 'Enter') {
+      if (suggestActiveIdx >= 0) { e.preventDefault(); selectSuggestion(items[suggestActiveIdx].dataset.value); }
+      return;
+    } else if (e.key === 'Escape') {
+      hideSuggestions();
+      return;
+    } else {
+      return;
+    }
+    items.forEach((li, i) => li.classList.toggle('active', i === suggestActiveIdx));
+    items[suggestActiveIdx].scrollIntoView({ block: 'nearest' });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-box')) hideSuggestions();
   });
 
   function clearSearch() {
@@ -632,13 +994,20 @@
     inp.value = '';
     const clearBtn = document.getElementById('clear-btn');
     if (clearBtn) clearBtn.style.display = 'none';
-    const onEvents = document.getElementById('tab-events').classList.contains('on');
+    const onEvents = document.getElementById('tab-events')?.classList.contains('on');
     if (onEvents) {
       evFiltered = evAllEvents;
       renderEvList(1);
       if (evMapReady) plotEvPins(evFiltered);
     } else {
       newsSearchQ = '';
+      newsDateFrom = ''; newsDateTo = '';
+      document.getElementById('news-date-from').value = '';
+      document.getElementById('news-date-to').value = '';
+      const presetEl = document.getElementById('news-date-preset');
+      if (presetEl) presetEl.value = 'any';
+      const customEl = document.getElementById('news-date-custom');
+      if (customEl) customEl.hidden = true;
       loadNewsGrid(true);
     }
   }
@@ -652,6 +1021,97 @@
   hamburger.addEventListener('click', () => {
     const open = mobileNav.classList.toggle('open');
     document.body.style.overflow = open ? 'hidden' : '';
+  });
+  function closeMobileNav() {
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Subscribe / Submit modals — 실제 edtechhub.com의 뉴스레터 구독·투고 폼과 동일한 필드/검증을 따름 ── */
+  function openModal(id) {
+    document.getElementById(id).hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).hidden = true;
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(overlay.id); });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.modal-overlay:not([hidden])').forEach(overlay => closeModal(overlay.id));
+  });
+
+  const FULL_NAME_PATTERN = /^[A-Za-z\s]+$/;
+  const EMAIL_PATTERN = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/;
+
+  document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('subscribe-error');
+    const btn = e.target.querySelector('.modal-submit');
+    const email = document.getElementById('sub-email').value.trim();
+    const full_name = document.getElementById('sub-name').value.trim();
+    const role = document.getElementById('sub-role').value;
+    const showErr = (msg) => { errEl.textContent = msg; errEl.hidden = false; };
+    errEl.hidden = true;
+    if (!email) return showErr('Please enter your email.');
+    if (!EMAIL_PATTERN.test(email)) return showErr('This is not a valid email format.');
+    if (!full_name) return showErr('Please enter your full name.');
+    if (!FULL_NAME_PATTERN.test(full_name) || full_name.length < 5 || full_name.length > 30)
+      return showErr('Full name must be 5–30 letters (no numbers or symbols).');
+    if (!role) return showErr('Please choose your role.');
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/user-mailing', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, full_name, role }),
+      });
+      const data = await r.json();
+      if (!r.ok || data.status !== 0) throw new Error(data.msg || 'error');
+      alert("You're now subscribed to our mailing list.");
+      e.target.reset();
+      closeModal('modal-subscribe');
+    } catch {
+      showErr('The request could not be processed due to a temporary error. Please try again later.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('submit-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('submit-error');
+    const btn = e.target.querySelector('.modal-submit');
+    const full_name = document.getElementById('sm-name').value.trim();
+    const email = document.getElementById('sm-email').value.trim();
+    const company_name = document.getElementById('sm-company').value.trim();
+    const content = document.getElementById('sm-content').value.trim();
+    const showErr = (msg) => { errEl.textContent = msg; errEl.hidden = false; };
+    errEl.hidden = true;
+    if (!full_name) return showErr('Please enter your full name.');
+    if (!FULL_NAME_PATTERN.test(full_name) || full_name.length < 5 || full_name.length > 30)
+      return showErr('Full name must be 5–30 letters (no numbers or symbols).');
+    if (!email) return showErr('Please enter your email.');
+    if (!EMAIL_PATTERN.test(email)) return showErr('This is not a valid email format.');
+    if (!content) return showErr('Please enter submission content.');
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/submission', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name, email, company_name, content }),
+      });
+      const data = await r.json();
+      if (!r.ok || data.status !== 0) throw new Error(data.msg || 'error');
+      alert("Thanks — your submission has been received. We'll be in touch.");
+      e.target.reset();
+      closeModal('modal-submit');
+    } catch {
+      showErr('The request could not be processed due to a temporary error. Please try again later.');
+    } finally {
+      btn.disabled = false;
+    }
   });
 
   /* ── Events tab state ── */
@@ -799,8 +1259,9 @@
   function openEvPanel(city, evs) {
     const allOnline = evs.every(e => /online|virtual|remote/i.test(e.city || ''));
     const someOnline = evs.some(e => /online|virtual|remote/i.test(e.city || ''));
-    const label = allOnline ? 'Online / Virtual' : someOnline ? `📍 ${city} (incl. Online)` : `📍 ${city}`;
-    document.getElementById('ev-mp-country').textContent = label;
+    const pinSvg = '<span class="icon-i" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>';
+    const label = allOnline ? 'Online / Virtual' : someOnline ? `${pinSvg} ${escH(city)} (incl. Online)` : `${pinSvg} ${escH(city)}`;
+    document.getElementById('ev-mp-country').innerHTML = label;
     document.getElementById('ev-mp-count').textContent   = `${evs.length} event${evs.length > 1 ? 's' : ''}`;
     document.getElementById('ev-mp-list').innerHTML = evs.map(e => {
       const rawDt = e.start_utc || e.event_start_dt || null;
@@ -852,6 +1313,7 @@
           city     : city || country || 'Global',
           country  : country || city || 'Global',
           flag     : country || city || 'Global',
+          price    : e.price,
           source   : 'db',
           latitude : e.latitude,
           longitude: e.longitude,
@@ -888,7 +1350,14 @@
       const dy   = d ? d.getDate() : '';
       const time = d ? d.toLocaleString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}) : '';
       const loc  = e.location || e.city || '';
-      const isDb = String(e.id).startsWith('db-');
+      // Price is rendered from real data only — never assumed. Eventbrite items carry a
+      // price computed from their actual ticket_availability (server.js); DB items carry
+      // the price scraped/curated by the pipeline. Only a genuinely empty/unspecified value
+      // falls back to the honest "Free / TBC" label, matching events.html's convention.
+      const priceText    = (e.price || '').trim();
+      const priceIsFree  = /^(free|0|unspecified)$/i.test(priceText) || !priceText;
+      const priceLabel   = priceIsFree ? 'Free / TBC' : priceText;
+      const priceClass   = priceIsFree ? 'ev-price-tag free' : 'ev-price-tag';
       return `<a href="${escH(e.url||'#')}" class="ev-item" target="_blank" rel="noopener">
         <div class="ev-item-left">
           ${d ? `<div class="ev-dt"><span class="mo">${escH(mo)}</span><span class="dy">${dy}</span></div>`
@@ -896,9 +1365,9 @@
           <div class="ev-info">
             <h4>${escH(e.title||'')}</h4>
             <div class="ev-meta">
-              ${loc ? `<span class="ev-loc">📍 ${escH(loc)}</span>` : ''}
+              ${loc ? `<span class="ev-loc"><span class="icon-i" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span> ${escH(loc)}</span>` : ''}
               ${time ? `<span class="ev-loc">${escH(time)}</span>` : ''}
-              ${isDb ? '' : '<span class="ev-price-tag free">Free</span>'}
+              <span class="${priceClass}">${escH(priceLabel)}</span>
             </div>
           </div>
         </div>
@@ -944,15 +1413,9 @@
     document.querySelector('.ev-map-wrap').style.display = 'none';
   });
 
-  /* ── Hash-based tab activation (initial load + same-page nav) ── */
+  /* ── #events로 들어오는 옛날 북마크/링크는 완전판 events.html로 보냄 (news.html 자체 Events 탭 UI는 안 씀) ── */
   function activateFromHash() {
-    if (window.location.hash === '#events') {
-      switchTab('events');
-      setTimeout(() => {
-        document.getElementById('sec-events').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (evMapReady && evMap) evMap.updateSize();
-      }, 150);
-    }
+    if (window.location.hash === '#events') location.href = 'events.html';
   }
   activateFromHash();
   window.addEventListener('hashchange', activateFromHash);

@@ -15,7 +15,7 @@ EdTech HUB 공식 웹사이트. 런던 기반 EdTech 생태계 플랫폼으로, 
 ```
 
 ## EC2 서버 (실제 Django 프로젝트)
-- **SSH 접속**: `ssh dohe-server` (키: `~/dohe_key.pem`, IP: `18.169.223.104`)
+- **SSH 접속**: `ssh dohe-server` (키: `~/.ssh/gt-sungsoo-20260804.pem`, IP: `18.169.223.104`)
 - **프로젝트 경로**: `~/edtechhub/src/`
 - **GitHub**: https://github.com/sungsooro-dot/edtechhub.git
 

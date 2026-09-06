@@ -18,17 +18,30 @@ function toEmbedSrc(input) {
 // Fetch Open Graph data from a LinkedIn post URL (Slack-style unfurl, follows redirects)
 const https = require('https');
 function parseOG(data, fallbackUrl) {
-  const get = (prop) => {
-    const m = data.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`))
-           || data.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`));
+  const getProp = (prop) => {
+    const m = data.match(new RegExp(`<meta[^>]*property=["']${prop}["'][^>]*content=["']([^"']+)["']`, 'i'))
+           || data.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*property=["']${prop}["']`, 'i'));
     return m ? m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'") : '';
   };
-  const ogTitle    = get('og:title');
-  const ogImage    = get('og:image');
-  const ogUrl      = get('og:url') || fallbackUrl;
+  // name= variant (article-metadata sites use both property= and name= inconsistently)
+  const getName = (name) => {
+    const m = data.match(new RegExp(`<meta[^>]*name=["']${name}["'][^>]*content=["']([^"']+)["']`, 'i'))
+           || data.match(new RegExp(`<meta[^>]*content=["']([^"']+)["'][^>]*name=["']${name}["']`, 'i'));
+    return m ? m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'") : '';
+  };
+  const ogTitle    = getProp('og:title');
+  const ogImage    = getProp('og:image');
+  const ogUrl      = getProp('og:url') || fallbackUrl;
+  // Article-mode extras (unused by the LinkedIn embed flow, additive so it stays backward compatible)
+  const ogDesc      = getProp('og:description') || getName('description');
+  const siteName    = getProp('og:site_name');
+  const publishedAt = getProp('article:published_time') || getName('date') || getName('DC.date') || getName('pubdate') || getName('publish-date');
   const parts      = ogTitle.split(' | ');
   const authorName = parts.length > 1 ? parts[1] : parts[0];
-  return { post_url: ogUrl, og_title: ogTitle, og_image: ogImage, author_name: authorName };
+  return {
+    post_url: ogUrl, og_title: ogTitle, og_image: ogImage, author_name: authorName,
+    og_description: ogDesc, site_name: siteName, published_at: publishedAt,
+  };
 }
 
 function fetchWithRedirect(url, maxRedirects = 5) {
@@ -184,12 +197,25 @@ async function fetchEventbriteCache() {
           })
           .map(e => {
             const city = detectCity(e.name?.text || e.venue?.city || '');
+            // Ticket price: trust Eventbrite's own ticket_availability, never assume free.
+            // Left null (not 'Free') when Eventbrite reports no ticket data at all, so the
+            // frontend's shared price-badge fallback ("Free / TBC") stays honest about the gap.
+            const ta = e.ticket_availability || {};
+            let price = null;
+            if (ta.is_free) {
+              price = 'Free';
+            } else if (ta.minimum_ticket_price?.display) {
+              price = (ta.maximum_ticket_price?.display && ta.maximum_ticket_price.display !== ta.minimum_ticket_price.display)
+                ? `From ${ta.minimum_ticket_price.display}`
+                : ta.minimum_ticket_price.display;
+            }
             return {
               id: e.id, title: e.name?.text, url: e.url,
               start_utc: e.start?.utc, end_utc: e.end?.utc,
               location: e.venue?.address?.localized_address_display || e.venue?.city || 'Online',
               city: city?.label || e.venue?.city || 'Online',
               flag: city?.flag || 'Online',
+              price,
             };
           }),
       };
@@ -302,6 +328,53 @@ app.post('/api/subscribe', async (req, res) => {
   }
 });
 
+// ── 뉴스레터 구독 (실제 edtechhub.com user_mail_action.php와 동일한 필드·검증·테이블) ──
+app.post('/api/user-mailing', async (req, res) => {
+  const email     = (req.body.email || '').trim();
+  const full_name = (req.body.full_name || '').trim();
+  const role      = (req.body.role || '').trim();
+
+  if (!email || !full_name || !role) {
+    return res.json({ status: -1, msg: 'Error' });
+  }
+
+  try {
+    await db.query(
+      `INSERT INTO user_mailing (email, full_name, role, del_flag, create_dt, update_dt)
+       VALUES (?, ?, ?, 'N', NOW(), NOW())`,
+      [email, full_name, role]
+    );
+    res.json({ status: 0, msg: 'Saved' });
+  } catch (err) {
+    console.error('user-mailing error:', err);
+    res.json({ status: -1, msg: 'Error' });
+  }
+});
+
+// ── News/Event 투고 (실제 edtechhub.com submission_action.php와 동일한 필드·검증·테이블) ──
+app.post('/api/submission', async (req, res) => {
+  const email        = (req.body.email || '').trim();
+  const full_name    = (req.body.full_name || '').trim();
+  const company_name = (req.body.company_name || '').trim();
+  const content       = (req.body.content || '').trim();
+
+  if (!email || !full_name || !content) {
+    return res.json({ status: -1, msg: 'Error' });
+  }
+
+  try {
+    await db.query(
+      `INSERT INTO submission (email, full_name, company_name, detail_content, content_summary, status, del_flag, create_dt, update_dt)
+       VALUES (?, ?, ?, ?, ?, '0', 'N', NOW(), NOW())`,
+      [email, full_name, company_name || null, content, content]
+    );
+    res.json({ status: 0, msg: 'Saved' });
+  } catch (err) {
+    console.error('submission error:', err);
+    res.json({ status: -1, msg: 'Error' });
+  }
+});
+
 app.get('/api/events', (req, res) => {
   if (cache.events) return res.json(cache.events);
   res.status(503).json({ error: 'Cache not ready, try again shortly' });
@@ -350,25 +423,41 @@ app.get('/api/db/news', async (req, res) => {
   const offset = (page - 1) * limit;
   const cat    = req.query.category || null;
   const q      = (req.query.q || '').trim();
+  const sort   = req.query.sort || null; // 'top' = Top Picks 우선 정렬
+  const dateFrom = /^\d{4}-\d{2}-\d{2}$/.test(req.query.date_from || '') ? req.query.date_from : null;
+  const dateTo   = /^\d{4}-\d{2}-\d{2}$/.test(req.query.date_to   || '') ? req.query.date_to   : null;
 
   try {
-    // 최근 14일 기준. 없으면 가장 최근 스크랩 배치 그대로 표시
-    const [[batchRow]] = await db.query(
-      `SELECT MAX(publish_dt) AS latest FROM news WHERE del_flag='N'`);
-    const latest    = batchRow?.latest ? new Date(batchRow.latest) : new Date();
-    const cutoff    = new Date(latest); cutoff.setDate(cutoff.getDate() - 14);
-    const cutoffStr = cutoff.toISOString().slice(0, 19).replace('T', ' ');
-
-    const conds  = ['n.del_flag = "N"', `n.publish_dt >= '${cutoffStr}'`];
+    const conds  = ['n.del_flag = "N"'];
     const params = [];
+    if (dateFrom || dateTo) {
+      // 날짜 범위 검색 시엔 최근 14일 제한을 걸지 않음 (과거 기사도 찾을 수 있게)
+      if (dateFrom) { conds.push('n.publish_dt >= ?'); params.push(dateFrom + ' 00:00:00'); }
+      if (dateTo)   { conds.push('n.publish_dt <= ?'); params.push(dateTo   + ' 23:59:59'); }
+    } else {
+      // 날짜 필터가 없으면 기본값: 최근 14일. 없으면 가장 최근 스크랩 배치 그대로 표시
+      const [[batchRow]] = await db.query(
+        `SELECT MAX(publish_dt) AS latest FROM news WHERE del_flag='N'`);
+      const latest    = batchRow?.latest ? new Date(batchRow.latest) : new Date();
+      const cutoff    = new Date(latest); cutoff.setDate(cutoff.getDate() - 14);
+      const cutoffStr = cutoff.toISOString().slice(0, 19).replace('T', ' ');
+      conds.push(`n.publish_dt >= '${cutoffStr}'`);
+    }
     if (cat) { conds.push('n.category_id = ?'); params.push(cat); }
-    if (q)   { conds.push('n.title LIKE ?');    params.push(`%${q}%`); }
+    if (q)   { conds.push('(n.title LIKE ? OR n.publisher LIKE ?)'); params.push(`%${q}%`, `%${q}%`); }
     const where = conds.join(' AND ');
 
+    const orderBy = sort === 'top'
+      ? 'ISNULL(tp.display_order) ASC, tp.display_order ASC, n.publish_dt DESC'
+      : 'n.publish_dt DESC';
+
     const [rows] = await db.query(
-      `SELECT n.id, n.title, n.publisher, n.url, n.category_id, ${NEWS_IMG_CASE}, n.publish_dt
-       FROM news n WHERE ${where}
-       ORDER BY n.publish_dt DESC LIMIT ? OFFSET ?`, [...params, limit, offset]);
+      `SELECT n.id, n.title, n.publisher, n.url, n.category_id, ${NEWS_IMG_CASE}, n.publish_dt,
+              (tp.id IS NOT NULL) AS is_top_pick, tp.display_order AS top_pick_order
+       FROM news n
+       LEFT JOIN news_top_picks tp ON tp.news_id = n.id AND tp.del_flag = 'N'
+       WHERE ${where}
+       ORDER BY ${orderBy} LIMIT ? OFFSET ?`, [...params, limit, offset]);
 
     const [[countRow]] = await db.query(
       `SELECT COUNT(*) AS total FROM news n WHERE ${where}`, params);
@@ -500,16 +589,15 @@ app.get('/api/db/voices', async (req, res) => {
 app.get('/api/db/events/top', async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT e.id, e.title, e.url, NULL AS image,
+      SELECT e.id, e.title, e.url, e.thumbnail_img_path AS image,
              e.event_start_dt, e.event_end_dt, e.price,
-             e.city_name AS city,
-             ec.country_name AS country,
-             e.latitude, e.longitude
+             e.country_etc AS city,
+             ec.country_name AS country
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
-      WHERE e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL)
+      WHERE e.del_flag = 'N'
             AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE())
-      ORDER BY e.publish_score DESC, e.id DESC
+      ORDER BY ISNULL(e.event_start_dt), e.event_start_dt ASC, e.id DESC
       LIMIT 50
     `);
     const active = applyDateFilter(rows);
@@ -528,22 +616,21 @@ app.get('/api/db/events', async (req, res) => {
 
   try {
     const baseWhere = q
-      ? `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE()) AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)`
-      : `e.del_flag = 'N' AND (e.event_type = '1' OR e.latitude IS NOT NULL) AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE())`;
+      ? `e.del_flag = 'N' AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE()) AND (e.title LIKE ? OR ec.country_name LIKE ? OR e.country_etc LIKE ?)`
+      : `e.del_flag = 'N' AND (e.event_start_dt IS NULL OR e.event_start_dt >= CURDATE())`;
     const qParam = `%${q}%`;
     const params = q ? [qParam, qParam, qParam] : [];
 
     // 이벤트 수가 적어서 전체 fetch 후 JS에서 페이지네이션
     const [rows] = await db.query(`
-      SELECT e.id, e.title, e.url, NULL AS image,
+      SELECT e.id, e.title, e.url, e.thumbnail_img_path AS image,
              e.event_start_dt, e.event_end_dt, e.price,
-             e.city_name AS city,
-             ec.country_name AS country,
-             e.latitude, e.longitude
+             e.country_etc AS city,
+             ec.country_name AS country
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE ${baseWhere}
-      ORDER BY ISNULL(e.event_start_dt), e.event_start_dt ASC, e.publish_score DESC, e.id DESC`, params);
+      ORDER BY ISNULL(e.event_start_dt), e.event_start_dt ASC, e.id DESC`, params);
 
     const active = applyDateFilter(rows);
     const total  = active.length;
@@ -567,11 +654,11 @@ app.get('/api/db/events/archive', async (req, res) => {
   try {
     const conds  = ["e.del_flag = 'N'"];
     const params = [];
-    if (q) { conds.push('(e.title LIKE ? OR ec.country_name LIKE ? OR e.city_name LIKE ?)'); params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
+    if (q) { conds.push('(e.title LIKE ? OR ec.country_name LIKE ? OR e.country_etc LIKE ?)'); params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
 
     const [rows] = await db.query(`
-      SELECT e.id, e.title, e.url,
-             e.event_start_dt, e.city_name AS city,
+      SELECT e.id, e.title, e.url, e.thumbnail_img_path AS image,
+             e.event_start_dt, e.country_etc AS city,
              ec.country_name AS country
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
@@ -743,6 +830,7 @@ app.get('/api/img', async (req, res) => {
 // ── Admin 인증 미들웨어 ──────────────────────────────────
 const ADMIN_USERS = [
   { email: 'sungsoo@dohegroup.com', password: process.env.ADMIN_PASSWORD },
+  { email: 'DOHE', password: process.env.ADMIN_PASSWORD_DOHE },
 ];
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
@@ -898,6 +986,29 @@ app.post('/api/admin/fetch-og', requireAdmin, express.json(), async (req, res) =
   } catch(e) { res.status(500).json({ error: 'fetch failed' }); }
 });
 
+// Generic article/event URL → metadata (News/Event manual-add autofill; non-GEM sources).
+// Reuses the same fetchWithRedirect/parseOG engine as LinkedIn OG fetch, no LinkedIn-specific
+// URL normalization applied since these are ordinary article/event pages.
+app.post('/api/admin/fetch-article', requireAdmin, express.json(), async (req, res) => {
+  try {
+    const { url } = req.body;
+    if (!url) return res.status(400).json({ error: 'url required' });
+    const og = await fetchWithRedirect(url.trim());
+    if (og._status === 429) return res.status(429).json({ error: 'rate_limited' });
+    if (!og.og_title)       return res.status(422).json({ error: 'Could not fetch metadata' });
+    let host = '';
+    try { host = new URL(og.post_url || url).hostname.replace(/^www\./, ''); } catch {}
+    res.json({
+      title:        og.og_title,
+      image:        og.og_image,
+      description:  og.og_description,
+      source_name:  og.site_name || host,
+      published_at: og.published_at,
+      url:          og.post_url || url,
+    });
+  } catch(e) { res.status(500).json({ error: 'fetch failed' }); }
+});
+
 app.post('/api/admin/embeds', requireAdmin, express.json(), async (req, res) => {
   try {
     const { embed_src, display_order = 0, og_title, og_image, author_name, excerpt, post_url } = req.body;
@@ -954,8 +1065,7 @@ app.get('/api/admin/events', requireAdmin, async (req, res) => {
   try {
     const [rows] = await db.query(`
       SELECT e.id, e.title, e.url, e.event_start_dt, e.event_end_dt,
-             e.city_name AS city, ec.country_name AS country, e.country_id,
-             e.latitude, e.longitude, e.price
+             e.country_etc AS city, ec.country_name AS country, e.country_id, e.price
       FROM event e
       LEFT JOIN event_country ec ON ec.id = e.country_id
       WHERE e.del_flag = 'N'
@@ -972,9 +1082,8 @@ app.post('/api/admin/events', requireAdmin, express.json(), async (req, res) => 
   try {
     const cityVal = is_online ? 'Online' : (city || null);
     const cid     = is_online ? null : (country_id || null);
-    const lat     = (!is_online && !city) ? null : null;
     const [r] = await db.query(
-      `INSERT INTO event (title, url, event_start_dt, event_end_dt, city_name, country_id, price, event_type, del_flag)
+      `INSERT INTO event (title, url, event_start_dt, event_end_dt, country_etc, country_id, price, event_type, del_flag)
        VALUES (?, ?, ?, ?, ?, ?, ?, '1', 'N')`,
       [title, url || null, event_start_dt || null, event_end_dt || null, cityVal, cid, price || null]
     );
@@ -989,7 +1098,7 @@ app.put('/api/admin/events/:id', requireAdmin, express.json(), async (req, res) 
     const cid     = is_online ? null : (country_id || null);
     await db.query(
       `UPDATE event SET title=?, url=?, event_start_dt=?, event_end_dt=?,
-       city_name=?, country_id=?, price=? WHERE id=?`,
+       country_etc=?, country_id=?, price=? WHERE id=?`,
       [title || null, url || null, event_start_dt || null, event_end_dt || null,
        cityVal, cid, price || null, req.params.id]
     );
@@ -1056,6 +1165,148 @@ app.delete('/api/admin/news/:id', requireAdmin, async (req, res) => {
   } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
 });
 
+// ── Admin: Pipeline Queue (News) ─────────────────────────
+// php-site/admin/news/pipeline_queue/index.php 포팅: queue_status='queued' 목록
+app.get('/api/admin/news-queue', requireAdmin, async (req, res) => {
+  const page  = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(100, parseInt(req.query.limit) || 30);
+  const q     = (req.query.q || '').trim();
+  const cat   = (req.query.category ?? '').toString().trim(); // ''=all, '0'=Other news
+  const SORT_COLS = ['publish_dt', 'pipeline_run_date', 'tier', 'title'];
+  const sort  = SORT_COLS.includes(req.query.sort) ? req.query.sort : 'publish_dt';
+  const order = String(req.query.order || '').toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+  try {
+    const conds  = ["n.del_flag != 'Y'", "n.queue_status = 'queued'"];
+    const params = [];
+    if (cat !== '') { conds.push('n.category_id = ?'); params.push(cat); }
+    if (q) { conds.push('(n.title LIKE ? OR n.publisher LIKE ? OR n.id = ?)'); params.push(`%${q}%`, `%${q}%`, q); }
+    const where = conds.join(' AND ');
+    const [rows] = await db.query(
+      `SELECT n.id, n.title, n.publisher, n.url, n.category_id, nc.category_name,
+              n.thumbnail_img_path AS image, n.tier, n.pipeline_source,
+              n.pipeline_run_date, n.publish_dt
+       FROM news n LEFT JOIN news_category nc ON nc.id = n.category_id
+       WHERE ${where}
+       ORDER BY n.\`${sort}\` ${order} LIMIT ? OFFSET ?`,
+      [...params, limit, (page - 1) * limit]);
+    const [[cnt]] = await db.query(`SELECT COUNT(*) AS total FROM news n WHERE ${where}`, params);
+    const [categories] = await db.query(
+      `SELECT id, category_name FROM news_category WHERE del_flag != 'Y' ORDER BY display_order`);
+    res.json({ news: rows, total: cnt.total, page, limit, pages: Math.ceil(cnt.total / limit) || 1, categories });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// php-site/admin/news/pipeline_queue/save_publish.php 포팅: queue_status → NULL
+app.post('/api/admin/news-queue/publish', requireAdmin, express.json(), async (req, res) => {
+  const ids = parseIdList(req.body);
+  if (!ids.length) return res.status(400).json({ error: 'ids required' });
+  try {
+    const [r] = await db.query(
+      `UPDATE news SET queue_status = NULL WHERE id IN (?) AND queue_status = 'queued'`, [ids]);
+    res.json({ ok: true, published: r.affectedRows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: Pipeline Queue (Events) ───────────────────────
+// php-site/admin/event/pipeline_queue/index.php 포팅
+app.get('/api/admin/event-queue', requireAdmin, async (req, res) => {
+  const page    = Math.max(1, parseInt(req.query.page) || 1);
+  const limit   = Math.min(100, parseInt(req.query.limit) || 30);
+  const q       = (req.query.q || '').trim();
+  const country = parseInt(req.query.country) || 0;
+  const SORT_COLS = ['event_start_dt', 'pipeline_run_date', 'create_dt', 'title'];
+  const sort  = SORT_COLS.includes(req.query.sort) ? req.query.sort : 'event_start_dt';
+  const order = String(req.query.order || '').toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+  try {
+    const conds  = ["e.del_flag != 'Y'", "e.queue_status = 'queued'"];
+    const params = [];
+    if (country > 0) { conds.push('e.country_id = ?'); params.push(country); }
+    if (q) { conds.push('(e.title LIKE ? OR e.id = ?)'); params.push(`%${q}%`, q); }
+    const where = conds.join(' AND ');
+    const [rows] = await db.query(
+      `SELECT e.id, e.title, e.url, e.thumbnail_img_path AS image, e.event_type,
+              e.country_id, e.country_etc, ec.country_name,
+              e.pipeline_source, e.pipeline_run_date,
+              e.event_start_dt, e.event_end_dt
+       FROM event e LEFT JOIN event_country ec ON ec.id = e.country_id
+       WHERE ${where}
+       ORDER BY e.\`${sort}\` ${order} LIMIT ? OFFSET ?`,
+      [...params, limit, (page - 1) * limit]);
+    const [[cnt]] = await db.query(`SELECT COUNT(*) AS total FROM event e WHERE ${where}`, params);
+    const [countries] = await db.query(
+      `SELECT id, country_name FROM event_country WHERE del_flag != 'Y' ORDER BY country_name`);
+    res.json({ events: rows, total: cnt.total, page, limit, pages: Math.ceil(cnt.total / limit) || 1, countries });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// php-site/admin/event/pipeline_queue/save_publish.php 포팅
+app.post('/api/admin/event-queue/publish', requireAdmin, express.json(), async (req, res) => {
+  const ids = parseIdList(req.body);
+  if (!ids.length) return res.status(400).json({ error: 'ids required' });
+  try {
+    const [r] = await db.query(
+      `UPDATE event SET queue_status = NULL WHERE id IN (?) AND queue_status = 'queued'`, [ids]);
+    res.json({ ok: true, published: r.affectedRows });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+// ── Admin: Top Picks ─────────────────────────────────────
+// body: { ids: [..] } 또는 PHP 호환 { id_list_str: "1,2,3" }
+function parseIdList(body = {}) {
+  const raw = Array.isArray(body.ids) ? body.ids : String(body.id_list_str || '').split(',');
+  return [...new Set(raw.map(v => parseInt(v, 10)).filter(Number.isInteger).filter(n => n > 0))];
+}
+
+// php-site/admin/news|event/reg_top_picks.php 포팅:
+// 이미 있으면 del_flag='N' 복구, 없으면 전체 display_order+1 후 맨 앞(1)에 INSERT
+async function registerTopPicks(table, fkCol, ids) {
+  for (const id of ids) {
+    const [[existing]] = await db.query(
+      `SELECT id FROM \`${table}\` WHERE \`${fkCol}\` = ? LIMIT 1`, [id]);
+    await db.query(`UPDATE \`${table}\` SET display_order = display_order + 1`);
+    if (existing) {
+      await db.query(`UPDATE \`${table}\` SET del_flag = 'N' WHERE id = ?`, [existing.id]);
+    } else {
+      await db.query(`INSERT INTO \`${table}\` (\`${fkCol}\`, display_order) VALUES (?, 1)`, [id]);
+    }
+  }
+}
+
+// 기존 /api/admin/news·events 응답을 건드리지 않고 별도로 Top Pick 상태를 조회
+app.get('/api/admin/top-picks', requireAdmin, async (req, res) => {
+  try {
+    const [n] = await db.query(`SELECT news_id  FROM news_top_picks  WHERE del_flag = 'N'`);
+    const [e] = await db.query(`SELECT event_id FROM event_top_picks WHERE del_flag = 'N'`);
+    res.json({ news: n.map(r => r.news_id), events: e.map(r => r.event_id) });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/news-top-picks', requireAdmin, express.json(), async (req, res) => {
+  const ids = parseIdList(req.body);
+  if (!ids.length) return res.status(400).json({ error: 'ids required' });
+  try {
+    if (req.body.remove) {
+      await db.query(`UPDATE news_top_picks SET del_flag = 'Y' WHERE news_id IN (?)`, [ids]);
+    } else {
+      await registerTopPicks('news_top_picks', 'news_id', ids);
+    }
+    res.json({ ok: true, status: 0 });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
+app.post('/api/admin/event-top-picks', requireAdmin, express.json(), async (req, res) => {
+  const ids = parseIdList(req.body);
+  if (!ids.length) return res.status(400).json({ error: 'ids required' });
+  try {
+    if (req.body.remove) {
+      await db.query(`UPDATE event_top_picks SET del_flag = 'Y' WHERE event_id IN (?)`, [ids]);
+    } else {
+      await registerTopPicks('event_top_picks', 'event_id', ids);
+    }
+    res.json({ ok: true, status: 0 });
+  } catch (e) { console.error(e); res.status(500).json({ error: 'DB error' }); }
+});
+
 app.get('/admin/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin-login.html'));
 });
@@ -1066,10 +1317,6 @@ app.get('/admin/logout', (req, res) => {
 
 app.get('/admin/content', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin-content.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 app.listen(PORT, () => console.log(`EdTech HUB running on port ${PORT}`));

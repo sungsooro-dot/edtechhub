@@ -42,12 +42,12 @@
   <h2>Admin Login</h2>
   <p class="sub">관리자 계정으로 로그인하세요</p>
 
-  <div class="error" id="err">이메일 또는 비밀번호가 올바르지 않습니다.</div>
+  <div class="error" id="err">아이디(이메일) 또는 비밀번호가 올바르지 않습니다.</div>
 
   <form onsubmit="doLogin(event)">
     <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="admin@example.com" autocomplete="email" autofocus required/>
+      <label for="email">Email or Username</label>
+      <input type="text" id="email" placeholder="admin@example.com or username" autocomplete="username" autofocus required/>
     </div>
     <div class="form-group">
       <label for="pwd">Password</label>

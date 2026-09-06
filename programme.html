@@ -4,6 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Programme — EdTech HUB</title>
+  <meta name="description" content="EdTech HUB's Global Startup Coach Award — championing the coaches who transform EdTech startups worldwide."/>
+  <link rel="canonical" href="https://edtechhub.com/programme.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="EdTech HUB"/>
+  <meta property="og:title" content="Programme — EdTech HUB"/>
+  <meta property="og:description" content="EdTech HUB's Global Startup Coach Award — championing the coaches who transform EdTech startups worldwide."/>
+  <meta property="og:url" content="https://edtechhub.com/programme.html"/>
+  <meta property="og:image" content="https://edtechhub.com/logo.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Programme — EdTech HUB"/>
+  <meta name="twitter:description" content="EdTech HUB's Global Startup Coach Award — championing the coaches who transform EdTech startups worldwide."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -63,7 +74,7 @@
     .nav-drop-item:hover { background: #F0FDF4; color: var(--accent-h); }
     .nav-drop-divider { height: 1px; background: var(--border); margin: 4px 0; }
     .nav-cta { display: flex; gap: 8px; align-items: center; }
-    .btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: background .15s; }
+    .btn { display: inline-flex; align-items: center; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: background .15s; }
     .btn-ghost   { background: transparent; color: var(--text-2); }
     .btn-ghost:hover { color: var(--text-1); }
     .btn-primary { background: var(--accent); color: #fff; }
@@ -257,7 +268,37 @@
       html { scroll-behavior: auto; }
       .reveal { opacity: 1; transform: none; transition: none; }
     }
+  
+    /* ── Subscribe modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(17,24,39,.55); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+    .modal-overlay[hidden] { display: none; }
+    .modal-card { position: relative; width: 100%; max-width: 440px; max-height: calc(100vh - 40px); overflow-y: auto; background: #fff; color: var(--text-1); border-radius: 14px; padding: 34px 32px 30px; box-shadow: 0 24px 60px rgba(0,0,0,.22); }
+    .modal-close { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border: none; background: var(--bg-surface); color: var(--text-2); border-radius: 8px; font-size: 14px; cursor: pointer; transition: background .15s; }
+    .modal-close:hover { background: var(--border); }
+    .modal-card h3 { font-family: 'Sora', sans-serif; font-size: 21px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; color: var(--text-1); }
+    .modal-sub { font-size: 13.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 22px; }
+    .modal-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-1); }
+    .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--border); color: var(--text-1); font-size: 14px; font-family: 'Inter', sans-serif; padding: 6px 2px 10px; margin-bottom: 18px; outline: none; transition: border-color .15s; }
+    .modal-input:focus { border-bottom-color: var(--accent); }
+    .modal-input::placeholder { color: var(--text-3); }
+    .modal-select { appearance: none; -webkit-appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 4px center/12px no-repeat; cursor: pointer; }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .modal-hint { font-size: 11.5px; color: var(--text-3); margin: -12px 0 18px; }
+    .modal-error { font-size: 12.5px; color: #DC2626; margin-bottom: 12px; }
+    .modal-error[hidden] { display: none; }
+    .modal-submit { width: 100%; padding: 13px; border: none; background: var(--accent); color: #fff; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .15s; }
+    .modal-submit:hover { background: var(--accent-h); }
+    .modal-submit:disabled { opacity: .55; cursor: default; }
+    @media (max-width: 480px) { .modal-row { grid-template-columns: 1fr; } }
+
   </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M7QD4DVR8W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-M7QD4DVR8W');
+  </script>
 </head>
 <body>
 
@@ -296,7 +337,7 @@
       <span></span><span></span><span></span>
     </button>
     <div class="nav-cta">
-      <a href="/#newsletter"          class="btn btn-ghost">Subscribe</a>
+      <a href="#"          class="btn btn-ghost" onclick="openModal('modal-subscribe');return false;">Subscribe</a>
       <a href="mailto:info@edtechhub.com" class="btn btn-primary">Contact Us</a>
     </div>
   </nav>
@@ -313,7 +354,7 @@
   <a href="https://gem.edtechhub.com/"  class="nav-mobile-a accent" target="_blank" rel="noopener" onclick="closeMenu()">GEM ↗</a>
   <div class="nav-mobile-divider"></div>
   <div class="nav-mobile-cta">
-    <a href="/#newsletter"              class="btn btn-ghost"   onclick="closeMenu()">Subscribe</a>
+    <a href="#"              class="btn btn-ghost"   onclick="closeMenu();openModal('modal-subscribe');return false;">Subscribe</a>
     <a href="mailto:info@edtechhub.com" class="btn btn-primary" onclick="closeMenu()">Contact Us</a>
   </div>
 </nav>
@@ -343,19 +384,19 @@
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <div class="tab-nav">
-    <button class="tab-btn on" data-tab="overview">Overview</button>
-    <button class="tab-btn" data-tab="eligibility">Eligibility</button>
-    <button class="tab-btn" data-tab="programme">Programme</button>
-    <button class="tab-btn" data-tab="dates">Dates</button>
-    <button class="tab-btn" data-tab="partners">Partners &amp; Press</button>
+  <div class="tab-nav" role="tablist">
+    <button class="tab-btn on" id="tabbtn-overview" data-tab="overview" role="tab" aria-selected="true" aria-controls="tab-overview">Overview</button>
+    <button class="tab-btn" id="tabbtn-eligibility" data-tab="eligibility" role="tab" aria-selected="false" aria-controls="tab-eligibility">Eligibility</button>
+    <button class="tab-btn" id="tabbtn-programme" data-tab="programme" role="tab" aria-selected="false" aria-controls="tab-programme">Programme</button>
+    <button class="tab-btn" id="tabbtn-dates" data-tab="dates" role="tab" aria-selected="false" aria-controls="tab-dates">Dates</button>
+    <button class="tab-btn" id="tabbtn-partners" data-tab="partners" role="tab" aria-selected="false" aria-controls="tab-partners">Partners &amp; Press</button>
   </div>
 </div>
 
 <main>
 
 <!-- ── OVERVIEW ── -->
-<div class="tab-pane on" id="tab-overview">
+<div class="tab-pane on" id="tab-overview" role="tabpanel" aria-labelledby="tabbtn-overview">
   <div class="wrap">
     <div class="ov-kpi">
       <div class="ov-kpi-card">
@@ -391,49 +432,49 @@
 </div>
 
 <!-- ── ELIGIBILITY ── -->
-<div class="tab-pane" id="tab-eligibility">
+<div class="tab-pane" id="tab-eligibility" role="tabpanel" aria-labelledby="tabbtn-eligibility">
   <div class="wrap">
     <div class="sec-lbl">Who Qualifies</div>
     <h2 class="sec-ttl reveal">Who Should Apply?</h2>
     <p class="sec-desc">The GSCA welcomes coaches from all backgrounds. If you are passionate about startup development and driving impact in EdTech, this programme is for you.</p>
     <div class="elig-grid">
       <div class="elig-card">
-        <div class="elig-icon">🎯</div>
+        <div class="elig-icon" aria-hidden="true">🎯</div>
         <div>
           <h4>Active Startup Coaches</h4>
           <p>Coaches currently working in startup development who want their impact recognised on a global stage.</p>
         </div>
       </div>
       <div class="elig-card">
-        <div class="elig-icon">🔄</div>
+        <div class="elig-icon" aria-hidden="true">🔄</div>
         <div>
           <h4>Transitioning from Mentoring</h4>
           <p>Professionals moving from a mentoring role to a coaching methodology, developing independent thinking in founders.</p>
         </div>
       </div>
       <div class="elig-card">
-        <div class="elig-icon">🌐</div>
+        <div class="elig-icon" aria-hidden="true">🌐</div>
         <div>
           <h4>Cross-Sector Professionals</h4>
           <p>Coaches with versatile experience across industries — tech, finance, education — with skills transferable to EdTech startups.</p>
         </div>
       </div>
       <div class="elig-card">
-        <div class="elig-icon">💡</div>
+        <div class="elig-icon" aria-hidden="true">💡</div>
         <div>
           <h4>Career Changers</h4>
           <p>Individuals from non-coaching backgrounds with demonstrable transferable skills relevant to startup development.</p>
         </div>
       </div>
       <div class="elig-card">
-        <div class="elig-icon">🚀</div>
+        <div class="elig-icon" aria-hidden="true">🚀</div>
         <div>
           <h4>EdTech Enthusiasts</h4>
           <p>Individuals deeply passionate about the development of education technology startups and driving societal impact.</p>
         </div>
       </div>
       <div class="elig-card">
-        <div class="elig-icon">📊</div>
+        <div class="elig-icon" aria-hidden="true">📊</div>
         <div>
           <h4>Business-Background Coaches</h4>
           <p>Coaches with EdTech and business backgrounds, recognised coaching qualifications, and proven startup experience.</p>
@@ -444,7 +485,7 @@
 </div>
 
 <!-- ── PROGRAMME ── -->
-<div class="tab-pane" id="tab-programme">
+<div class="tab-pane" id="tab-programme" role="tabpanel" aria-labelledby="tabbtn-programme">
   <div class="wrap">
     <div class="sec-lbl">How It Works</div>
     <h2 class="sec-ttl reveal">24-Week Programme Structure</h2>
@@ -494,7 +535,7 @@
 </div>
 
 <!-- ── DATES ── -->
-<div class="tab-pane" id="tab-dates">
+<div class="tab-pane" id="tab-dates" role="tabpanel" aria-labelledby="tabbtn-dates">
   <div class="wrap">
     <div class="sec-lbl">Schedule</div>
     <h2 class="sec-ttl reveal">2025 Programme Timeline</h2>
@@ -537,7 +578,7 @@
 </div>
 
 <!-- ── PARTNERS & PRESS ── -->
-<div class="tab-pane" id="tab-partners">
+<div class="tab-pane" id="tab-partners" role="tabpanel" aria-labelledby="tabbtn-partners">
   <div class="wrap">
     <div class="sec-lbl">Partners</div>
     <h2 class="sec-ttl reveal">Key Partners</h2>
@@ -593,7 +634,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
-            <li><a href="news.html#events">Events</a></li>
+            <li><a href="events.html">Events</a></li>
             <li><a href="programme.html">Programme</a></li>
             <li><a href="https://gem.edtechhub.com/" target="_blank">GEM ↗</a></li>
           </ul>
@@ -615,29 +656,86 @@
   </div>
 </footer>
 
+<!-- Subscribe modal — 실제 edtechhub.com 뉴스레터 구독 폼(Email/Full name/Role)과 동일한 필드·검증 규칙 -->
+<div class="modal-overlay" id="modal-subscribe" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-subscribe-ttl">
+    <button class="modal-close" onclick="closeModal('modal-subscribe')" aria-label="Close">✕</button>
+    <h3 id="modal-subscribe-ttl">Subscribe to our newsletter!</h3>
+    <p class="modal-sub">Don't miss out on the latest trends, events, and activities in EdTech.</p>
+    <form id="subscribe-form">
+      <label class="modal-label" for="sub-email">Email*</label>
+      <input class="modal-input" type="text" id="sub-email" autocomplete="email"/>
+      <p class="modal-hint">Share a bit more about yourself and receive tailored articles.</p>
+      <div class="modal-row">
+        <div>
+          <label class="modal-label" for="sub-name">Full name</label>
+          <input class="modal-input" type="text" id="sub-name" maxlength="30" autocomplete="name"/>
+        </div>
+        <div>
+          <label class="modal-label" for="sub-role">Role</label>
+          <select class="modal-input modal-select" id="sub-role">
+            <option value="">Choose your role</option>
+            <option>Startup</option>
+            <option>Startup Coach</option>
+            <option>Expert</option>
+            <option>Investor</option>
+            <option>Service Provider</option>
+            <option>Accelerator</option>
+            <option>Educator</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-error" id="subscribe-error" hidden></div>
+      <button type="submit" class="modal-submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+<script src="subscribe-modal.js"></script>
+
+
 <script>
   document.querySelector('.tab-nav').addEventListener('click', e => {
     const btn = e.target.closest('.tab-btn');
     if (!btn) return;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
     btn.classList.add('on');
+    btn.setAttribute('aria-selected', 'true');
     document.getElementById('tab-' + btn.dataset.tab).classList.add('on');
     window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop - 60, behavior: 'smooth' });
+  });
+  document.querySelector('.tab-nav').addEventListener('keydown', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn || (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft')) return;
+    e.preventDefault();
+    const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+    const i = tabs.indexOf(btn);
+    const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+    next.focus();
+    next.click();
   });
 
   const hamburger  = document.getElementById('nav-hamburger');
   const mobileMenu = document.getElementById('nav-mobile');
+  let menuScrollCloser = null;
   hamburger.addEventListener('click', () => {
     const isOpen = mobileMenu.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (isOpen) {
+      menuScrollCloser = () => closeMenu();
+      window.addEventListener('scroll', menuScrollCloser, { passive: true, once: true });
+    }
   });
   function closeMenu() {
     mobileMenu.classList.remove('open');
     document.body.style.overflow = '';
+    if (menuScrollCloser) {
+      window.removeEventListener('scroll', menuScrollCloser);
+      menuScrollCloser = null;
+    }
   }
-  window.addEventListener('scroll', () => { if (mobileMenu.classList.contains('open')) closeMenu(); }, { passive: true });
 
   // Scroll fade-up reveal — section titles only, plays once, skipped for reduced-motion
   (function() {

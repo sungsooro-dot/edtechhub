@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About — EdTech HUB</title>
-  <meta name="description" content="Learn about EdTech HUB — London's platform connecting the global EdTech ecosystem through events, programmes, and community initiatives."/>
-  <link rel="canonical" href="https://edtechhub.com/about.html"/>
+  <title>Terms &amp; Conditions — EdTech HUB</title>
+  <meta name="description" content="EdTech HUB's Terms and Conditions for using our website and services."/>
+  <link rel="canonical" href="https://edtechhub.com/terms.html"/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="EdTech HUB"/>
-  <meta property="og:title" content="About — EdTech HUB"/>
-  <meta property="og:description" content="Learn about EdTech HUB — London's platform connecting the global EdTech ecosystem through events, programmes, and community initiatives."/>
-  <meta property="og:url" content="https://edtechhub.com/about.html"/>
+  <meta property="og:title" content="Terms &amp; Conditions — EdTech HUB"/>
+  <meta property="og:description" content="EdTech HUB's Terms and Conditions for using our website and services."/>
+  <meta property="og:url" content="https://edtechhub.com/terms.html"/>
   <meta property="og:image" content="https://edtechhub.com/logo.png"/>
   <meta name="twitter:card" content="summary"/>
-  <meta name="twitter:title" content="About — EdTech HUB"/>
-  <meta name="twitter:description" content="Learn about EdTech HUB — London's platform connecting the global EdTech ecosystem through events, programmes, and community initiatives."/>
+  <meta name="twitter:title" content="Terms &amp; Conditions — EdTech HUB"/>
+  <meta name="twitter:description" content="EdTech HUB's Terms and Conditions for using our website and services."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -46,8 +46,6 @@
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: background .15s, border-color .15s; font-family: 'Inter', sans-serif; white-space: nowrap; }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
-    .btn-secondary { background: transparent; border: 1.5px solid var(--border-h); color: var(--text-1); padding: 10px 20px; }
-    .btn-secondary:hover { border-color: var(--accent-h); color: var(--accent-h); }
     .btn-ghost { background: transparent; color: var(--text-2); padding: 8px 14px; font-size: 13px; border: none; }
     .btn-ghost:hover { color: var(--text-1); }
 
@@ -61,10 +59,9 @@
     .nav-item { position: relative; }
     .nav-a { display: block; padding: 6px 13px; border-radius: 5px; font-size: 14px; font-weight: 500; color: #4B5563; transition: color .15s, background .15s; white-space: nowrap; }
     .nav-a:hover { color: var(--text-1); background: var(--bg-surface); }
-    .nav-a.on { color: var(--accent-h); }
     .nav-a.gem { color: var(--accent-h); }
     .nav-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 190px; padding: 6px 0; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; z-index: 200; }
-    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-item:hover .nav-dropdown, .nav-item:focus-within .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
     .nav-drop-item { display: block; padding: 9px 16px; font-size: 14px; font-weight: 500; color: #374151; transition: background .12s, color .12s; }
     .nav-drop-item:hover { background: #F0FDF4; color: var(--accent-h); }
     .nav-drop-div { height: 1px; background: var(--border); margin: 4px 0; }
@@ -81,87 +78,23 @@
     .nav-mobile-cta { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
     .nav-mobile-cta .btn { justify-content: center; }
 
-    /* HERO */
-    .about-hero {
-      background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 50%, #F0FDF4 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 80px 0 72px;
-    }
-    .about-hero-inner { display: grid; grid-template-columns: 1fr 360px; gap: 64px; align-items: center; }
-    .about-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .about-tag::before { content: ''; width: 16px; height: 2px; background: var(--accent); }
-    .about-hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; color: #111827; margin-bottom: 16px; }
-    .about-hero h1 span { color: var(--accent); }
-    .about-hero-desc { font-size: 17px; color: #4B5563; line-height: 1.75; margin-bottom: 28px; }
-    .about-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-    .about-hero-card { background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.04), 0 4px 10px rgba(0,0,0,.06); }
-    .ahc-stat { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #F0FDF4; }
-    .ahc-stat:last-child { border-bottom: none; padding-bottom: 0; }
-    .ahc-num { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: #111827; min-width: 68px; }
-    .ahc-num sup { font-size: 14px; color: var(--accent-h); }
-    .ahc-lbl { font-size: 14px; color: #4B5563; line-height: 1.4; }
+    /* LEGAL HERO */
+    .legal-hero { background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 56px 0 40px; }
+    .legal-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .legal-tag::before { content: ''; width: 16px; height: 2px; background: var(--accent); }
+    .legal-hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; color: #111827; margin-bottom: 10px; }
+    .legal-updated { font-size: 13px; color: var(--text-2); }
 
-    /* SECTION COMMON */
-    .section { padding: 72px 0; }
-    .section + .section { border-top: 1px solid var(--border); }
-    .sec-lbl { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-h); margin-bottom: 10px; }
-    .sec-ttl { font-family: 'Sora', sans-serif; font-size: clamp(22px, 2.8vw, 32px); font-weight: 700; color: #111827; line-height: 1.2; }
-    .sec-sub  { font-size: 16px; color: #4B5563; margin-top: 10px; line-height: 1.7; max-width: 600px; }
-
-    /* MISSION */
-    .mission-section { background: #fff; }
-    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-    .mission-body { font-size: 16px; color: #374151; line-height: 1.8; }
-    .mission-body p + p { margin-top: 16px; }
-    .mission-quote { background: #F0FDF4; border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 24px 28px; margin-top: 28px; }
-    .mission-quote p { font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 600; color: #111827; line-height: 1.6; font-style: italic; }
-    .mission-pills { display: flex; flex-direction: column; gap: 14px; }
-    .mission-pill { display: flex; align-items: flex-start; gap: 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
-    .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
-    .pill-ttl { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 3px; }
-    .pill-txt { font-size: 13px; color: var(--text-2); line-height: 1.6; }
-
-    /* INITIATIVES */
-    .init-section { background: var(--bg-surface); }
-    .init-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 40px; }
-    .init-card { border-radius: 12px; padding: 28px 22px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); transition: box-shadow .2s, border-color .2s, transform .2s; }
-    .init-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.07); transform: translateY(-2px); }
-    .init-icon { font-size: 30px; margin-bottom: 4px; }
-    .init-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
-    .init-card h3 { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 800; color: #111827; line-height: 1.25; }
-    .init-card p { font-size: 13px; color: var(--text-2); line-height: 1.6; flex: 1; }
-    .init-link { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; align-self: flex-start; margin-top: 6px; transition: background .15s; }
-    .ic-green  { background: linear-gradient(135deg,#F0FDF4,#DCFCE7); border-color: #A7F3D0; }
-    .ic-green .init-tag { color: #15803D; }
-    .ic-green .init-link { background: #16A34A; color: #fff; }
-    .ic-green .init-link:hover { background: #15803D; }
-    .ic-blue   { background: linear-gradient(135deg,#EFF6FF,#DBEAFE); border-color: #BFDBFE; }
-    .ic-blue .init-tag { color: #1D4ED8; }
-    .ic-blue .init-link { background: #2563EB; color: #fff; }
-    .ic-blue .init-link:hover { background: #1D4ED8; }
-    .ic-orange { background: linear-gradient(135deg,#FFF7ED,#FFEDD5); border-color: #FED7AA; }
-    .ic-orange .init-tag { color: #C2410C; }
-    .ic-orange .init-link { background: #EA580C; color: #fff; }
-    .ic-orange .init-link:hover { background: #C2410C; }
-    .ic-purple { background: linear-gradient(135deg,#FAF5FF,#EDE9FE); border-color: #DDD6FE; }
-    .ic-purple .init-tag { color: #7C3AED; }
-    .ic-purple .init-link { background: #7C3AED; color: #fff; }
-    .ic-purple .init-link:hover { background: #6D28D9; }
-    .ic-teal   { background: linear-gradient(135deg,#F0FDFA,#CCFBF1); border-color: #99F6E4; }
-    .ic-teal .init-tag { color: #0F766E; }
-    .ic-teal .init-link { background: #0D9488; color: #fff; }
-    .ic-teal .init-link:hover { background: #0F766E; }
-
-    /* CTA */
-    .cta-section { background: #111827; padding: 72px 0; }
-    .cta-inner { text-align: center; }
-    .cta-inner h2 { font-family: 'Sora', sans-serif; font-size: clamp(24px, 3vw, 36px); font-weight: 700; color: #fff; margin-bottom: 14px; }
-    .cta-inner p  { font-size: 16px; color: rgba(255,255,255,.55); margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto; }
-    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn-white { background: #fff; color: #111827; }
-    .btn-white:hover { background: #F9FAFB; }
-    .btn-outline-white { background: transparent; border: 1.5px solid rgba(255,255,255,.3); color: #fff; padding: 10px 20px; }
-    .btn-outline-white:hover { border-color: rgba(255,255,255,.7); }
+    /* LEGAL BODY */
+    .legal-section { padding: 56px 0 80px; }
+    .legal-body { font-size: 15.5px; color: #374151; line-height: 1.8; }
+    .legal-body p { margin-bottom: 18px; }
+    .legal-body h2 { font-family: 'Sora', sans-serif; font-size: 19px; font-weight: 700; color: #111827; margin: 36px 0 12px; }
+    .legal-body h2:first-of-type { margin-top: 8px; }
+    .legal-body p:last-child { margin-bottom: 0; }
+    .legal-source { margin-top: 44px; padding: 16px 20px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .legal-source a { color: var(--accent-h); font-weight: 600; }
+    .legal-source a:hover { text-decoration: underline; }
 
     /* FOOTER */
     .footer { background: #111827; border-top: 1px solid #1F2937; padding: 48px 0 28px; }
@@ -182,28 +115,11 @@
     .back-top { background: none; border: none; font-size: 12px; color: #6B7280; cursor: pointer; letter-spacing: .08em; text-transform: uppercase; padding: 14px 4px; }
 
     /* RESPONSIVE */
-    @media (max-width: 1080px) { .init-grid { grid-template-columns: repeat(3,1fr); } }
-    @media (max-width: 900px) {
-      .about-hero-inner { grid-template-columns: 1fr; }
-      .about-hero-card { display: none; }
-      .mission-grid { grid-template-columns: 1fr; gap: 32px; }
-    }
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
-      .init-grid { grid-template-columns: repeat(2,1fr); }
       .ft-top { grid-template-columns: 1fr; gap: 28px; }
       .ft-cols { grid-template-columns: 1fr 1fr; }
-      .about-btns { flex-direction: column; }
-    }
-    @media (max-width: 480px) { .init-grid { grid-template-columns: 1fr; } }
-
-    /* ── SCROLL REVEAL (section titles only) ── */
-    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.in { opacity: 1; transform: translateY(0); }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .reveal { opacity: 1; transform: none; transition: none; }
     }
   
     /* ── Subscribe modal ── */
@@ -248,7 +164,7 @@
     </a>
     <ul class="nav-links">
       <li class="nav-item"><a href="index.html" class="nav-a">Home</a></li>
-      <li class="nav-item"><a href="about.html" class="nav-a on">About</a></li>
+      <li class="nav-item"><a href="about.html" class="nav-a">About</a></li>
       <li class="nav-item">
         <a href="news.html" class="nav-a">News & Events ▾</a>
         <div class="nav-dropdown">
@@ -272,7 +188,7 @@
       <li class="nav-item"><a href="programme.html" class="nav-a">Programme</a></li>
       <li class="nav-item"><a href="https://gem.edtechhub.com/" class="nav-a gem" target="_blank" rel="noopener">GEM ↗</a></li>
     </ul>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
     <div class="nav-cta">
@@ -284,7 +200,7 @@
 
 <nav class="nav-mobile" id="mobileNav">
   <a href="index.html" class="nav-mobile-a">Home</a>
-  <a href="about.html" class="nav-mobile-a accent">About</a>
+  <a href="about.html" class="nav-mobile-a">About</a>
   <a href="news.html" class="nav-mobile-a">News & Events</a>
   <a href="events.html" class="nav-mobile-a">EdTech Together</a>
   <a href="programme.html" class="nav-mobile-a">Programme</a>
@@ -298,144 +214,51 @@
 
 <main>
 
-  <!-- HERO -->
-  <section class="about-hero">
-    <div class="wrap about-hero-inner">
-      <div>
-        <div class="about-tag">About EdTech HUB</div>
-        <h1>Connecting the Global<br/><span>EdTech Ecosystem</span></h1>
-        <p class="about-hero-desc">EdTech HUB is London's leading platform for the EdTech community — bringing together startups, investors, educators, and policymakers to connect, collaborate, and drive innovation in education.</p>
-        <div class="about-btns">
-          <a href="events.html" class="btn btn-primary">Join an Event</a>
-          <a href="news.html" class="btn btn-secondary">Latest News</a>
-        </div>
-      </div>
-      <div class="about-hero-card">
-        <div class="ahc-stat">
-          <span class="ahc-num">500<sup>+</sup></span>
-          <span class="ahc-lbl">EdTech startups connected through our platform</span>
-        </div>
-        <div class="ahc-stat">
-          <span class="ahc-num">30<sup>+</sup></span>
-          <span class="ahc-lbl">Countries represented in our global community</span>
-        </div>
-        <div class="ahc-stat">
-          <span class="ahc-num">6</span>
-          <span class="ahc-lbl">Global strategic partners</span>
-        </div>
-        <div class="ahc-stat">
-          <span class="ahc-num">5</span>
-          <span class="ahc-lbl">Active initiatives running globally</span>
-        </div>
-      </div>
+  <!-- LEGAL HERO -->
+  <section class="legal-hero">
+    <div class="wrap-narrow">
+      <div class="legal-tag">Legal</div>
+      <h1>Terms &amp; Conditions</h1>
+      <p class="legal-updated">Last updated: June 20, 2023</p>
     </div>
   </section>
 
-  <!-- MISSION -->
-  <section class="mission-section section">
-    <div class="wrap mission-grid">
-      <div>
-        <div class="sec-lbl">Our Mission</div>
-        <h2 class="sec-ttl reveal">Why EdTech HUB Exists</h2>
-        <div style="height:20px;"></div>
-        <div class="mission-body">
-          <p>The global EdTech sector is growing fast — but it remains fragmented. Startups struggle to find the right investors. Educators can't easily discover what's working. Policymakers are disconnected from innovation at the ground level.</p>
-          <p>EdTech HUB was founded to fix that. We exist to be the connective layer of the EdTech ecosystem — a trusted, active community where the people shaping the future of education can find each other, share knowledge, and build together.</p>
-          <p>With operations running across London, Singapore, Seoul, Sydney, and online, we host monthly events, curate the latest news, and run programmes that create real opportunities across the ecosystem.</p>
-        </div>
-        <div class="mission-quote">
-          <p>"Together, not against each other — that's how we make EdTech work for everyone."</p>
-        </div>
-      </div>
-      <div class="mission-pills">
-        <div class="mission-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <div class="pill-ttl">Community First</div>
-            <div class="pill-txt">We build genuine relationships, not just networks. Every event, programme, and initiative is designed to create lasting connections.</div>
-          </div>
-        </div>
-        <div class="mission-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <div class="pill-ttl">Global, Local</div>
-            <div class="pill-txt">Operating across London, Singapore, Seoul, Sydney, and online — we connect local ecosystems to the global stage.</div>
-          </div>
-        </div>
-        <div class="mission-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <div class="pill-ttl">Evidence-Driven</div>
-            <div class="pill-txt">We champion EdTech that works. Our news, events, and programmes focus on real outcomes and learning evidence, not just hype.</div>
-          </div>
-        </div>
-        <div class="mission-pill">
-          <div class="pill-dot"></div>
-          <div>
-            <div class="pill-ttl">Open & Inclusive</div>
-            <div class="pill-txt">Whether you're a founder, a teacher, an investor, or a student — there's a place for you in the EdTech HUB community.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- LEGAL BODY -->
+  <section class="legal-section">
+    <div class="wrap-narrow">
+      <div class="legal-body">
+        <p>Please read these Terms of Use ("Terms", "Terms of Use") carefully before using the https://doheglobal.com website (the "Service") operated by DOHE Global ("us", "we", or "our").</p>
+        <p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>
+        <p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>
 
-  <!-- INITIATIVES -->
-  <section class="init-section section">
-    <div class="wrap">
-      <div style="text-align:center;max-width:600px;margin:0 auto;">
-        <div class="sec-lbl">What We Do</div>
-        <h2 class="sec-ttl reveal">Our Initiatives</h2>
-        <p class="sec-sub" style="margin:10px auto 0;">Five programmes connecting and growing the global EdTech ecosystem.</p>
-      </div>
-      <div class="init-grid">
-        <div class="init-card ic-green">
-          <div class="init-icon">🎓</div>
-          <div class="init-tag">Programme</div>
-          <h3>Global Startup Coach Award</h3>
-          <p>A 24-week programme celebrating the coaches behind the world's most impactful EdTech startups. $200,000 prize fund.</p>
-          <a href="programme.html" class="init-link">Learn More →</a>
-        </div>
-        <div class="init-card ic-blue">
-          <div class="init-icon">🌍</div>
-          <div class="init-tag">Global Resource Map</div>
-          <h3>EdTech Global Resource Map</h3>
-          <p>Discover EdTech organisations, accelerators, and initiatives mapped across 50+ countries worldwide.</p>
-          <a href="https://gem.edtechhub.com/" class="init-link" target="_blank" rel="noopener">Explore GEM ↗</a>
-        </div>
-        <div class="init-card ic-orange">
-          <div class="init-icon">💡</div>
-          <div class="init-tag">Community</div>
-          <h3>Redefining Learning Forum</h3>
-          <p>Educators, innovators, and policymakers challenging assumptions and shaping the future of learning.</p>
-          <a href="community-forum.html" class="init-link">Learn More →</a>
-        </div>
-        <div class="init-card ic-purple">
-          <div class="init-icon">🌐</div>
-          <div class="init-tag">Partnership</div>
-          <h3>Partnership Initiatives</h3>
-          <p>Together, not against each other — driving innovation through strategic partnerships across the ecosystem.</p>
-          <a href="community-partnership.html" class="init-link">Learn More →</a>
-        </div>
-        <div class="init-card ic-teal">
-          <div class="init-icon">🔗</div>
-          <div class="init-tag">Networking</div>
-          <h3>Cross-Cohort Networking</h3>
-          <p>Connect across programmes and cohorts to build lasting relationships in the EdTech community.</p>
-          <a href="networking.html" class="init-link">Learn More →</a>
-        </div>
-      </div>
-    </div>
-  </section>
+        <h2>Intellectual Property</h2>
+        <p>The Service and its original content, features, and functionality are and will remain the exclusive property of DOHE Global and its licensors.</p>
 
-  <!-- CTA -->
-  <section class="cta-section">
-    <div class="wrap cta-inner">
-      <h2>Ready to Join the Community?</h2>
-      <p>Connect with 500+ EdTech startups, investors, and educators. Join us at the next EdTech Together event.</p>
-      <div class="cta-btns">
-        <a href="events.html" class="btn btn-white">Reserve a Spot</a>
-        <a href="news.html" class="btn btn-outline-white">Latest News</a>
+        <h2>Links To Other Web Sites</h2>
+        <p>Our Service may contain links to third-party web sites or services that are not owned or controlled by DOHE Global.</p>
+        <p>DOHE Global has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that "DOHE Global shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services."</p>
+        <p>We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services that you visit.</p>
+
+        <h2>Termination</h2>
+        <p>"We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms."</p>
+        <p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.</p>
+
+        <h2>Disclaimer</h2>
+        <p>"Your use of the Service is at your sole risk. The Service is provided on an 'AS IS' and 'AS AVAILABLE' basis." The Service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement or course of performance.</p>
+
+        <h2>Governing Law</h2>
+        <p>These Terms shall be governed and construed in accordance with the laws of without regard to its conflict of law provisions.</p>
+        <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. "These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service."</p>
+
+        <h2>Changes</h2>
+        <p>"We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect."</p>
+        <p>What constitutes a material change will be determined at our sole discretion.</p>
+        <p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>
+
+        <h2>Contact Us</h2>
+        <p>If you have any questions about these Terms, please contact us at <a href="mailto:info@edtechhub.com" style="color:var(--accent-h);font-weight:600;">info@edtechhub.com</a>.</p>
+
+        <div class="legal-source">Reproduced from <a href="https://edtechhub.com/contents/terms.php" target="_blank" rel="noopener">edtechhub.com/contents/terms.php</a>.</div>
       </div>
     </div>
   </section>
@@ -540,23 +363,6 @@
     hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
     document.body.style.overflow = open ? 'hidden' : '';
   });
-
-  // Scroll fade-up reveal — section titles only, plays once, skipped for reduced-motion
-  (function() {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const els = document.querySelectorAll('.reveal');
-    if (!els.length) return;
-    if (reduceMotion) { els.forEach(el => el.classList.add('in')); return; }
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    els.forEach(el => io.observe(el));
-  })();
 </script>
 </body>
 </html>

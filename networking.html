@@ -4,6 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cross-Cohort Networking — EdTech HUB</title>
+  <meta name="description" content="Cross-Cohort Networking — EdTech HUB connects founders, coaches, and investors across programme cohorts to build lasting relationships."/>
+  <link rel="canonical" href="https://edtechhub.com/networking.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="EdTech HUB"/>
+  <meta property="og:title" content="Cross-Cohort Networking — EdTech HUB"/>
+  <meta property="og:description" content="Cross-Cohort Networking — EdTech HUB connects founders, coaches, and investors across programme cohorts to build lasting relationships."/>
+  <meta property="og:url" content="https://edtechhub.com/networking.html"/>
+  <meta property="og:image" content="https://edtechhub.com/logo.png"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Cross-Cohort Networking — EdTech HUB"/>
+  <meta name="twitter:description" content="Cross-Cohort Networking — EdTech HUB connects founders, coaches, and investors across programme cohorts to build lasting relationships."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -30,7 +41,7 @@
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
     /* BUTTONS */
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 7px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; white-space: nowrap; transition: background .15s, border-color .15s; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; font-family: 'Inter', sans-serif; white-space: nowrap; transition: background .15s, border-color .15s; }
     .btn-primary  { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-h); }
     .btn-outline  { background: transparent; border: 1.5px solid rgba(255,255,255,.5); color: #fff; padding: 10px 20px; }
@@ -166,7 +177,37 @@
       html { scroll-behavior: auto; }
       .reveal { opacity: 1; transform: none; transition: none; }
     }
+  
+    /* ── Subscribe modal ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(17,24,39,.55); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+    .modal-overlay[hidden] { display: none; }
+    .modal-card { position: relative; width: 100%; max-width: 440px; max-height: calc(100vh - 40px); overflow-y: auto; background: #fff; color: var(--text-1); border-radius: 14px; padding: 34px 32px 30px; box-shadow: 0 24px 60px rgba(0,0,0,.22); }
+    .modal-close { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border: none; background: var(--bg-surface); color: var(--text-2); border-radius: 8px; font-size: 14px; cursor: pointer; transition: background .15s; }
+    .modal-close:hover { background: var(--border); }
+    .modal-card h3 { font-family: 'Sora', sans-serif; font-size: 21px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; color: var(--text-1); }
+    .modal-sub { font-size: 13.5px; color: var(--text-2); line-height: 1.6; margin-bottom: 22px; }
+    .modal-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-1); }
+    .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1.5px solid var(--border); color: var(--text-1); font-size: 14px; font-family: 'Inter', sans-serif; padding: 6px 2px 10px; margin-bottom: 18px; outline: none; transition: border-color .15s; }
+    .modal-input:focus { border-bottom-color: var(--accent); }
+    .modal-input::placeholder { color: var(--text-3); }
+    .modal-select { appearance: none; -webkit-appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 4px center/12px no-repeat; cursor: pointer; }
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .modal-hint { font-size: 11.5px; color: var(--text-3); margin: -12px 0 18px; }
+    .modal-error { font-size: 12.5px; color: #DC2626; margin-bottom: 12px; }
+    .modal-error[hidden] { display: none; }
+    .modal-submit { width: 100%; padding: 13px; border: none; background: var(--accent); color: #fff; font-size: 14px; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .15s; }
+    .modal-submit:hover { background: var(--accent-h); }
+    .modal-submit:disabled { opacity: .55; cursor: default; }
+    @media (max-width: 480px) { .modal-row { grid-template-columns: 1fr; } }
+
   </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M7QD4DVR8W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-M7QD4DVR8W');
+  </script>
 </head>
 <body>
 
@@ -185,15 +226,13 @@
         <div class="nav-dropdown">
           <a href="news.html" class="nav-drop-item">News</a>
           <div class="nav-drop-div"></div>
-          <a href="news.html#events" class="nav-drop-item">Events</a>
-          <div class="nav-drop-div"></div>
-          <a href="submit.html" class="nav-drop-item">Submit News / Event</a>
+          <a href="events.html" class="nav-drop-item">Events</a>
         </div>
       </li>
       <li class="nav-item">
         <a href="#" class="nav-a on">Community ▾</a>
         <div class="nav-dropdown" style="min-width:220px;">
-          <a href="news.html#events" class="nav-drop-item">EdTech Together</a>
+          <a href="events.html" class="nav-drop-item">EdTech Together</a>
           <div class="nav-drop-div"></div>
           <a href="community-partnership.html" class="nav-drop-item">Partnership Initiatives</a>
           <div class="nav-drop-div"></div>
@@ -209,7 +248,7 @@
       <span></span><span></span><span></span>
     </button>
     <div class="nav-cta">
-      <a href="/#newsletter" class="btn-ghost btn">Subscribe</a>
+      <a href="#" class="btn-ghost btn" onclick="openModal('modal-subscribe');return false;">Subscribe</a>
       <a href="mailto:info@edtechhub.com" class="btn btn-teal" style="font-size:13px;padding:9px 18px;">Contact Us</a>
     </div>
   </nav>
@@ -219,7 +258,7 @@
   <a href="index.html" class="nav-mobile-a">Home</a>
   <a href="about.html" class="nav-mobile-a">About</a>
   <a href="news.html" class="nav-mobile-a">News & Events</a>
-  <a href="news.html#events" class="nav-mobile-a">EdTech Together</a>
+  <a href="events.html" class="nav-mobile-a">EdTech Together</a>
   <a href="community-partnership.html" class="nav-mobile-a">Partnership Initiatives</a>
   <a href="networking.html" class="nav-mobile-a accent">Cross-Cohort Networking</a>
   <a href="community-forum.html" class="nav-mobile-a">Redefining Learning Forum</a>
@@ -227,7 +266,7 @@
   <a href="https://gem.edtechhub.com/" class="nav-mobile-a accent" target="_blank">GEM ↗</a>
   <div class="nav-mobile-div"></div>
   <div class="nav-mobile-cta">
-    <a href="/#newsletter" class="btn btn-secondary">Subscribe</a>
+    <a href="#" class="btn btn-secondary" onclick="openModal('modal-subscribe');return false;">Subscribe</a>
     <a href="mailto:info@edtechhub.com" class="btn btn-teal">Contact Us</a>
   </div>
 </nav>
@@ -359,7 +398,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="news.html">News</a></li>
-            <li><a href="news.html#events">Events</a></li>
+            <li><a href="events.html">Events</a></li>
             <li><a href="programme.html">Programme</a></li>
             <li><a href="https://gem.edtechhub.com/" target="_blank" rel="noopener">GEM ↗</a></li>
           </ul>
@@ -367,7 +406,7 @@
         <div class="ft-col">
           <h3>Community</h3>
           <ul>
-            <li><a href="news.html#events">EdTech Together</a></li>
+            <li><a href="events.html">EdTech Together</a></li>
             <li><a href="community-partnership.html">Partnership Initiatives</a></li>
             <li><a href="networking.html">Cross-Cohort Networking</a></li>
             <li><a href="community-forum.html">Learning Forum</a></li>
@@ -386,11 +425,49 @@
     </div>
     <div class="ft-btm">
       <span>© 2026 DOHE Global. All rights reserved.</span>
-      <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Submissions</a></div>
+      <div class="ft-legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="news.html">Submissions</a></div>
       <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ TOP</button>
     </div>
   </div>
 </footer>
+
+<!-- Subscribe modal — 실제 edtechhub.com 뉴스레터 구독 폼(Email/Full name/Role)과 동일한 필드·검증 규칙 -->
+<div class="modal-overlay" id="modal-subscribe" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-subscribe-ttl">
+    <button class="modal-close" onclick="closeModal('modal-subscribe')" aria-label="Close">✕</button>
+    <h3 id="modal-subscribe-ttl">Subscribe to our newsletter!</h3>
+    <p class="modal-sub">Don't miss out on the latest trends, events, and activities in EdTech.</p>
+    <form id="subscribe-form">
+      <label class="modal-label" for="sub-email">Email*</label>
+      <input class="modal-input" type="text" id="sub-email" autocomplete="email"/>
+      <p class="modal-hint">Share a bit more about yourself and receive tailored articles.</p>
+      <div class="modal-row">
+        <div>
+          <label class="modal-label" for="sub-name">Full name</label>
+          <input class="modal-input" type="text" id="sub-name" maxlength="30" autocomplete="name"/>
+        </div>
+        <div>
+          <label class="modal-label" for="sub-role">Role</label>
+          <select class="modal-input modal-select" id="sub-role">
+            <option value="">Choose your role</option>
+            <option>Startup</option>
+            <option>Startup Coach</option>
+            <option>Expert</option>
+            <option>Investor</option>
+            <option>Service Provider</option>
+            <option>Accelerator</option>
+            <option>Educator</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-error" id="subscribe-error" hidden></div>
+      <button type="submit" class="modal-submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+<script src="subscribe-modal.js"></script>
+
 
 <script>
   const hamburger = document.getElementById('hamburger');
